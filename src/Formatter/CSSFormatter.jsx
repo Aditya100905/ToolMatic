@@ -5,6 +5,7 @@ import { materialOceanic, prism } from "react-syntax-highlighter/dist/esm/styles
 import { useTheme } from "../ThemeProvider";
 import { detectFileType } from "../fileTypeDetector";
 import { FaSun, FaMoon } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function CSSFormatter() {
     const { theme, toggleTheme } = useTheme();
@@ -25,7 +26,7 @@ export default function CSSFormatter() {
                 beautifyCSS(inputCSS, { indent_size: 4, preserve_newlines: true, max_preserve_newlines: 1 }).trim()
             );
         } catch {
-            alert("Invalid CSS code.");
+            toast.error("Invalid CSS code.");
         }
     };
 
@@ -39,9 +40,9 @@ export default function CSSFormatter() {
     const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText(outputCSS);
-            alert("Copied to clipboard!");
+            toast.success("Copied to clipboard!");
         } catch (error) {
-            alert("Failed to copy!");
+            toast.error("Failed to copy!");
         }
     };
 

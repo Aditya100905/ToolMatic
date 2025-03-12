@@ -44,7 +44,7 @@ const utilities = {
     "HTML Formatter",
     "CSS Formatter",
     "JS Formatter",
-    "TS Formatter",
+    // "TS Formatter",
     "JSON Formatter",
   ],
   "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images"], // ✅ Added "PDF to Images
@@ -67,7 +67,7 @@ const utilityRoutes = {
   "HTML Formatter": "/formatters/html",
   "CSS Formatter": "/formatters/css",
   "JS Formatter": "/formatters/js",
-  "TS Formatter": "/formatters/ts",
+  // "TS Formatter": "/formatters/ts",
   "JSON Formatter": "/formatters/json",
   "Merge PDFs": "/pdf-tools/merge",
   "Split PDFs": "/pdf-tools/split",
@@ -177,10 +177,10 @@ const App = () => {
             path="/formatters/js"
             element={<JSFormatter theme={theme} />}
           />
-          <Route
+          {/* <Route
             path="/formatters/ts"
             element={<TSFormatter theme={theme} />}
-          />
+          /> */}
           <Route
             path="/formatters/json"
             element={<JSONFormatter theme={theme} />}

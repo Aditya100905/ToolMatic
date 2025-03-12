@@ -144,6 +144,7 @@ import { materialOceanic, prism } from "react-syntax-highlighter/dist/esm/styles
 import { useTheme } from "../ThemeProvider";
 import { detectFileType } from "../fileTypeDetector";
 import { FaSun, FaMoon } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function JSFormatter() {
     const { theme, toggleTheme } = useTheme();
@@ -164,7 +165,7 @@ export default function JSFormatter() {
                 beautifyJS(inputJS, { indent_size: 4, preserve_newlines: true, max_preserve_newlines: 1 }).trim()
             );
         } catch {
-            alert("Invalid TypeScript code.");
+            toast.error("Invalid TypeScript code.");
         }
     };
 
@@ -178,9 +179,9 @@ export default function JSFormatter() {
     const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText(outputJS);
-            alert("Copied to clipboard!");
+            toast.success("Copied to clipboard!");
         } catch (error) {
-            alert("Failed to copy!");
+            toast.error("Failed to copy!");
         }
     };
 

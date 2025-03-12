@@ -6,7 +6,7 @@ const formatters = [
   { name: "CSS Formatter", path: "/formatters/css" },
   { name: "JS Formatter", path: "/formatters/js" },
   { name: "TS Formatter", path: "/formatters/ts" },
-  { name: "JSON Formatter", path: "/formatters/json" },
+  // { name: "JSON Formatter", path: "/formatters/json" },
 ];
 
 const Formatter = () => {

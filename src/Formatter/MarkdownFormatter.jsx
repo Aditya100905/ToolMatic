@@ -5,6 +5,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialOceanic, prism } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useTheme } from "../ThemeProvider";
 import { FaSun, FaMoon } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function MarkdownFormatter() {
     const { theme, toggleTheme } = useTheme();
@@ -24,14 +25,14 @@ export default function MarkdownFormatter() {
 
             setFormattedMarkdown(cleanedMarkdown);
         } catch {
-            alert("Invalid Markdown.");
+            toast.error("Invalid Markdown.");
         }
     };
 
     // Function to copy formatted Markdown
     const handleCopy = () => {
         navigator.clipboard.writeText(formattedMarkdown);
-        alert("Copied to clipboard!");
+        toast.success("Copied to clipboard!");
     };
 
     // Function to download formatted Markdown

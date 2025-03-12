@@ -4,6 +4,7 @@ import { materialOceanic, prism } from "react-syntax-highlighter/dist/esm/styles
 import { useTheme } from "../ThemeProvider";
 import { detectFileType } from "../fileTypeDetector";
 import { FaSun, FaMoon } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function JSONFormatter() {
     const { theme, toggleTheme } = useTheme();
@@ -23,7 +24,7 @@ export default function JSONFormatter() {
             const parsed = JSON.parse(inputJSON);
             setOutputJSON(JSON.stringify(parsed, null, 4));
         } catch {
-            alert("Invalid JSON format.");
+            toast.error("Invalid JSON format.");
         }
     };
 
@@ -37,9 +38,9 @@ export default function JSONFormatter() {
     const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText(outputJSON);
-            alert("Copied to clipboard!");
+            toast.success("Copied to clipboard!");
         } catch (error) {
-            alert("Failed to copy!");
+            toast.error("Failed to copy!");
         }
     };
 
