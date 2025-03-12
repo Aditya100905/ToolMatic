@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+/* Dark Mode Styling */
+body {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.light {
+  background: #f8f9fa;
+  color: #222;
+}
+
+.dark {
+  background: #1e1e1e;
+  color: #ddd;
+}
+
+button:hover{
+  cursor: pointer;
+}
+
+
