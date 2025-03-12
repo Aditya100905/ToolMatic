@@ -22,12 +22,12 @@ const TextCaseConverter = () => {
         return inputText.toLowerCase();
       case "SENTENCE":
         return inputText.charAt(0).toUpperCase() + inputText.slice(1).toLowerCase();
-      case "CAMEL":
-        return inputText.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
-          index === 0 ? match.toLowerCase() : match.toUpperCase()
-        );
-      case "TITLE":
-        return inputText.replace(/\b\w/g, (match) => match.toUpperCase());
+      // case "CAMEL":
+      //   return inputText.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
+      //     index === 0 ? match.toLowerCase() : match.toUpperCase()
+      //   );
+      // case "TITLE":
+      //   return inputText.replace(/\b\w/g, (match) => match.toUpperCase());
       default:
         return inputText;
     }
@@ -73,8 +73,8 @@ const TextCaseConverter = () => {
             { type: "UPPER", label: "Upper Case" },
             { type: "LOWER", label: "Lower Case" },
             { type: "SENTENCE", label: "Sentence Case" },
-            { type: "CAMEL", label: "Camel Case" },
-            { type: "TITLE", label: "Title Case" }, // Title Case button
+            // { type: "CAMEL", label: "Camel Case" },
+            // { type: "TITLE", label: "Title Case" },
           ].map(({ type, label }) => (
             <button
               key={type}
