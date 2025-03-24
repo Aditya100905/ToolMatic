@@ -4,7 +4,7 @@ import {
   Route,
   useNavigate,
 } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Utilities from "./pages/Utilities";
@@ -24,6 +24,9 @@ import JSONFormatter from "./Formatter/JSONFormatter";
 import MergePDF from "./PDFTools/MergePDF";
 import PDFtoImages from "./PDFTools/PDFtoImages";
 import SplitPDF from "./PDFTools/SplitPDF";
+import MatrixSolver from "./Maths/MatrixSolver";
+import GraphPlotter from "./Maths/GraphPlotter";
+import EquationSolver from "./Maths/EquationSolver";
 // import CompressPDF from "./PDFTools/CompressPDF";
 // import WordConverter from "./PDFTools/WordConverter";
 // import CodeFormatter from "./Programming/CodeFormatter";
@@ -48,16 +51,15 @@ const utilities = {
     "JSON Formatter",
   ],
   "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images"], // ✅ Added "PDF to Images
-  Text: ["Word Counter", "Case Converter"],
+  "Text": ["Word Counter", "Case Converter"],
 
-  Programming: [
+  "Programming": [
     // "Code Formatter", "Regex Tester", "Base64 Encoder"
   ],
 
-  Math: [
-    // "Calculator", "Matrix Solver", "Graph Plotter"
-  ],
-  Converters: [
+  "Math": ["Matrix Multiplier", "Graph Plotter", "Equation Solver"],
+
+  "Converters": [
     // "Unit Converter", "Currency Converter", "PDF Converter"
   ],
 };
@@ -76,6 +78,9 @@ const utilityRoutes = {
   "PDF to Images": "/pdf-tools/pdf-to-images", // ✅ Added missing route  "Case Converter" : "/text/case-converter",
   "Word Counter": "/text/word-counter",
   "Case Converter": "/text/case-converter",
+  "Matrix Multiplier": "/math/matrix-multiplier",
+  "Graph Plotter": "/math/graph-plotter",
+  "Equation Solver": "/math/equation-solver",
 };
 
 const MainContent = ({ theme }) => {
@@ -93,7 +98,6 @@ const MainContent = ({ theme }) => {
   };
 
   return (
-    
     <div className="container mx-auto mt-16 flex">
       {/* Sidebar for category selection */}
       <aside
@@ -153,9 +157,7 @@ const App = () => {
         className={`${theme === "dark" ? "bg-[#000] text-white" : "bg-gray-100 text-black"} min-h-screen`}
       >
         <Navbar /> {/* Navbar component */}
-
         <ToastContainer position="top-right" autoClose={3000} />
-        
         <Routes>
           {/* Pass theme prop to MainContent */}
           <Route path="/" element={<MainContent theme={theme} />} />
@@ -190,7 +192,6 @@ const App = () => {
           <Route path="/pdf-tools/merge" element={<MergePDF theme={theme} />} />
           <Route path="/pdf-tools/split" element={<SplitPDF theme={theme} />} />
 
-
           <Route
             path="/pdf-tools/pdf-to-images"
             element={<PDFtoImages theme={theme} />}
@@ -204,15 +205,18 @@ const App = () => {
           <Route path="/text/word-counter" element={<WordCounter />} />
           {/* <Route path="/text/text-formatter" element={<TextFormatter />} /> */}
 
+          {/* Math Utilities */}
+          <Route path="/math/matrix-multiplier" element={<MatrixSolver />} />
+          <Route path="/math/graph-plotter" element={<GraphPlotter theme={theme}/>} />
+          <Route path="/math/equation-solver" element={<EquationSolver theme={theme}/>} />
+          {/* <Route path="/math/calculator" element={<Calculator />} /> */}
+
+          
           {/* Programming Routes */}
           {/* <Route path="/programming/code-formatter" element={<CodeFormatter />} />
           <Route path="/programming/regex-tester" element={<RegexTester />} />
           <Route path="/programming/base64-encoder" element={<Base64Encoder />} /> */}
 
-          {/* Math Utilities */}
-          {/* <Route path="/math/calculator" element={<Calculator />} />
-          <Route path="/math/matrix-solver" element={<MatrixSolver />} />
-          <Route path="/math/graph-plotter" element={<GraphPlotter />} /> */}
 
           {/* Converter Utilities */}
           {/* <Route path="/converters/unit-converter" element={<UnitConverter />} />
