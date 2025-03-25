@@ -28,6 +28,7 @@ import GraphPlotter from "./Maths/GraphPlotter";
 import EquationSolver from "./Maths/EquationSolver";
 import BaseConverter from "./DSD/BaseConverter.jsx";
 import BitwiseOperators from "./DSD/BitwiseOperators.jsx";
+import BinaryGrayBCDConverter from "./DSD/BinaryGrayBCDConverter.jsx";
 import Complement from "./DSD/Complement.jsx";
 // import Length from "./converters/LengthConverter"
 import LengthConverter from "./converters/LengthConverter.jsx";
@@ -81,7 +82,7 @@ const utilities = {
 
  "Basic Mathematics": ["Scientific Calculator", ""],
 
-  "Bases & Bitwise Operators": ["Base Converter", "Bitwise Operators", "Complement"],
+  "Bases & Bitwise Operators": ["Base Converter", "Bitwise Operators", "Complement", "Binary, Gray, BCD Converter"],
   
   "Unit Converters": ["Length Converter", "Mass Converter", "Temperature Converter"],
 };
@@ -107,6 +108,7 @@ const utilityRoutes = {
   "Scientific Calculator": "/math/scientific-calculator",
   "Base Converter": "/bases-and-bitwise/base-converter",
   "Bitwise Operators": "/bases-and-bitwise/bitwise-operators",
+  "Binary, Gray, BCD Converter": "/bases-and-bitwise/binary-gray-bcd",
   "Complement": "/bases-and-bitwise/complement",
   "Length Converter": "/converters/length-converter",
   "Mass Converter": "/converters/mass-converter",
@@ -242,6 +244,7 @@ const App = () => {
           <Route path="/bases-and-bitwise/base-converter" element={<BaseConverter theme={theme} />}/>
           <Route path="/bases-and-bitwise/bitwise-operators" element={<BitwiseOperators theme={theme} />}/>
           <Route path="/bases-and-bitwise/complement" element={<Complement theme={theme} />}/>
+          <Route path="/bases-and-bitwise/binary-gray-bcd" element={<BinaryGrayBCDConverter theme={theme} />}/>
 
 
 

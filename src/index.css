@@ -20,3 +20,37 @@ button:hover{
 }
 
 
+/* Themed Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Scrollbar colors based on theme */
+.light {
+  --scrollbar-track: #f1f1f1;
+  --scrollbar-thumb: #bdbdbd;
+  --scrollbar-thumb-hover: #a0a0a0;
+}
+
+.dark {
+  --scrollbar-track: #1E1E1E;
+  --scrollbar-thumb: #555;
+  --scrollbar-thumb-hover: #888;
+}
+

@@ -8,14 +8,16 @@ const Complement = ({ theme = "dark" }) => {
   // Theme definitions using Tailwind CSS classes
   const darkTheme = {
     container:
-      "w-3xl mx-auto mt-20 my-10 p-8 bg-gray-900 rounded-2xl shadow-lg text-white",
+      "max-w-2xl w-11/12 mx-auto mt-20 my-10 p-8 bg-[#121212] rounded-2xl shadow-lg text-white",
     input:
       "w-full p-3 rounded-lg bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-blue-500",
     button:
       "w-full py-3 px-6 bg-blue-600 hover:bg-blue-500 rounded-lg font-semibold shadow-md transition-all",
-    card: "p-6 bg-gray-800 rounded-lg shadow-md mt-6",
+    card: "p-6 bg-[#121212] rounded-lg shadow-md mt-6",
     header: "text-4xl font-bold mb-8 text-center",
     fieldLabel: "block text-sm font-medium mb-1 text-gray-400",
+    outputText: `text-xl font-bold text-green-400`,
+
     result: "text-xl font-bold text-green-400",
     resultField:
       "flex items-center justify-between p-3 bg-gray-800 rounded-lg border border-gray-600",
@@ -36,6 +38,8 @@ const Complement = ({ theme = "dark" }) => {
     card: "p-6 bg-gray-50 rounded-lg shadow-md mt-6",
     header: "text-4xl font-bold mb-8 text-center",
     fieldLabel: "block text-sm font-medium mb-1 text-gray-600",
+    outputText: `text-xl font-bold text-green-600`,
+
     result: "text-xl font-bold text-green-600",
     resultField:
       "flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-300",
@@ -47,6 +51,8 @@ const Complement = ({ theme = "dark" }) => {
   };
 
   const styles = theme === "light" ? lightTheme : darkTheme;
+  const currentTheme = theme === "dark" ? darkTheme : lightTheme;
+
 
   // State variables
   const [number, setNumber] = useState(10);
@@ -192,7 +198,7 @@ const Complement = ({ theme = "dark" }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center pt-2">
+    <div className="min-h-screen flex items-center justify-center pt-2">
 
     <motion.div
       initial={{ opacity: 0 }}
@@ -242,7 +248,10 @@ const Complement = ({ theme = "dark" }) => {
 
         {resultValue && (
           <div className={styles.resultField}>
-            <span className={styles.result}>{resultValue}</span>
+            <h2 className="text-xl font-bold">
+                  Output:
+                  <p className={currentTheme.outputText}>{resultValue}</p>
+                </h2>
             <FaCopy
               className={styles.copyIcon}
               onClick={() => copyToClipboard(resultValue)}

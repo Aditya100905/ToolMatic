@@ -5,6 +5,7 @@ const BaseBitwise = [
   { name: "Base Converter", path: "/bases-and-bitwise/base-converter" },
   { name: "Bitwise Operators", path: "/bases-and-bitwise/bitwise-operators" },
   { name: "Complement", path: "/bases-and-bitwise/complement" },
+  { name: "Binary, Gray, BCD Converter", path: "/bases-and-bitwise/binary-gray-bcd" },
   // { name: "JSON Formatter", path: "/formatters/json" },
 ];
 
