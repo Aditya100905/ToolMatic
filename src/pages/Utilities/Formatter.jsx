@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../ThemeProvider"; // Import theme context
+import { useTheme } from "../../ThemeProvider"; // Import theme context
 
 const formatters = [
   { name: "HTML Formatter", path: "/formatters/html" },
   { name: "CSS Formatter", path: "/formatters/css" },
   { name: "JS Formatter", path: "/formatters/js" },
-  { name: "TS Formatter", path: "/formatters/ts" },
-  // { name: "JSON Formatter", path: "/formatters/json" },
+  { name: "JSON Formatter", path: "/formatters/json" },
 ];
 
 const Formatter = () => {

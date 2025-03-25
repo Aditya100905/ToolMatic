@@ -2,13 +2,12 @@ import { useTheme } from "../ThemeProvider";
 import { Link } from "react-router-dom";
 
 const categories = [
-    { name: "Code Formatter", path: "/utilities/formatter", description: "Format JavaScript, TypeScript, HTML, CSS, and JSON code." },
-    { name: "PDF Tools", path: "/utilities/pdf-tools", description: "Convert Word to PDF, merge PDFs, and more." },
-    { name: "Text Utilities", path: "/utilities/text", description: "Format, convert, and manipulate text easily." },
-    { name: "Code Utilities", path: "/utilities/code", description: "Beautify, minify, and format code snippets." },
-    { name: "File Converters", path: "/utilities/converters", description: "Convert files between different formats." },
-    { name: "Math Tools", path: "/utilities/math", description: "Calculate and solve engineering problems." },
-    { name: "Drawing & Diagrams", path: "/utilities/drawing", description: "Create diagrams, flowcharts, and sketches." },
+    { name: "Code Formatters", path: "/formatters", description: "Format JavaScript, HTML, CSS, and JSON code." },
+    { name: "PDF Tools", path: "/pdf-tools", description: "Merge PDFs, PDFs to Images and more." },
+    { name: "Text Utilities", path: "/text", description: "Word Counter, Text CleanUp and more" },
+    { name: "Math Tools", path: "/math", description: "Calculate and solve engineering problems." },
+    { name: "Bases & Bitwise Operators", path: "/bases-and-bitwise", description: "Deals in numbers among different bases and their operations" },
+    { name: "Unit Converters", path: "/converters", description: "Convert different units among themselves including local traditional units" },
 ];
 
 const Utilities = () => {

@@ -10,16 +10,15 @@ import Footer from "./components/Footer";
 import Utilities from "./pages/Utilities";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
-import Formatter from "./pages/Formatter";
 import TextCaseConverter from "./Text/TextCaseConverter";
 import WordCounter from "./Text/WordCounter";
+import TextCleaning from "./Text/TextCleaning";
 
 import { useTheme } from "./ThemeProvider"; // Import theme context
 import { useState } from "react";
 import HTMLFormatter from "./Formatter/HTMLFormatter";
 import CSSFormatter from "./Formatter/CSSFormatter";
 import JSFormatter from "./Formatter/JSFormatter";
-import TSFormatter from "./Formatter/TSFormatter";
 import JSONFormatter from "./Formatter/JSONFormatter";
 import MergePDF from "./PDFTools/MergePDF";
 import PDFtoImages from "./PDFTools/PDFtoImages";
@@ -27,6 +26,28 @@ import SplitPDF from "./PDFTools/SplitPDF";
 import MatrixSolver from "./Maths/MatrixSolver";
 import GraphPlotter from "./Maths/GraphPlotter";
 import EquationSolver from "./Maths/EquationSolver";
+import BaseConverter from "./DSD/BaseConverter.jsx";
+import BitwiseOperators from "./DSD/BitwiseOperators.jsx";
+// import Length from "./converters/LengthConverter"
+import LengthConverter from "./converters/LengthConverter.jsx";
+import MassConverter from "./converters/MassConverter.jsx";
+import TemperatureConverter from "./converters/TemperatureConverter.jsx";
+
+
+import ScientificCalculator from "./Basic-Maths/ScientificCalculator";
+
+
+// routing at utilities page......
+
+import Formatter from "./pages/Utilities/Formatter";
+import PDF from "./pages/Utilities/PDF";
+import Text from "./pages/Utilities/Text";
+import Maths from "./pages/Utilities/Maths";
+import BaseAndBitwiseOperator from "./pages/Utilities/BaseAndBitwiseOperator";
+import Converters from "./pages/Utilities/Converters.jsx";
+
+
+
 // import CompressPDF from "./PDFTools/CompressPDF";
 // import WordConverter from "./PDFTools/WordConverter";
 // import CodeFormatter from "./Programming/CodeFormatter";
@@ -50,18 +71,18 @@ const utilities = {
     // "TS Formatter",
     "JSON Formatter",
   ],
-  "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images"], // ✅ Added "PDF to Images
-  "Text": ["Word Counter", "Case Converter"],
 
-  "Programming": [
-    // "Code Formatter", "Regex Tester", "Base64 Encoder"
-  ],
+  "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images"],
 
-  "Math": ["Matrix Multiplier", "Graph Plotter", "Equation Solver"],
+  "Text": ["Word Counter", "Case Converter", "Text Cleaner"],
 
-  "Converters": [
-    // "Unit Converter", "Currency Converter", "PDF Converter"
-  ],
+ "Advanced Mathematics": ["Matrix Solver", "Graph Plotter", "Equation Solver"],
+
+ "Basic Mathematics": ["Scientific Calculator", ""],
+
+  "Bases & Bitwise Operators": ["Base Converter", "Bitwise Operators"],
+  
+  "Unit Converters": ["Length Converter", "Mass Converter", "Temperature Converter"],
 };
 
 // Define route mappings for each utility
@@ -75,12 +96,19 @@ const utilityRoutes = {
   "Split PDFs": "/pdf-tools/split",
   "Compress PDFs": "/pdf-tools/compress",
   "Word to PDF": "/pdf-tools/word-converter",
-  "PDF to Images": "/pdf-tools/pdf-to-images", // ✅ Added missing route  "Case Converter" : "/text/case-converter",
+  "PDF to Images": "/pdf-tools/pdf-to-images",
   "Word Counter": "/text/word-counter",
   "Case Converter": "/text/case-converter",
-  "Matrix Multiplier": "/math/matrix-multiplier",
+  "Text Cleaner": "/text/text-cleaner",
+  "Matrix Solver": "/math/matrix-solver",
   "Graph Plotter": "/math/graph-plotter",
   "Equation Solver": "/math/equation-solver",
+  "Scientific Calculator": "/math/scientific-calculator",
+  "Base Converter": "/bases-and-bitwise/base-converter",
+  "Bitwise Operators": "/bases-and-bitwise/bitwise-operators",
+  "Length Converter": "/converters/length-converter",
+  "Mass Converter": "/converters/mass-converter",
+  "Temperature Converter": "/converters/temperature-converter"
 };
 
 const MainContent = ({ theme }) => {
@@ -165,58 +193,63 @@ const App = () => {
           <Route path="/about" element={<About theme={theme} />} />
           <Route path="/contact" element={<Contact theme={theme} />} />
           <Route path="/formatters" element={<Formatter />} />
+          <Route path="/text" element={<Text />} />
+          <Route path="/pdf-tools" element={<PDF />} />
+          <Route path="/math" element={<Maths />} />
+          <Route path="/bases-and-bitwise" element={<BaseAndBitwiseOperator />} />
+          <Route path="/converters" element={<Converters />} />
+
+
 
           {/* Formatter Routes - Pass theme prop to each formatter */}
-          <Route
-            path="/formatters/html"
-            element={<HTMLFormatter theme={theme} />}
-          />
-          <Route
-            path="/formatters/css"
-            element={<CSSFormatter theme={theme} />}
-          />
-          <Route
-            path="/formatters/js"
-            element={<JSFormatter theme={theme} />}
-          />
-          {/* <Route
-            path="/formatters/ts"
-            element={<TSFormatter theme={theme} />}
-          /> */}
-          <Route
-            path="/formatters/json"
-            element={<JSONFormatter theme={theme} />}
-          />
+          <Route path="/formatters/html" element={<HTMLFormatter theme={theme} />} />
+          <Route path="/formatters/css" element={<CSSFormatter theme={theme} />}/>
+          <Route path="/formatters/js" element={<JSFormatter theme={theme} />}/>
+          <Route path="/formatters/json" element={<JSONFormatter theme={theme} />}/>
+
+
 
           {/* PDF Tools Routes - Pass theme prop to each PDF tool */}
           <Route path="/pdf-tools/merge" element={<MergePDF theme={theme} />} />
           <Route path="/pdf-tools/split" element={<SplitPDF theme={theme} />} />
+          <Route path="/pdf-tools/pdf-to-images" element={<PDFtoImages theme={theme} />}/>
 
-          <Route
-            path="/pdf-tools/pdf-to-images"
-            element={<PDFtoImages theme={theme} />}
-          />
+
 
           {/* Text Utilities */}
-          <Route
-            path="/text/case-converter"
-            element={<TextCaseConverter theme={theme} />}
-          />
+          <Route path="/text/case-converter" element={<TextCaseConverter theme={theme} />}/>
           <Route path="/text/word-counter" element={<WordCounter />} />
-          {/* <Route path="/text/text-formatter" element={<TextFormatter />} /> */}
+          <Route path="/text/text-cleaning" element={<TextCleaning theme={theme} />} />
+
+
 
           {/* Math Utilities */}
-          <Route path="/math/matrix-multiplier" element={<MatrixSolver />} />
-          <Route path="/math/graph-plotter" element={<GraphPlotter theme={theme}/>} />
-          <Route path="/math/equation-solver" element={<EquationSolver theme={theme}/>} />
+
+{/* Advanced */}
+          <Route path="/math/matrix-solver" element={<MatrixSolver />} />
+          <Route path="/math/graph-plotter" element={<GraphPlotter theme={theme} />}/>
+          <Route path="/math/equation-solver" element={<EquationSolver theme={theme} />}/>
           {/* <Route path="/math/calculator" element={<Calculator />} /> */}
 
-          
-          {/* Programming Routes */}
-          {/* <Route path="/programming/code-formatter" element={<CodeFormatter />} />
-          <Route path="/programming/regex-tester" element={<RegexTester />} />
-          <Route path="/programming/base64-encoder" element={<Base64Encoder />} /> */}
+{/* Basic */}
+          <Route path="/math/scientific-calculator" element={<ScientificCalculator theme={theme} />}/>
 
+
+
+          {/* DSD Utilities */}
+          <Route path="/bases-and-bitwise/base-converter" element={<BaseConverter theme={theme} />}/>
+          <Route path="/bases-and-bitwise/bitwise-operators" element={<BitwiseOperators theme={theme} />}/>
+
+
+
+          {/* Converters Routes */}
+<Route path="/converters/length-converter" element={<LengthConverter theme={theme} />} />
+<Route path="/converters/mass-converter" element={<MassConverter theme={theme} />} />
+<Route path="/converters/temperature-converter" element={<TemperatureConverter theme={theme} />} />
+
+
+          {/* <Route path="/programming/regex-tester" element={<RegexTester />} />
+          <Route path="/programming/base64-encoder" element={<Base64Encoder />} /> */}
 
           {/* Converter Utilities */}
           {/* <Route path="/converters/unit-converter" element={<UnitConverter />} />
