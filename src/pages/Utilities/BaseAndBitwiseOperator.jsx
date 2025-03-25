@@ -4,6 +4,7 @@ import { useTheme } from "../../ThemeProvider"; // Import theme context
 const BaseBitwise = [
   { name: "Base Converter", path: "/bases-and-bitwise/base-converter" },
   { name: "Bitwise Operators", path: "/bases-and-bitwise/bitwise-operators" },
+  { name: "Complement", path: "/bases-and-bitwise/complement" },
   // { name: "JSON Formatter", path: "/formatters/json" },
 ];
 
