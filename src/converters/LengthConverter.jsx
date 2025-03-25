@@ -119,31 +119,38 @@ const LengthConverter = ({ theme }) => {
   };
 
   const themeStyles = {
-    container:
+    container: `transition-all duration-500 ${
       theme === "dark"
         ? "bg-gradient-to-br from-[#0a0a0a] to-[#1c1c1c] text-white"
-        : "bg-gradient-to-br from-gray-100 to-gray-200 text-black",
-    card:
+        : "bg-gradient-to-br from-gray-100 to-gray-200 text-black"
+    }`,
+    card: `transition-all duration-500 ${
       theme === "dark"
         ? "bg-[#121212] border border-gray-700 shadow-2xl"
-        : "bg-white border border-gray-200 shadow-xl",
-    input:
+        : "bg-white border border-gray-200 shadow-xl"
+    }`,
+    input: `transition-all duration-500 ${
       theme === "dark"
         ? "bg-[#181818] text-white border-gray-700"
-        : "bg-gray-50 text-black border-gray-300",
-    select:
+        : "bg-gray-50 text-black border-gray-300"
+    }`,
+    select: `transition-all duration-500 ${
       theme === "dark"
         ? "bg-[#1a1a1a] text-white border-gray-700"
-        : "bg-gray-100 text-black border-gray-300",
-    button:
+        : "bg-gray-100 text-black border-gray-300"
+    }`,
+    button: `transition-all duration-500 ${
       theme === "dark"
         ? "bg-blue-900 hover:bg-blue-800 text-white"
-        : "bg-blue-500 hover:bg-blue-600 text-white",
-    formula:
+        : "bg-blue-500 hover:bg-blue-600 text-white"
+    }`,
+    formula: `transition-all duration-500 ${
       theme === "dark"
         ? "bg-yellow-900 text-yellow-200"
-        : "bg-yellow-100 text-yellow-800",
+        : "bg-yellow-100 text-yellow-800"
+    }`,
   };
+  
 
   return (
     <div className={`min-h-screen flex justify-center items-center ${themeStyles.container} p-4 sm:mt-20 md:mt-0 mt-12 sm:p-6`}>
