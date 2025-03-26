@@ -5,6 +5,14 @@ const Converting = [
   { name: "Length Unit Converter", path: "/converters/length-converter" },
   { name: "Mass Unit Converter", path: "/converters/mass-converter" },
   { name: "Temperature Unit Converter", path: "/converters/temperature-converter" },
+  { name: "Time Unit Converter", path: "/converters/time-converter" },
+  { name: "Frequency Unit Converter", path: "/converters/frequency-converter" },
+  { name: "Area Unit Converter", path: "/converters/area-converter" },
+  { name: "Volume Unit Converter", path: "/converters/volume-converter" },
+  { name: "Density Unit Converter", path: "/converters/density-converter" },
+  { name: "Energy Unit Converter", path: "/converters/energy-converter" },
+  { name: "Power Unit Converter", path: "/converters/power-converter" },
+  { name: "Speed Unit Converter", path: "/converters/speed-converter" },
 ];
 
 const Converters = () => {

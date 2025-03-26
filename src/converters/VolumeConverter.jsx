@@ -3,10 +3,46 @@ import { FaExchangeAlt, FaCopy, FaRedo } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const TemperatureConverter = ({ theme }) => {
+// Comprehensive volume conversion rates (all standardized to liters)
+const volumeConversionRates = {
+  liter: 1,
+  milliliter: 0.001,
+  cubicMeter: 1000, // 1 m³ = 1000 L
+
+  // US customary Units
+  gallon: 3.78541,
+  quart: 0.946353,
+  pint: 0.473176,
+  cup: 0.24,
+  fluidOunce: 0.0295735,
+  tablespoon: 0.0147868,
+  teaspoon: 0.00492892,
+
+  // Other Units
+  cubicInch: 0.0163871,
+  cubicFoot: 28.3168,
+};
+
+// Mapping of unit keys to full name with unit abbreviation
+const volumeUnitLabels = {
+  liter: "Liter (L)",
+  milliliter: "Milliliter (mL)",
+  cubicMeter: "Cubic Meter (m³)",
+  gallon: "Gallon (gal)",
+  quart: "Quart (qt)",
+  pint: "Pint (pt)",
+  cup: "Cup",
+  fluidOunce: "Fluid Ounce (fl oz)",
+  tablespoon: "Tablespoon (tbsp)",
+  teaspoon: "Teaspoon (tsp)",
+  cubicInch: "Cubic Inch (in³)",
+  cubicFoot: "Cubic Foot (ft³)",
+};
+
+const VolumeConverter = ({ theme }) => {
   const [inputValue, setInputValue] = useState("");
-  const [fromUnit, setFromUnit] = useState("celsius");
-  const [toUnit, setToUnit] = useState("fahrenheit");
+  const [fromUnit, setFromUnit] = useState("liter");
+  const [toUnit, setToUnit] = useState("milliliter");
   const [outputValue, setOutputValue] = useState("");
   const [formula, setFormula] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -18,19 +54,11 @@ const TemperatureConverter = ({ theme }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Temperature conversion logic
-  const convertTemperature = (value, from, to) => {
-    let result;
-    if (from === to) return value;
-    const temp = parseFloat(value);
-    if (from === "celsius") {
-      result = to === "fahrenheit" ? (temp * 9) / 5 + 32 : temp + 273.15;
-    } else if (from === "fahrenheit") {
-      result = to === "celsius" ? ((temp - 32) * 5) / 9 : ((temp - 32) * 5) / 9 + 273.15;
-    } else if (from === "kelvin") {
-      result = to === "celsius" ? temp - 273.15 : ((temp - 273.15) * 9) / 5 + 32;
-    }
-    return result;
+  // Conversion logic with improved accuracy
+  const convertVolume = (value, fromUnit, toUnit) => {
+    const valueInLiters = parseFloat(value) * volumeConversionRates[fromUnit];
+    const convertedValue = valueInLiters / volumeConversionRates[toUnit];
+    return convertedValue;
   };
 
   // Automatically convert on change
@@ -46,30 +74,22 @@ const TemperatureConverter = ({ theme }) => {
       setFormula("");
       return;
     }
+
     try {
-      const result = convertTemperature(parseFloat(inputValue), fromUnit, toUnit);
+      const result = convertVolume(parseFloat(inputValue), fromUnit, toUnit);
       const formattedResult = result.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
+        minimumFractionDigits: 0,
         maximumFractionDigits: 6,
       });
       setOutputValue(formattedResult);
 
-      // Display conversion formula
-      let formulaText = "";
-      if (fromUnit === "celsius" && toUnit === "fahrenheit") {
-        formulaText = `°F = (°C × 9/5) + 32`;
-      } else if (fromUnit === "celsius" && toUnit === "kelvin") {
-        formulaText = `K = °C + 273.15`;
-      } else if (fromUnit === "fahrenheit" && toUnit === "celsius") {
-        formulaText = `°C = (°F − 32) × 5/9`;
-      } else if (fromUnit === "fahrenheit" && toUnit === "kelvin") {
-        formulaText = `K = (°F − 32) × 5/9 + 273.15`;
-      } else if (fromUnit === "kelvin" && toUnit === "celsius") {
-        formulaText = `°C = K − 273.15`;
-      } else if (fromUnit === "kelvin" && toUnit === "fahrenheit") {
-        formulaText = `°F = (K − 273.15) × 9/5 + 32`;
-      }
-      setFormula(formulaText);
+      const conversionRatio = convertVolume(1, fromUnit, toUnit);
+      setFormula(
+        `1 ${volumeUnitLabels[fromUnit]} = ${conversionRatio.toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 6,
+        })} ${volumeUnitLabels[toUnit]}`
+      );
     } catch (error) {
       toast.error("Conversion error occurred!");
       setOutputValue("");
@@ -94,8 +114,8 @@ const TemperatureConverter = ({ theme }) => {
     setInputValue("");
     setOutputValue("");
     setFormula("");
-    setFromUnit("celsius");
-    setToUnit("fahrenheit");
+    setFromUnit("liter");
+    setToUnit("milliliter");
   };
 
   const themeStyles = {
@@ -134,10 +154,12 @@ const TemperatureConverter = ({ theme }) => {
   return (
     <div className={`min-h-screen flex justify-center items-center ${themeStyles.container} p-4 sm:mt-20 md:mt-0 mt-12 sm:p-6`}>
       <ToastContainer />
+
       <div className={`w-full max-w-4xl rounded-2xl p-6 sm:p-10 ${themeStyles.card}`}>
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 sm:mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 pb-5">
-      🌡️ Temperature Converter
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 sm:mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 pb-5">
+          🧪 Volume Unit Converter
         </h2>
+
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
           <div className="flex flex-col w-full">
             <input
@@ -152,12 +174,18 @@ const TemperatureConverter = ({ theme }) => {
               onChange={(e) => setFromUnit(e.target.value)}
               className={`p-2 sm:p-3 md:p-4 mt-2 sm:mt-4 rounded-xl border-2 text-sm sm:text-base md:text-lg ${themeStyles.select}`}
             >
-              <option value="celsius">Celsius (°C)</option>
-              <option value="fahrenheit">Fahrenheit (°F)</option>
-              <option value="kelvin">Kelvin (K)</option>
+              {Object.keys(volumeConversionRates).map((unit) => (
+                <option key={unit} value={unit}>
+                  {volumeUnitLabels[unit]}
+                </option>
+              ))}
             </select>
           </div>
-          <div className="text-3xl sm:text-4xl md:text-5xl font-bold opacity-50 my-4 md:my-0">=</div>
+
+          <div className="text-3xl sm:text-4xl md:text-5xl font-bold opacity-50 my-4 md:my-0">
+            =
+          </div>
+
           <div className="flex flex-col w-full">
             <div className="relative">
               <input
@@ -167,25 +195,30 @@ const TemperatureConverter = ({ theme }) => {
                 placeholder="Converted value"
                 className={`p-3 sm:p-4 md:p-6 text-base sm:text-xl md:text-2xl rounded-xl border-2 w-full pr-12 sm:pr-16 ${themeStyles.input}`}
               />
-              <button
-                onClick={handleCopyResult}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors"
-                title="Copy Result"
-              >
-                <FaCopy size={isMobile ? 16 : 20} />
-              </button>
+              <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex gap-2">
+                <button 
+                  onClick={handleCopyResult}
+                  className="text-gray-500 hover:text-blue-600 transition-colors"
+                  title="Copy Result"
+                >
+                  <FaCopy size={isMobile ? 16 : 20} />
+                </button>
+              </div>
             </div>
             <select
               value={toUnit}
               onChange={(e) => setToUnit(e.target.value)}
               className={`p-2 sm:p-3 md:p-4 mt-2 sm:mt-4 rounded-xl border-2 text-sm sm:text-base md:text-lg ${themeStyles.select}`}
             >
-              <option value="celsius">Celsius (°C)</option>
-              <option value="fahrenheit">Fahrenheit (°F)</option>
-              <option value="kelvin">Kelvin (K)</option>
+              {Object.keys(volumeConversionRates).map((unit) => (
+                <option key={unit} value={unit}>
+                  {volumeUnitLabels[unit]}
+                </option>
+              ))}
             </select>
           </div>
         </div>
+
         <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-6 sm:mt-8">
           <button
             onClick={handleSwap}
@@ -202,9 +235,10 @@ const TemperatureConverter = ({ theme }) => {
             Reset
           </button>
         </div>
+
         {formula && (
-          <div className={`mt-4 p-3 rounded-lg ${themeStyles.formula} flex items-center text-xs sm:text-sm`}>
-            {formula}
+          <div className={`mt-4 sm:mt-8 p-3 sm:p-4 rounded-lg ${themeStyles.formula} flex items-center text-xs sm:text-sm`}>
+            <span className="font-bold mr-2">Conversion Ratio:</span> {formula}
           </div>
         )}
       </div>
@@ -212,4 +246,4 @@ const TemperatureConverter = ({ theme }) => {
   );
 };
 
-export default TemperatureConverter;
+export default VolumeConverter;

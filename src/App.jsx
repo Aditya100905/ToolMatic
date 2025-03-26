@@ -34,6 +34,14 @@ import Complement from "./DSD/Complement.jsx";
 import LengthConverter from "./converters/LengthConverter.jsx";
 import MassConverter from "./converters/MassConverter.jsx";
 import TemperatureConverter from "./converters/TemperatureConverter.jsx";
+import VolumeConverter from "./converters/VolumeConverter.jsx";
+import DensityConverter from "./converters/DensityConverter.jsx";
+import AreaConverter from "./converters/AreaConverter.jsx";
+import SpeedConverter from "./converters/SpeedConverter.jsx";
+import EnergyConverter from "./converters/EnergyConverter.jsx";
+import TimeConverter from "./converters/TimeConverter.jsx";
+import PowerConverter from "./converters/PowerConverter.jsx";
+import FrequencyConverter from "./converters/FrequencyConverter.jsx";
 
 
 import ScientificCalculator from "./Basic-Maths/ScientificCalculator";
@@ -84,7 +92,7 @@ const utilities = {
 
   "Bases & Bitwise Operators": ["Base Converter", "Bitwise Operators", "Complement", "Binary, Gray, BCD Converter"],
   
-  "Unit Converters": ["Length Converter", "Mass Converter", "Temperature Converter"],
+  "Unit Converters": ["Length Converter", "Mass Converter", "Temperature Converter","Time Converter","Frequency Converter", "Area Converter", "Volume Converter", "Density Converter", "Energy Converter","Power Converter", "Speed Converter"],
 };
 
 // Define route mappings for each utility
@@ -112,7 +120,15 @@ const utilityRoutes = {
   "Complement": "/bases-and-bitwise/complement",
   "Length Converter": "/converters/length-converter",
   "Mass Converter": "/converters/mass-converter",
-  "Temperature Converter": "/converters/temperature-converter"
+  "Temperature Converter": "/converters/temperature-converter",
+  "Area Converter": "/converters/area-converter",
+  "Volume Converter": "/converters/volume-converter",
+  "Density Converter": "/converters/density-converter",
+  "Time Converter": "/converters/time-converter",
+  "Energy Converter": "/converters/energy-converter",
+  "Speed Converter": "/converters/speed-converter",
+  "Power Converter": "/converters/power-converter",
+  "Frequency Converter": "/converters/frequency-converter",
 };
 
 const MainContent = ({ theme }) => {
@@ -249,9 +265,19 @@ const App = () => {
 
 
           {/* Converters Routes */}
-<Route path="/converters/length-converter" element={<LengthConverter theme={theme} />} />
-<Route path="/converters/mass-converter" element={<MassConverter theme={theme} />} />
-<Route path="/converters/temperature-converter" element={<TemperatureConverter theme={theme} />} />
+          <Route path="/converters/length-converter" element={<LengthConverter theme={theme} />} />
+          <Route path="/converters/mass-converter" element={<MassConverter theme={theme} />} />
+          <Route path="/converters/temperature-converter" element={<TemperatureConverter theme={theme} />} />
+          <Route path="/converters/area-converter" element={<AreaConverter theme={theme} />} />
+          <Route path="/converters/volume-converter" element={<VolumeConverter theme={theme} />} />
+          <Route path="/converters/density-converter" element={<DensityConverter theme={theme} />} />
+          
+          <Route path="/converters/time-converter" element={<TimeConverter theme={theme} />} />
+          <Route path="/converters/frequency-converter" element={<FrequencyConverter theme={theme} />} />
+          <Route path="/converters/energy-converter" element={<EnergyConverter theme={theme} />} />
+          <Route path="/converters/power-converter" element={<PowerConverter theme={theme} />} />
+          <Route path="/converters/speed-converter" element={<SpeedConverter theme={theme} />} />
+
 
 
           {/* <Route path="/programming/regex-tester" element={<RegexTester />} />

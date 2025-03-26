@@ -24,6 +24,24 @@ const conversionRates = {
   ratti: 0.00175,             // 1 ratti ≈ 0.00175 kg
 };
 
+// Mapping of unit keys to full names with abbreviations
+const unitLabels = {
+  kilogram: "Kilogram (kg)",
+  gram: "Gram (g)",
+  milligram: "Milligram (mg)",
+  metricton: "Metric Ton (t)",
+  pound: "Pound (lb)",
+  ounce: "Ounce (oz)",
+  stone: "Stone (st)",
+  ton: "Short Ton (ton)",
+  seer: "Seer",
+  maund: "Maund",
+  tola: "Tola",
+  chatak: "Chatak",
+  masha: "Masha",
+  ratti: "Ratti",
+};
+
 const MassConverter = ({ theme }) => {
   const [inputValue, setInputValue] = useState("");
   const [fromUnit, setFromUnit] = useState("kilogram");
@@ -69,10 +87,12 @@ const MassConverter = ({ theme }) => {
       setOutputValue(formattedResult);
 
       const conversionRatio = convertMass(1, fromUnit, toUnit);
-      setFormula(`1 ${fromUnit} = ${conversionRatio.toLocaleString("en-US", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 6,
-      })} ${toUnit}`);
+      setFormula(
+        `1 ${unitLabels[fromUnit]} = ${conversionRatio.toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 6,
+        })} ${unitLabels[toUnit]}`
+      );
     } catch (error) {
       toast.error("Conversion error occurred!");
       setOutputValue("");
@@ -133,14 +153,14 @@ const MassConverter = ({ theme }) => {
         : "bg-yellow-100 text-yellow-800"
     }`,
   };
-  
-    return (
+
+  return (
     <div className={`min-h-screen flex justify-center items-center ${themeStyles.container} p-4 sm:mt-20 md:mt-0 mt-12 sm:p-6`}>
-    <ToastContainer />
+      <ToastContainer />
 
       <div className={`w-full max-w-4xl rounded-2xl p-6 sm:p-10 ${themeStyles.card}`}>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 sm:mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-500">
-          ⚖️ Mass Unit Converter
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 sm:mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 pb-5">
+      ⚖️ Mass Unit Converter
         </h2>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
@@ -159,13 +179,15 @@ const MassConverter = ({ theme }) => {
             >
               {Object.keys(conversionRates).map((unit) => (
                 <option key={unit} value={unit}>
-                  {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                  {unitLabels[unit] || (unit.charAt(0).toUpperCase() + unit.slice(1))}
                 </option>
               ))}
             </select>
           </div>
 
-          <div className="text-3xl sm:text-4xl md:text-5xl font-bold opacity-50 my-4 md:my-0">=</div>
+          <div className="text-3xl sm:text-4xl md:text-5xl font-bold opacity-50 my-4 md:my-0">
+            =
+          </div>
 
           <div className="flex flex-col w-full">
             <div className="relative">
@@ -177,12 +199,15 @@ const MassConverter = ({ theme }) => {
                 className={`p-3 sm:p-4 md:p-6 text-base sm:text-xl md:text-2xl rounded-xl border-2 w-full pr-12 sm:pr-16 ${themeStyles.input}`}
               />
               <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex gap-2">
-                <button onClick={handleCopyResult} className="text-gray-500 hover:text-blue-600 transition-colors" title="Copy Result">
+                <button 
+                  onClick={handleCopyResult}
+                  className="text-gray-500 hover:text-blue-600 transition-colors"
+                  title="Copy Result"
+                >
                   <FaCopy size={isMobile ? 16 : 20} />
                 </button>
               </div>
             </div>
-
             <select
               value={toUnit}
               onChange={(e) => setToUnit(e.target.value)}
@@ -190,23 +215,35 @@ const MassConverter = ({ theme }) => {
             >
               {Object.keys(conversionRates).map((unit) => (
                 <option key={unit} value={unit}>
-                  {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                  {unitLabels[unit] || (unit.charAt(0).toUpperCase() + unit.slice(1))}
                 </option>
               ))}
             </select>
           </div>
         </div>
 
-        <div className="flex justify-center gap-4 mt-6">
-          <button onClick={handleSwap} className={`px-6 py-3 rounded-lg ${themeStyles.button}`}>
-            <FaExchangeAlt /> Swap
+        <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-6 sm:mt-8">
+          <button
+            onClick={handleSwap}
+            className={`flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-lg ${themeStyles.button} font-bold hover:scale-105 transition-all`}
+          >
+            <FaExchangeAlt size={isMobile ? 16 : 20} />
+            Swap Units
           </button>
-          <button onClick={handleReset} className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg">
-            <FaRedo /> Reset
+          <button
+            onClick={handleReset}
+            className={`flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-gray-500 hover:bg-gray-600 text-white font-bold hover:scale-105 transition-all`}
+          >
+            <FaRedo size={isMobile ? 16 : 20} />
+            Reset
           </button>
         </div>
 
-        {formula && <div className={`mt-4 p-3 rounded-lg ${themeStyles.formula}`}>{formula}</div>}
+        {formula && (
+          <div className={`mt-4 sm:mt-8 p-3 rounded-lg ${themeStyles.formula} flex items-center text-xs sm:text-sm`}>
+            <span className="font-bold mr-2">Conversion Ratio:</span> {formula}
+          </div>
+        )}
       </div>
     </div>
   );

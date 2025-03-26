@@ -3,10 +3,28 @@ import { FaExchangeAlt, FaCopy, FaRedo } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const TemperatureConverter = ({ theme }) => {
+// Comprehensive frequency conversion rates (all standardized to Hertz)
+const frequencyConversionRates = {
+  hertz: 1,
+  kilohertz: 1e3,  // 1 kHz = 1,000 Hz
+  megahertz: 1e6,  // 1 MHz = 1,000,000 Hz
+  gigahertz: 1e9,  // 1 GHz = 1,000,000,000 Hz
+  terahertz: 1e12, // 1 THz = 1,000,000,000,000 Hz
+};
+
+// Mapping of unit keys to SI abbreviations
+const unitLabels = {
+  hertz: "Hz",
+  kilohertz: "kHz",
+  megahertz: "MHz",
+  gigahertz: "GHz",
+  terahertz: "THz",
+};
+
+const FrequencyConverter = ({ theme }) => {
   const [inputValue, setInputValue] = useState("");
-  const [fromUnit, setFromUnit] = useState("celsius");
-  const [toUnit, setToUnit] = useState("fahrenheit");
+  const [fromUnit, setFromUnit] = useState("hertz");
+  const [toUnit, setToUnit] = useState("kilohertz");
   const [outputValue, setOutputValue] = useState("");
   const [formula, setFormula] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -18,19 +36,11 @@ const TemperatureConverter = ({ theme }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Temperature conversion logic
-  const convertTemperature = (value, from, to) => {
-    let result;
-    if (from === to) return value;
-    const temp = parseFloat(value);
-    if (from === "celsius") {
-      result = to === "fahrenheit" ? (temp * 9) / 5 + 32 : temp + 273.15;
-    } else if (from === "fahrenheit") {
-      result = to === "celsius" ? ((temp - 32) * 5) / 9 : ((temp - 32) * 5) / 9 + 273.15;
-    } else if (from === "kelvin") {
-      result = to === "celsius" ? temp - 273.15 : ((temp - 273.15) * 9) / 5 + 32;
-    }
-    return result;
+  // Conversion logic with improved accuracy
+  const convertFrequency = (value, fromUnit, toUnit) => {
+    const valueInHz = parseFloat(value) * frequencyConversionRates[fromUnit];
+    const convertedValue = valueInHz / frequencyConversionRates[toUnit];
+    return convertedValue;
   };
 
   // Automatically convert on change
@@ -47,29 +57,20 @@ const TemperatureConverter = ({ theme }) => {
       return;
     }
     try {
-      const result = convertTemperature(parseFloat(inputValue), fromUnit, toUnit);
+      const result = convertFrequency(parseFloat(inputValue), fromUnit, toUnit);
       const formattedResult = result.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
+        minimumFractionDigits: 0,
         maximumFractionDigits: 6,
       });
       setOutputValue(formattedResult);
-
-      // Display conversion formula
-      let formulaText = "";
-      if (fromUnit === "celsius" && toUnit === "fahrenheit") {
-        formulaText = `°F = (°C × 9/5) + 32`;
-      } else if (fromUnit === "celsius" && toUnit === "kelvin") {
-        formulaText = `K = °C + 273.15`;
-      } else if (fromUnit === "fahrenheit" && toUnit === "celsius") {
-        formulaText = `°C = (°F − 32) × 5/9`;
-      } else if (fromUnit === "fahrenheit" && toUnit === "kelvin") {
-        formulaText = `K = (°F − 32) × 5/9 + 273.15`;
-      } else if (fromUnit === "kelvin" && toUnit === "celsius") {
-        formulaText = `°C = K − 273.15`;
-      } else if (fromUnit === "kelvin" && toUnit === "fahrenheit") {
-        formulaText = `°F = (K − 273.15) × 9/5 + 32`;
-      }
-      setFormula(formulaText);
+      
+      const conversionRatio = convertFrequency(1, fromUnit, toUnit);
+      setFormula(
+        `1 ${unitLabels[fromUnit]} = ${conversionRatio.toLocaleString("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 6,
+        })} ${unitLabels[toUnit]}`
+      );
     } catch (error) {
       toast.error("Conversion error occurred!");
       setOutputValue("");
@@ -94,8 +95,8 @@ const TemperatureConverter = ({ theme }) => {
     setInputValue("");
     setOutputValue("");
     setFormula("");
-    setFromUnit("celsius");
-    setToUnit("fahrenheit");
+    setFromUnit("hertz");
+    setToUnit("kilohertz");
   };
 
   const themeStyles = {
@@ -135,9 +136,10 @@ const TemperatureConverter = ({ theme }) => {
     <div className={`min-h-screen flex justify-center items-center ${themeStyles.container} p-4 sm:mt-20 md:mt-0 mt-12 sm:p-6`}>
       <ToastContainer />
       <div className={`w-full max-w-4xl rounded-2xl p-6 sm:p-10 ${themeStyles.card}`}>
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 sm:mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 pb-5">
-      🌡️ Temperature Converter
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 sm:mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 pb-5">
+          Frequency Converter
         </h2>
+
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
           <div className="flex flex-col w-full">
             <input
@@ -152,12 +154,16 @@ const TemperatureConverter = ({ theme }) => {
               onChange={(e) => setFromUnit(e.target.value)}
               className={`p-2 sm:p-3 md:p-4 mt-2 sm:mt-4 rounded-xl border-2 text-sm sm:text-base md:text-lg ${themeStyles.select}`}
             >
-              <option value="celsius">Celsius (°C)</option>
-              <option value="fahrenheit">Fahrenheit (°F)</option>
-              <option value="kelvin">Kelvin (K)</option>
+              {Object.keys(frequencyConversionRates).map((unit) => (
+                <option key={unit} value={unit}>
+                  {unitLabels[unit]}
+                </option>
+              ))}
             </select>
           </div>
+
           <div className="text-3xl sm:text-4xl md:text-5xl font-bold opacity-50 my-4 md:my-0">=</div>
+
           <div className="flex flex-col w-full">
             <div className="relative">
               <input
@@ -167,25 +173,30 @@ const TemperatureConverter = ({ theme }) => {
                 placeholder="Converted value"
                 className={`p-3 sm:p-4 md:p-6 text-base sm:text-xl md:text-2xl rounded-xl border-2 w-full pr-12 sm:pr-16 ${themeStyles.input}`}
               />
-              <button
-                onClick={handleCopyResult}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors"
-                title="Copy Result"
-              >
-                <FaCopy size={isMobile ? 16 : 20} />
-              </button>
+              <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 flex gap-2">
+                <button
+                  onClick={handleCopyResult}
+                  className="text-gray-500 hover:text-blue-600 transition-colors"
+                  title="Copy Result"
+                >
+                  <FaCopy size={isMobile ? 16 : 20} />
+                </button>
+              </div>
             </div>
             <select
               value={toUnit}
               onChange={(e) => setToUnit(e.target.value)}
               className={`p-2 sm:p-3 md:p-4 mt-2 sm:mt-4 rounded-xl border-2 text-sm sm:text-base md:text-lg ${themeStyles.select}`}
             >
-              <option value="celsius">Celsius (°C)</option>
-              <option value="fahrenheit">Fahrenheit (°F)</option>
-              <option value="kelvin">Kelvin (K)</option>
+              {Object.keys(frequencyConversionRates).map((unit) => (
+                <option key={unit} value={unit}>
+                  {unitLabels[unit]}
+                </option>
+              ))}
             </select>
           </div>
         </div>
+
         <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 mt-6 sm:mt-8">
           <button
             onClick={handleSwap}
@@ -202,9 +213,10 @@ const TemperatureConverter = ({ theme }) => {
             Reset
           </button>
         </div>
+
         {formula && (
-          <div className={`mt-4 p-3 rounded-lg ${themeStyles.formula} flex items-center text-xs sm:text-sm`}>
-            {formula}
+          <div className={`mt-4 sm:mt-8 p-3 rounded-lg ${themeStyles.formula} flex items-center text-xs sm:text-sm`}>
+            <span className="font-bold mr-2">Conversion Ratio:</span> {formula}
           </div>
         )}
       </div>
@@ -212,4 +224,4 @@ const TemperatureConverter = ({ theme }) => {
   );
 };
 
-export default TemperatureConverter;
+export default FrequencyConverter;

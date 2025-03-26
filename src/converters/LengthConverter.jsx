@@ -31,6 +31,32 @@ const conversionRates = {
   angulam: 0.018288,    // 1 angulam ≈ 0.018288 meters
 };
 
+// Mapping of unit keys to full names with abbreviations
+const unitLabels = {
+  meter: "Meter (m)",
+  kilometer: "Kilometer (km)",
+  mile: "Mile (mi)",
+  yard: "Yard (yd)",
+  foot: "Foot (ft)",
+  inch: "Inch (in)",
+  centimeter: "Centimeter (cm)",
+  millimeter: "Millimeter (mm)",
+  micrometer: "Micrometer (µm)",
+  nanometer: "Nanometer (nm)",
+  nauticalmile: "Nautical Mile (NM)",
+  lightyear: "Light Year (ly)",
+  // Local/Traditional Units (if no abbreviation is common, just display the name)
+  gaj: "Gaj",
+  haat: "Haat",
+  kos: "Kos",
+  dhanush: "Dhanush",
+  baalish: "Baalish",
+  zira: "Zira",
+  cubit: "Cubit",
+  handspan: "Handspan",
+  angulam: "Angulam",
+};
+
 const LengthConverter = ({ theme }) => {
   const [inputValue, setInputValue] = useState("");
   const [fromUnit, setFromUnit] = useState("meter");
@@ -44,9 +70,8 @@ const LengthConverter = ({ theme }) => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Conversion logic with improved accuracy
@@ -76,20 +101,17 @@ const LengthConverter = ({ theme }) => {
         fromUnit, 
         toUnit
       );
-
-      const formattedResult = result.toLocaleString('en-US', {
+      const formattedResult = result.toLocaleString("en-US", {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 6
+        maximumFractionDigits: 6,
       });
-      
       setOutputValue(formattedResult);
 
       const conversionRatio = convertLength(1, fromUnit, toUnit);
-      setFormula(`1 ${fromUnit} = ${conversionRatio.toLocaleString('en-US', {
+      setFormula(`1 ${unitLabels[fromUnit] || fromUnit} = ${conversionRatio.toLocaleString("en-US", {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 6
-      })} ${toUnit}`);
-
+        maximumFractionDigits: 6,
+      })} ${unitLabels[toUnit] || toUnit}`);
     } catch (error) {
       toast.error("Conversion error occurred!");
       setOutputValue("");
@@ -177,7 +199,7 @@ const LengthConverter = ({ theme }) => {
             >
               {Object.keys(conversionRates).map((unit) => (
                 <option key={unit} value={unit}>
-                  {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                  {unitLabels[unit] || (unit.charAt(0).toUpperCase() + unit.slice(1))}
                 </option>
               ))}
             </select>
@@ -213,7 +235,7 @@ const LengthConverter = ({ theme }) => {
             >
               {Object.keys(conversionRates).map((unit) => (
                 <option key={unit} value={unit}>
-                  {unit.charAt(0).toUpperCase() + unit.slice(1)}
+                  {unitLabels[unit] || (unit.charAt(0).toUpperCase() + unit.slice(1))}
                 </option>
               ))}
             </select>
