@@ -152,7 +152,7 @@ const convert = () => {
     setSolutionSteps(steps);
   } catch (error) {
     toast.error("Invalid conversion!");
-    setOutput="";
+    setOutput("");
   }
 };
 
