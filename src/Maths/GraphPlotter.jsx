@@ -5,7 +5,9 @@ import {
   Trash2, 
   X,
   Copy,
-  Download
+  Download,
+  Grid,
+  Trash
 } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -61,6 +63,8 @@ const UltimateGraphPlotter = ({
     velocity: { x: 0, y: 0 },
     isDragging: false
   });
+  // Add state for grid visibility
+  const [showGrid, setShowGrid] = useState(true);
 
   // Refs
   const canvasRef = useRef(null);
@@ -78,8 +82,8 @@ const UltimateGraphPlotter = ({
       text: 'text-gray-800',
       input: 'bg-white border-gray-300',
       grid: {
-        color: 'rgba(200,200,200,0.5)',
-        axes: 'rgba(0,0,0,0.7)'
+        color: 'rgba(175,175,175,0.5)',
+        axes: 'black'
       }
     },
     dark: {
@@ -88,14 +92,34 @@ const UltimateGraphPlotter = ({
       text: 'text-gray-100',
       input: 'bg-black border-gray-600 text-gray-100',
       grid: {
-        color: 'rgba(100,100,100,0.3)',
-        axes: 'rgba(255,255,255,0.7)'
+        color: 'rgba(211, 211, 211,0.3)',
+        axes: 'white'
       }
     }
   };
 
   // Draw Grid
   const drawGrid = (ctx, width, height) => {
+    if (!showGrid) {
+      // If grid is disabled, only draw axes
+      const gridConfig = themeStyles[theme].grid;
+      ctx.strokeStyle = gridConfig.axes;
+      ctx.lineWidth = 2;
+      
+      // X-axis
+      ctx.beginPath();
+      ctx.moveTo(0, height/2 + graphState.offsetY);
+      ctx.lineTo(width, height/2 + graphState.offsetY);
+      ctx.stroke();
+
+      // Y-axis
+      ctx.beginPath();
+      ctx.moveTo(width/2 + graphState.offsetX, 0);
+      ctx.lineTo(width/2 + graphState.offsetX, height);
+      ctx.stroke();
+      return;
+    }
+    
     const gridConfig = themeStyles[theme].grid;
     const gridSize = 50 * graphState.scale;
     
@@ -286,7 +310,7 @@ const UltimateGraphPlotter = ({
 
     // Draw equations
     drawEquations(ctx, width, height);
-  }, [drawEquations, theme]);
+  }, [drawEquations, theme, showGrid]);
 
   // Setup Canvas and Event Listeners
   useEffect(() => {
@@ -447,6 +471,16 @@ const UltimateGraphPlotter = ({
       // Validate equation
       math.evaluate(equation, { x: 1 });
 
+      // Check if equation already exists
+      const isDuplicate = equations.some(eq => eq.expression === equation);
+      
+      if (isDuplicate) {
+        
+        toast.info('This equation is already plotted');
+        setCurrentEquation('')
+        return;
+      }
+
       const newEquation = {
         id: `eq-${Date.now()}`,
         expression: equation,
@@ -457,6 +491,15 @@ const UltimateGraphPlotter = ({
       setCurrentEquation('');
     } catch (err) {
       toast.error(`Invalid equation: ${err.message}`);
+    }
+  };
+
+  // Function to clear all equations except one
+  const clearAllEquations = () => {
+    // Keep only the first equation
+    if (equations.length > 1) {
+      setEquations([equations[0]]);
+      toast.info('All equations cleared except the first one');
     }
   };
 
@@ -530,8 +573,36 @@ const UltimateGraphPlotter = ({
             />
           </div>
 
-          {/* Download Graph Button */}
-          <div className="mt-2 flex justify-end">
+          {/* Controls Row */}
+          <div className="mt-2 flex justify-between flex-wrap gap-2">
+            {/* Left side controls */}
+            <div className="flex items-center space-x-2">
+              {/* Grid Toggle Button */}
+              <button
+                onClick={() => setShowGrid(!showGrid)}
+                className={`flex items-center space-x-2 p-2 rounded ${
+                  theme === 'light' ? 'bg-gray-200 text-gray-800' : 'bg-gray-700 text-gray-100'
+                }`}
+              >
+                <Grid size={20} />
+                <span>{showGrid ? 'Hide Grid' : 'Show Grid'}</span>
+              </button>
+              
+              {/* Clear All Equations Button - Only shown if more than 1 equation */}
+              {equations.length > 1 && (
+                <button
+                  onClick={clearAllEquations}
+                  className={`flex items-center space-x-2 p-2 rounded ${
+                    theme === 'light' ? 'bg-red-100 text-red-800' : 'bg-red-900 text-red-100'
+                  }`}
+                >
+                  <Trash size={20} />
+                  <span>Clear All</span>
+                </button>
+              )}
+            </div>
+            
+            {/* Right side controls */}
             <button
               onClick={downloadGraph}
               className={`flex items-center space-x-2 p-2 rounded ${
