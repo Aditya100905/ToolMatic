@@ -277,15 +277,16 @@ const UltimateGraphPlotter = ({
     const ctx = canvas.getContext('2d');
     const { width, height } = canvas;
 
-    // Clear canvas
-    ctx.clearRect(0, 0, width, height);
+    // Clear canvas with background color based on theme
+    ctx.fillStyle = theme === 'light' ? 'white' : 'black';
+    ctx.fillRect(0, 0, width, height);
 
     // Draw grid
     drawGrid(ctx, width, height);
 
     // Draw equations
     drawEquations(ctx, width, height);
-  }, [drawEquations]);
+  }, [drawEquations, theme]);
 
   // Setup Canvas and Event Listeners
   useEffect(() => {
@@ -459,6 +460,20 @@ const UltimateGraphPlotter = ({
     }
   };
 
+  // Function to download the graph with correct theme
+  const downloadGraph = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    // The canvas already has the correct theme applied
+    // because we're now explicitly setting the background in renderCanvas
+    const link = document.createElement('a');
+    link.download = 'graph.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    toast.success('Graph downloaded');
+  };
+
   const currentTheme = themeStyles[theme];
 
   return (
@@ -518,16 +533,7 @@ const UltimateGraphPlotter = ({
           {/* Download Graph Button */}
           <div className="mt-2 flex justify-end">
             <button
-              onClick={() => {
-                const canvas = canvasRef.current;
-                if (!canvas) return;
-
-                const link = document.createElement('a');
-                link.download = 'graph.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                toast.success('Graph downloaded');
-              }}
+              onClick={downloadGraph}
               className={`flex items-center space-x-2 p-2 rounded ${
                 theme === 'light' ? 'bg-gray-200 text-gray-800' : 'bg-gray-700 text-gray-100'
               }`}
