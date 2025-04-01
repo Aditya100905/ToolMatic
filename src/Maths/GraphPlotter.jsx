@@ -41,6 +41,37 @@ const generateDistinctRandomColor = (index) => {
   return `hsl(${hue}, 70%, 50%)`;
 };
 
+// Function to check if two equations are mathematically equivalent
+const areEquationsEquivalent = (expr1, expr2) => {
+  try {
+    // Generate a set of test points
+    const testPoints = [-10, -3, -1, 0, 0.5, 1, 2, 5, 10];
+    
+    // Compare function outputs at each test point
+    for (const x of testPoints) {
+      // Evaluate both expressions at this point
+      const value1 = math.evaluate(expr1, { x });
+      const value2 = math.evaluate(expr2, { x });
+      
+      // If either result is NaN or Infinity, skip this test point
+      if (!isFinite(value1) || !isFinite(value2)) {
+        continue;
+      }
+      
+      // If values differ significantly, they're not equivalent
+      if (Math.abs(value1 - value2) > 1e-10) {
+        return false;
+      }
+    }
+    
+    // If all test points match, equations are likely equivalent
+    return true;
+  } catch (err) {
+    // If there's an error in evaluation, assume they're different
+    return false;
+  }
+};
+
 const UltimateGraphPlotter = ({ 
   theme = 'light', 
   initialEquations = ['x^2'] 
@@ -471,13 +502,14 @@ const UltimateGraphPlotter = ({
       // Validate equation
       math.evaluate(equation, { x: 1 });
 
-      // Check if equation already exists
-      const isDuplicate = equations.some(eq => eq.expression === equation);
+      // Check if equation is mathematically equivalent to any existing equation
+      const duplicateEquation = equations.find(eq => 
+        areEquationsEquivalent(eq.expression, equation)
+      );
       
-      if (isDuplicate) {
-        
-        toast.info('This equation is already plotted');
-        setCurrentEquation('')
+      if (duplicateEquation) {
+        toast.info('This equation is mathematically equivalent to an existing equation');
+        setCurrentEquation('');
         return;
       }
 
@@ -494,15 +526,11 @@ const UltimateGraphPlotter = ({
     }
   };
 
-  // Function to clear all equations except one
   const clearAllEquations = () => {
-    // Keep only the first equation
-    if (equations.length > 1) {
-      setEquations([equations[0]]);
-      toast.info('All equations cleared except the first one');
-    }
+    // Clear all equations
+    setEquations([]);
+    toast.info('All equations cleared');
   };
-
   // Function to download the graph with correct theme
   const downloadGraph = () => {
     const canvas = canvasRef.current;
