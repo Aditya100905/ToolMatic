@@ -88,7 +88,7 @@ const utilities = {
 
   "Text": ["Word Counter", "Case Converter", "Text Cleaner"],
 
- "Advanced Mathematics": ["Matrix Solver", "Graph Plotter", "Equation Solver"],
+ "Advanced Mathematics": ["Matrix Calculator", "Graph Plotter", "Equation Solver"],
 
  "Basic Mathematics": ["Scientific Calculator", ""],
 
@@ -114,7 +114,7 @@ const utilityRoutes = {
   "Word Counter": "/text/word-counter",
   "Case Converter": "/text/case-converter",
   "Text Cleaner": "/text/text-cleaner",
-  "Matrix Solver": "/math/matrix-solver",
+  "Matrix Calculator": "/math/matrix-calculator",
   "Graph Plotter": "/math/graph-plotter",
   "Equation Solver": "/math/equation-solver",
   "Scientific Calculator": "/math/scientific-calculator",
@@ -251,7 +251,7 @@ const App = () => {
           {/* Math Utilities */}
 
 {/* Advanced */}
-          <Route path="/math/matrix-solver" element={<MatrixSolver />} />
+          <Route path="/math/matrix-calculator" element={<MatrixSolver />} />
           <Route path="/math/graph-plotter" element={<GraphPlotter theme={theme} />}/>
           <Route path="/math/equation-solver" element={<EquationSolver theme={theme} />}/>
           {/* <Route path="/math/calculator" element={<Calculator />} /> */}

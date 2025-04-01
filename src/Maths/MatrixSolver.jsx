@@ -67,11 +67,74 @@ const MatrixSolver = () => {
       setShake(true);
       setTimeout(() => setShake(false), 500); // Reset shake effect
       toast.warn("Reached max dimension limit!");
-    } else {
     }
 
     setter(newValue);
   };
+
+  // ----- Helper functions for determinant and inverse -----
+
+  const computeDeterminant = (mat) => {
+    const n = mat.length;
+    if (n === 1) return mat[0][0];
+    if (n === 2) return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];
+    let det = 0;
+    for (let col = 0; col < n; col++) {
+      const subMatrix = mat
+        .slice(1)
+        .map((row) => row.filter((_, j) => j !== col));
+      det +=
+        (col % 2 === 0 ? 1 : -1) * mat[0][col] * computeDeterminant(subMatrix);
+    }
+    return det;
+  };
+
+  const invertMatrix = (mat) => {
+    const n = mat.length;
+    // Create augmented matrix [A | I]
+    let aug = mat.map((row, i) => [
+      ...row,
+      ...Array.from({ length: n }, (_, j) => (i === j ? 1 : 0)),
+    ]);
+
+    // Perform Gauss-Jordan elimination
+    for (let i = 0; i < n; i++) {
+      // Find pivot
+      let pivot = aug[i][i];
+      if (pivot === 0) {
+        // Swap with a row below
+        let swapped = false;
+        for (let j = i + 1; j < n; j++) {
+          if (aug[j][i] !== 0) {
+            [aug[i], aug[j]] = [aug[j], aug[i]];
+            pivot = aug[i][i];
+            swapped = true;
+            break;
+          }
+        }
+        if (!swapped) {
+          throw new Error("Matrix is singular and cannot be inverted");
+        }
+      }
+      // Normalize pivot row
+      for (let j = 0; j < 2 * n; j++) {
+        aug[i][j] /= pivot;
+      }
+      // Eliminate other rows
+      for (let k = 0; k < n; k++) {
+        if (k !== i) {
+          let factor = aug[k][i];
+          for (let j = 0; j < 2 * n; j++) {
+            aug[k][j] -= factor * aug[i][j];
+          }
+        }
+      }
+    }
+    // Extract inverse matrix
+    return aug.map((row) => row.slice(n));
+  };
+
+  // ----- End helper functions -----
 
   const calculate = (operation) => {
     let res;
@@ -114,17 +177,62 @@ const MatrixSolver = () => {
         }
         break;
 
-      case "transposeA":
-        res = matrixA[0].map((_, colIndex) =>
-          matrixA.map((row) => row[colIndex])
+      // ----- New logic for determinant and inverse -----
+      case "determinant-A":
+        if (rowsA !== colsA) {
+          toast.error("Matrix A must be square to compute determinant!");
+          return;
+        }
+        // Ensure numbers (treat null as 0)
+        const detA = computeDeterminant(
+          matrixA.map((row) => row.map((v) => v || 0))
         );
+        res = [[detA]]; // 1x1 matrix display
         break;
 
-      case "transposeB":
-        res = matrixB[0].map((_, colIndex) =>
-          matrixB.map((row) => row[colIndex])
+      case "determinant-B":
+        if (rowsB !== colsB) {
+          toast.error("Matrix B must be square to compute determinant!");
+          return;
+        }
+        const detB = computeDeterminant(
+          matrixB.map((row) => row.map((v) => v || 0))
         );
+        res = [[detB]];
         break;
+
+      case "inverse-A":
+        if (rowsA !== colsA) {
+          toast.error("Matrix A must be square for inverse!");
+          return;
+        }
+        try {
+          const invA = invertMatrix(
+            matrixA.map((row) => row.map((v) => v || 0))
+          );
+          res = invA;
+        } catch (error) {
+          toast.error(error.message);
+          return;
+        }
+        break;
+
+      case "inverse-B":
+        if (rowsB !== colsB) {
+          toast.error("Matrix B must be square for inverse!");
+          return;
+        }
+        try {
+          const invB = invertMatrix(
+            matrixB.map((row) => row.map((v) => v || 0))
+          );
+          res = invB;
+        } catch (error) {
+          toast.error(error.message);
+          return;
+        }
+        break;
+      // ----- End new logic -----
 
       default:
         return;
@@ -205,26 +313,57 @@ const MatrixSolver = () => {
       </h1>
 
       <div className="flex flex-wrap justify-center gap-12 w-full">
-        {renderMatrix(matrixA, setMatrixA, "Matrix A", rowsA, colsA, setRowsA, setColsA)}
-        {renderMatrix(matrixB, setMatrixB, "Matrix B", rowsB, colsB, setRowsB, setColsB)}
+        {renderMatrix(
+          matrixA,
+          setMatrixA,
+          "Matrix A",
+          rowsA,
+          colsA,
+          setRowsA,
+          setColsA
+        )}
+        {renderMatrix(
+          matrixB,
+          setMatrixB,
+          "Matrix B",
+          rowsB,
+          colsB,
+          setRowsB,
+          setColsB
+        )}
       </div>
 
       <div className="flex gap-4 my-12 flex-wrap justify-center">
-        {["add", "subtract", "multiply", "transposeA", "transposeB"].map((op) => (
-          <button key={op} onClick={() => calculate(op)} className="px-8 py-4 rounded-lg font-bold shadow-md transition-all bg-blue-500 text-white hover:bg-blue-600">
+        {[
+          "add",
+          "subtract",
+          "multiply",
+          "determinant-A",
+          "determinant-B",
+          "inverse-A",
+          "inverse-B",
+        ].map((op) => (
+          <button
+            key={op}
+            onClick={() => calculate(op)}
+            className="px-8 py-4 rounded-lg font-bold shadow-md transition-all bg-blue-500 text-white hover:bg-blue-600"
+          >
             {op.toUpperCase()}
           </button>
         ))}
       </div>
 
-             {result && (
+      {result && (
         <div className="mt-10">
           <h2 className="text-3xl font-bold mb-6">Result</h2>
           <div className="grid gap-2 sm:gap-3">
             {result.map((row, i) => (
               <div key={i} className="flex gap-2">
                 {row.map((val, j) => (
-                  <div key={j} className="w-20 h-20 bg-blue-200 rounded-lg shadow-md flex justify-center items-center">
+                  <div
+                    key={j}
+                    className="w-20 h-20 bg-blue-200 text-black rounded-lg shadow-md flex justify-center items-center"
+                  >
                     {val}
                   </div>
                 ))}
@@ -233,7 +372,6 @@ const MatrixSolver = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
