@@ -113,7 +113,7 @@ const utilityRoutes = {
   "PDF to Images": "/pdf-tools/pdf-to-images",
   "Word Counter": "/text/word-counter",
   "Case Converter": "/text/case-converter",
-  "Text Cleaner": "/text/text-cleaner",
+  "Text Cleaner": "/text/text-cleaning",
   "Matrix Calculator": "/math/matrix-calculator",
   "Graph Plotter": "/math/graph-plotter",
   "Equation Solver": "/math/equation-solver",
