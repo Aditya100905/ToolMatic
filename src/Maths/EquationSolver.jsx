@@ -1,518 +1,529 @@
-import { useState } from "react";
-import * as math from "mathjs";
-const EquationSolver = ({ theme = "light" }) => {
+import React, { useState } from "react";
+import { simplify, evaluate, derivative, parse, rationalize } from "mathjs";
+
+const MathSolver = ({ theme = "light" }) => {
   const [equation, setEquation] = useState("");
   const [solution, setSolution] = useState("");
   const [error, setError] = useState("");
+  const [isCalculating, setIsCalculating] = useState(false);
   const [history, setHistory] = useState([]);
-  const [advancedMode, setAdvancedMode] = useState(false);
-  const [variable, setVariable] = useState("x");
-  const [equationType, setEquationType] = useState("general");
-  const themes = {
-    light: {
-      background: "bg-gray-100",
-      card: "bg-white",
-      primary: "bg-blue-500 hover:bg-blue-600",
-      secondary: "bg-gray-200 hover:bg-gray-300",
-      text: "text-gray-800",
-      border: "border-gray-300",
-      highlight: "bg-blue-100",
-    },
-    dark: {
-      background: "bg-gray-900",
-      card: "bg-gray-800",
-      primary: "bg-blue-600 hover:bg-blue-700",
-      secondary: "bg-gray-700 hover:bg-gray-600",
-      text: "text-gray-100",
-      border: "border-gray-700",
-      highlight: "bg-gray-700",
-    },
-    colorful: {
-      background: "bg-purple-100",
-      card: "bg-white",
-      primary: "bg-purple-500 hover:bg-purple-600",
-      secondary: "bg-pink-200 hover:bg-pink-300",
-      text: "text-gray-800",
-      border: "border-purple-300",
-      highlight: "bg-pink-100",
-    },
+
+  // Theme-based styling
+  const isDark = theme === "dark";
+  
+  const themeStyles = {
+    container: isDark ? "bg-gray-900" : "bg-white",
+    header: isDark 
+      ? "bg-gradient-to-r from-indigo-900 to-purple-900" 
+      : "bg-gradient-to-r from-blue-600 to-indigo-700", headerText: isDark ? "text-gray-100" : "text-white", headerSubtext: isDark ? "text-indigo-200" : "text-blue-100", cardBg: isDark ? "bg-gray-800" : "bg-white", inputBg: isDark ? "bg-gray-700 text-white" : "bg-white text-gray-900", inputBorder: isDark ? "border-gray-600" : "border-gray-300", inputFocus: isDark ? "focus:ring-purple-500 focus:border-purple-500" : "focus:ring-blue-500 focus:border-blue-500", primaryButton: isDark 
+      ? "bg-purple-600 hover:bg-purple-700 text-white" 
+      : "bg-blue-600 hover:bg-blue-700 text-white",
+    secondaryButton: isDark 
+      ? "bg-gray-700 hover:bg-gray-600 text-gray-200" 
+      : "bg-gray-200 hover:bg-gray-300 text-gray-800",
+    resultBox: isDark ? "bg-gray-750 border-gray-700" : "bg-blue-50 border-blue-100", resultTitle: isDark ? "text-purple-300" : "text-blue-800", resultLabel: isDark ? "text-gray-400" : "text-gray-700", resultText: isDark ? "text-gray-200" : "text-gray-900", divider: isDark ? "border-gray-700" : "border-gray-200", historyTitle: isDark ? "text-gray-400" : "text-gray-500", historyItem: isDark ? "hover:bg-gray-750" : "hover:bg-gray-100", historyText: isDark ? "text-gray-300" : "text-gray-800", historySubtext: isDark ? "text-gray-500" : "text-gray-500", infoText: isDark ? "text-gray-400" : "text-gray-500", errorBg: isDark ? "bg-red-900/30 border-red-800" : "bg-red-100 border-red-500", errorText: isDark ? "text-red-300" : "text-red-700",
   };
-  const currentTheme = themes[theme] || themes.light;
-  const detectEquationType = (eq) => {
-    const eqLower = eq.toLowerCase();
-    if (
-      eqLower.includes("log(") ||
-      eqLower.includes("ln(") ||
-      eqLower.includes("log10(")
-    ) {
-      return "logarithmic";
-    } else if (
-      eqLower.includes("sin(") ||
-      eqLower.includes("cos(") ||
-      eqLower.includes("tan(") ||
-      eqLower.includes("asin(") ||
-      eqLower.includes("acos(") ||
-      eqLower.includes("atan(")
-    ) {
-      return "trigonometric";
-    } else if (
-      eqLower.includes("e^") ||
-      eqLower.includes("exp(") ||
-      (eqLower.includes("^") && eqLower.includes(variable))
-    ) {
-      return "exponential";
-    }
-    return "general";
-  };
-  const checkIdentities = (expr) => {
-    try {
-      if (expr.includes("sin") && expr.includes("cos")) {
-        const simplifiedExpr = math.parse(expr);
-        const normalized = simplifiedExpr.toString({ parenthesis: "all" });
-        if (
-          /\(sin\(.+?\)\)\^2\s*\+\s*\(cos\(.+?\)\)\^2/.test(normalized) ||
-          /sin\(.+?\)\^2\s*\+\s*cos\(.+?\)\^2/.test(normalized)
-        ) {
-          return "1 (Pythagorean identity: sin²(x) + cos²(x) = 1)";
+
+  const solveLinearEquation = (leftSide, rightSide) => {
+    try {      const allVariables = new Set([
+        ...(leftSide.match(/[a-zA-Z]/g) || []), 
+        ...(rightSide.match(/[a-zA-Z]/g) || [])
+      ]);
+            if (allVariables.size === 0) {
+        return "No variables found in equation";
+      }      const variable = Array.from(allVariables)[0];      const parsedLeft = parse(leftSide);
+      const parsedRight = parse(rightSide);      const subtracted = parse(`(${leftSide}) - (${rightSide})`);
+      const standardForm = simplify(subtracted).toString();
+      let withVariable = [];
+      let withoutVariable = [];
+    
+      const terms = standardForm.replace(/\s+/g, '')
+        .replace(/-/g, '+-')
+        .split('+')
+        .filter(term => term !== '');
+      terms.forEach(term => {
+        if (term.includes(variable)) {
+          withVariable.push(term);
+        } else {
+          withoutVariable.push(term);
         }
-        if (
-          /\(tan\(.+?\)\)\^2\s*\+\s*1/.test(normalized) ||
-          /tan\(.+?\)\^2\s*\+\s*1/.test(normalized)
-        ) {
-          return "sec²(x) (Identity: tan²(x) + 1 = sec²(x))";
-        }
-        if (
-          /1\s*\+\s*\(cot\(.+?\)\)\^2/.test(normalized) ||
-          /1\s*\+\s*cot\(.+?\)\^2/.test(normalized)
-        ) {
-          return "csc²(x) (Identity: 1 + cot²(x) = csc²(x))";
-        }
+      });
+      let leftCoefficient = withVariable.length > 0
+        ? simplify(withVariable.join('+'))
+        : '0';
+      let rightConstant = withoutVariable.length > 0
+        ? simplify(`-(${withoutVariable.join('+')})`).toString()
+        : '0';
+      if (leftCoefficient.toString() === variable) {
+        leftCoefficient = '1';
+      } 
+      else if (leftCoefficient.toString() === `-${variable}`) {
+        leftCoefficient = '-1';
       }
-    } catch (e) {}
-    return null;
-  };
-  const solveLogarithmic = (leftSide, rightSide) => {
-    try {
-      const expr = `${leftSide} - (${rightSide})`;
-      if (leftSide.includes("log(") && !rightSide.includes(variable)) {
-        if (leftSide.match(/^log\(\s*${variable}\s*\)$/)) {
-          const base = 10;
-          const exponent = parseFloat(rightSide);
-          if (!isNaN(exponent)) {
-            return [Math.pow(base, exponent)];
-          }
-        } else if (leftSide.match(/^ln\(\s*${variable}\s*\)$/)) {
-          const exponent = parseFloat(rightSide);
-          if (!isNaN(exponent)) {
-            return [Math.exp(exponent)];
-          }
-        }
+      else {
+        leftCoefficient = leftCoefficient.toString().replace(variable, '');
+        if (leftCoefficient === '') leftCoefficient = '1';
+        if (leftCoefficient === '-') leftCoefficient = '-1';
       }
-      return solveNumerically(expr, 0.0001, 1000, 0.1);
+      const solution = simplify(`(${rightConstant})/(${leftCoefficient})`).toString();
+      
+      return `${variable} = ${solution}`;
     } catch (err) {
-      throw new Error(`Error solving logarithmic equation: ${err.message}`);
+      return `Error solving linear equation: ${err.message}`;
     }
   };
-  const solveTrigonometric = (leftSide, rightSide) => {
+  const solveQuadraticEquation = (equation) => {
     try {
-      const expr = `${leftSide} - (${rightSide})`;
-      if (
-        leftSide.match(/^sin\(\s*${variable}\s*\)$/) &&
-        !rightSide.includes(variable)
-      ) {
-        const value = parseFloat(rightSide);
-        if (!isNaN(value) && value >= -1 && value <= 1) {
-          const baseAngle = Math.asin(value);
-          return [
-            baseAngle,
-            Math.PI - baseAngle,
-            baseAngle + 2 * Math.PI,
-            Math.PI - baseAngle + 2 * Math.PI,
-          ].filter((angle) => angle >= -2 * Math.PI && angle <= 2 * Math.PI);
+      const sides = equation.split('=');
+      if (sides.length !== 2) {
+        throw new Error("Invalid equation format");
+      }
+      
+      const leftSide = sides[0].trim();
+      const rightSide = sides[1].trim();
+      
+      // Find the variable (assuming one variable)
+      const variables = new Set([
+        ...(leftSide.match(/[a-zA-Z]/g) || []), 
+        ...(rightSide.match(/[a-zA-Z]/g) || [])
+      ]);
+      
+      if (variables.size === 0) {
+        throw new Error("No variables found");
+      }
+      
+      const variable = Array.from(variables)[0];
+      
+      // Get the standardized form ax² + bx + c = 0
+      const standardForm = simplify(`(${leftSide}) - (${rightSide})`).toString();
+      
+      // Extract coefficients
+      // We'll use a simplified approach that works for many quadratic equations
+      
+      // This regex looks for terms in the form of:
+      // ax², ax^2, ax*x, a*x*x, a*x^2, etc.
+      const quadraticTermRegex = new RegExp(`([+-]?\\s*\\d*\\.?\\d*\\s*\\*?\\s*${variable}\\s*\\^\\s*2|[+-]?\\s*\\d*\\.?\\d*\\s*\\*?\\s*${variable}\\s*\\*\\s*${variable})`, 'g');
+      // This regex looks for terms in the form of:
+      // bx, b*x, etc.
+      const linearTermRegex = new RegExp(`([+-]?\\s*\\d*\\.?\\d*\\s*\\*?\\s*${variable}(?!\\^|\\*${variable}))`, 'g');
+      
+      // Extract terms
+      const quadraticTerms = standardForm.match(quadraticTermRegex) || [];
+      const linearTerms = standardForm.match(linearTermRegex) || [];
+      
+      // Remove extracted terms from the equation to find constant term
+      let remaining = standardForm;
+      [...quadraticTerms, ...linearTerms].forEach(term => {
+        remaining = remaining.replace(term, '');
+      });
+      
+      // Clean up remaining to find constant term
+      remaining = remaining.replace(/[+\-\s]+$/, '').trim();
+      if (remaining === '') remaining = '0';
+      if (remaining === '+') remaining = '0';
+      if (remaining === '-') remaining = '0';
+      
+      // Parse coefficients
+      let a = 0, b = 0, c = 0;
+      
+      if (quadraticTerms.length > 0) {
+        // Combine and simplify quadratic terms
+        const combinedQuadratic = simplify(quadraticTerms.join('+')).toString();
+        // Extract coefficient of x²
+        const aMatch = combinedQuadratic.match(new RegExp(`([+-]?\\s*\\d*\\.?\\d*)\\s*\\*?\\s*${variable}(?:\\s*\\^\\s*2|\\s*\\*\\s*${variable})`));
+        if (aMatch) {
+          const aCoef = aMatch[1].trim();
+          a = aCoef === '' ? 1 : aCoef === '-' ? -1 : parseFloat(aCoef);
         }
       }
-      if (
-        leftSide.match(/^cos\(\s*${variable}\s*\)$/) &&
-        !rightSide.includes(variable)
-      ) {
-        const value = parseFloat(rightSide);
-        if (!isNaN(value) && value >= -1 && value <= 1) {
-          const baseAngle = Math.acos(value);
-          return [
-            baseAngle,
-            -baseAngle,
-            baseAngle + 2 * Math.PI,
-            -baseAngle + 2 * Math.PI,
-          ].filter((angle) => angle >= -2 * Math.PI && angle <= 2 * Math.PI);
+      
+      if (linearTerms.length > 0) {
+        // Combine and simplify linear terms
+        const combinedLinear = simplify(linearTerms.join('+')).toString();
+        // Extract coefficient of x
+        const bMatch = combinedLinear.match(new RegExp(`([+-]?\\s*\\d*\\.?\\d*)\\s*\\*?\\s*${variable}`));
+        if (bMatch) {
+          const bCoef = bMatch[1].trim();
+          b = bCoef === '' ? 1 : bCoef === '-' ? -1 : parseFloat(bCoef);
         }
       }
-      return solveNumerically(expr, -2 * Math.PI, 2 * Math.PI, 0.1);
-    } catch (err) {
-      throw new Error(`Error solving trigonometric equation: ${err.message}`);
-    }
-  };
-  const solveExponential = (leftSide, rightSide) => {
-    try {
-      if (
-        leftSide.match(/^(\d+|e)\^${variable}$/) &&
-        !rightSide.includes(variable)
-      ) {
-        const base = leftSide.startsWith("e")
-          ? Math.E
-          : parseFloat(leftSide.split("^")[0]);
-        const value = parseFloat(rightSide);
-        if (!isNaN(base) && !isNaN(value) && value > 0) {
-          return [Math.log(value) / Math.log(base)];
-        }
+      
+      // Parse constant term
+      try {
+        c = evaluate(remaining);
+      } catch (e) {
+        c = 0;
       }
-      const expr = `${leftSide} - (${rightSide})`;
-      return solveNumerically(expr, -10, 10, 0.1);
-    } catch (err) {
-      throw new Error(`Error solving exponential equation: ${err.message}`);
-    }
-  };
-  const solveNumerically = (expr, start = -100, end = 100, step = 1) => {
-    const compiled = math.compile(expr);
-    const solutions = [];
-    for (let i = start; i <= end; i += step) {
-      const scope = {};
-      scope[variable] = i;
-      const value = compiled.evaluate(scope);
-      const nextScope = {};
-      nextScope[variable] = i + step;
-      const nextValue = compiled.evaluate(nextScope);
-      if (value * nextValue <= 0) {
-        const refinedSolution = refineRoot(compiled, i, i + step, 0.0001);
-        if (refinedSolution !== null) {
-          const roundedSolution =
-            Math.round(refinedSolution * 1000000) / 1000000;
-          if (
-            !solutions.some((sol) => Math.abs(sol - roundedSolution) < 0.0001)
-          ) {
-            solutions.push(roundedSolution);
+      
+      // Apply quadratic formula: x = (-b ± sqrt(b² - 4ac)) / 2a
+      if (a === 0) {
+        // If a = 0, it's actually a linear equation
+        if (b === 0) {
+          if (c === 0) {
+            return "Infinite solutions (identity)";
+          } else {
+            return "No solution (contradiction)";
           }
+        } else {
+          return `${variable} = ${-c / b}`;
         }
-      }
-      if (Math.abs(value) < 0.0001) {
-        const roundedSolution = Math.round(i * 1000000) / 1000000;
-        if (
-          !solutions.some((sol) => Math.abs(sol - roundedSolution) < 0.0001)
-        ) {
-          solutions.push(roundedSolution);
-        }
-      }
-    }
-    return solutions;
-  };
-  const refineRoot = (compiled, left, right, tolerance) => {
-    let mid, leftValue, midValue;
-    for (let i = 0; i < 50; i++) {
-      mid = (left + right) / 2;
-      const leftScope = {};
-      leftScope[variable] = left;
-      leftValue = compiled.evaluate(leftScope);
-      const midScope = {};
-      midScope[variable] = mid;
-      midValue = compiled.evaluate(midScope);
-      if (Math.abs(midValue) < tolerance) {
-        return mid;
-      }
-      if (leftValue * midValue <= 0) {
-        right = mid;
       } else {
-        left = mid;
+        const discriminant = b * b - 4 * a * c;
+        
+        if (discriminant < 0) {
+          // Complex solutions
+          const realPart = -b / (2 * a);
+          const imaginaryPart = Math.sqrt(Math.abs(discriminant)) / (2 * a);
+          
+          return `${variable} = ${realPart.toFixed(4)} + ${imaginaryPart.toFixed(4)}i or ${realPart.toFixed(4)} - ${imaginaryPart.toFixed(4)}i`;
+        } else if (discriminant === 0) {
+          // One solution
+          const solution = -b / (2 * a);
+          return `${variable} = ${solution.toFixed(4)}`;
+        } else {
+          // Two solutions
+          const solution1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+          const solution2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+          return `${variable} = ${solution1.toFixed(4)} or ${variable} = ${solution2.toFixed(4)}`;
+        }
       }
-      if (Math.abs(right - left) < tolerance) {
-        return mid;
-      }
+    } catch (err) {
+      return `Error solving quadratic equation: ${err.message}`;
     }
-    return null;
   };
-  const formatNumber = (num) => {
-    if (Math.abs(Math.round(num) - num) < 0.0000001) {
-      return Math.round(num);
-    }
-    const piFactors = [1 / 6, 1 / 4, 1 / 3, 1 / 2, 2 / 3, 3 / 4, 5 / 6, 1, 2];
-    for (const factor of piFactors) {
-      if (Math.abs(num - factor * Math.PI) < 0.0000001) {
-        if (factor === 1) return "π";
-        if (factor === 2) return "2π";
-        return `${factor === 1 ? "" : factor}π`;
-      }
-      if (Math.abs(num + factor * Math.PI) < 0.0000001) {
-        if (factor === 1) return "-π";
-        if (factor === 2) return "-2π";
-        return `-${factor === 1 ? "" : factor}π`;
-      }
-    }
-    if (Math.abs(num) < 1000 && Math.abs(num) > 0.001) {
-      return num.toFixed(6).replace(/\.?0+$/, "");
-    }
-    return num.toString();
+
+  // Check if an equation is likely to be quadratic
+  const isQuadraticEquation = (equation) => {
+    const variables = equation.match(/[a-zA-Z]/g) || [];
+    if (variables.length === 0) return false;
+    
+    const variable = variables[0];
+    const squared = new RegExp(`${variable}\\s*\\^\\s*2|${variable}\\s*\\*\\s*${variable}`, 'g');
+    
+    return squared.test(equation);
   };
-  const formatSolution = (solutions, type) => {
-    if (!solutions || solutions.length === 0) {
-      return "No solutions found in search range";
+
+  const handleSolve = () => {
+    if (!equation.trim()) {
+      setError("Please enter a valid equation or expression.");
+      setSolution("");
+      return;
     }
-    const formattedSolutions = solutions.map((sol) => {
-      if (type === "trigonometric") {
-        return formatNumber(sol);
-      }
-      return formatNumber(sol);
-    });
-    return `${variable} = ${formattedSolutions.join(" or " + variable + " = ")}`;
-  };
-  const solveEquation = () => {
+
+    setIsCalculating(true);
     setError("");
-    try {
-      if (!equation.trim()) {
-        setError("Please enter an equation");
-        return;
-      }
-      let processedEquation = equation
-        .replace(/sin\^2/g, "sin^2")
-        .replace(/cos\^2/g, "cos^2")
-        .replace(/\^(\d+)/g, "^($1)");
-      const detectedType = detectEquationType(processedEquation);
-      setEquationType(detectedType);
-      const isEquation = processedEquation.includes("=");
-      if (isEquation) {
-        const [leftSide, rightSide] = processedEquation
-          .split("=")
-          .map((side) => side.trim());
-        if (advancedMode) {
-          let solutions = [];
-          switch (detectedType) {
-            case "logarithmic":
-              solutions = solveLogarithmic(leftSide, rightSide);
-              break;
-            case "trigonometric":
-              solutions = solveTrigonometric(leftSide, rightSide);
-              break;
-            case "exponential":
-              solutions = solveExponential(leftSide, rightSide);
-              break;
-            default:
+
+    setTimeout(() => {
+      try {
+        let result = "";
+        let simplified = "";
+        let derivativeResult = "";
+        let steps = [];
+        const isEquation = equation.includes("=");
+
+        if (isEquation) {
+          const sides = equation.split("=");
+          
+          if (sides.length === 2) {
+            const leftSide = sides[0].trim();
+            const rightSide = sides[1].trim();
+            
+            // Determine if equation is quadratic
+            if (isQuadraticEquation(`${leftSide} - (${rightSide})`)) {
+              steps.push("Identified as a quadratic equation");
+              steps.push(`Standard form: ${leftSide} = ${rightSide}`);
+              steps.push("Using quadratic formula: x = (-b ± √(b² - 4ac)) / 2a");
+              result = solveQuadraticEquation(equation);
+            } else {
+              steps.push("Identified as a linear equation");
+              steps.push(`Standard form: ${leftSide} = ${rightSide}`);
+              steps.push("Moving all terms with the variable to one side");
+              result = solveLinearEquation(leftSide, rightSide);
+            }
+            
+            // Try to simplify both sides for display
+            try {
+              simplified = `${simplify(leftSide).toString()} = ${simplify(rightSide).toString()}`;
+              steps.push(`Simplified form: ${simplified}`);
+            } catch (err) {
+              simplified = "Cannot simplify equation";
+            }
+          } else {
+            result = "Invalid equation format";
+          }
+        } else {
+          // Handle expressions - this should work reliably
+          try {
+            steps.push("Processing mathematical expression");
+            // Basic simplification
+            simplified = simplify(equation).toString();
+            steps.push(`Simplified form: ${simplified}`);
+          } catch (err) {
+            simplified = "Cannot simplify";
+          }
+
+          try {
+            // Evaluation
+            let evaluated = evaluate(equation);
+            steps.push("Evaluating expression");
+            
+            // Handle numerical result
+            if (typeof evaluated === 'number') {
+              // For better display of exact values
+              if (equation.includes('pi') || equation.includes('PI') || equation.includes('π')) {
+                // Special case for better display
+                result = Number.isInteger(evaluated) ? evaluated.toString() : evaluated.toFixed(8);
+              } else {
+                result = Number.isInteger(evaluated) ? evaluated.toString() : evaluated.toFixed(8);
+              }
+              
+              // Check if we can rationalize (convert to fraction) for cleaner display
               try {
-                const expr = math.parse(`${leftSide}-(${rightSide})`);
-                const simplified = math.simplify(expr);
-                const solved = math.solve(simplified, variable);
-                if (Array.isArray(solved)) {
-                  solutions = solved.map((sol) => parseFloat(sol));
-                } else {
-                  solutions = [parseFloat(solved)];
+                const rational = rationalize(equation);
+                if (rational) {
+                  const rationalStr = rational.toString();
+                  if (rationalStr !== simplified) {
+                    steps.push(`Rational form: ${rationalStr}`);
+                  }
                 }
               } catch (err) {
-                const expr = `${leftSide}-(${rightSide})`;
-                solutions = solveNumerically(expr);
+                // Silently fail, rationalization is just a nice-to-have
               }
-          }
-          setSolution(formatSolution(solutions, detectedType));
-        } else {
-          try {
-            const result = math.evaluate(processedEquation);
-            setSolution(`${result}`);
-          } catch (err) {
-            setError(
-              "Couldn't evaluate equation. Try advanced mode for equations with variables."
-            );
-          }
-        }
-      } else {
-        try {
-          const identityResult = checkIdentities(processedEquation);
-          if (identityResult) {
-            setSolution(identityResult);
-          } else {
-            let evalEquation = processedEquation.replace(
-              /e\^([^+\-*/\s]+)/g,
-              "exp($1)"
-            );
-            if (advancedMode && evalEquation.includes(variable)) {
-              const simplified = math.simplify(evalEquation).toString();
-              setSolution(`Simplified: ${simplified}`);
             } else {
-              const result = math.evaluate(evalEquation);
-              setSolution(
-                `${typeof result === "number" ? formatNumber(result) : result}`
-              );
+              // For non-numerical results
+              result = String(evaluated);
             }
+            steps.push(`Result: ${result}`);
+          } catch (err) {
+            result = "Cannot evaluate";
           }
-        } catch (err) {
+
+          // Calculate derivative if there are variables
           try {
-            const simplified = math.simplify(processedEquation).toString();
-            setSolution(`Simplified: ${simplified}`);
-          } catch (simplifyErr) {
-            setError(
-              `Couldn't evaluate or simplify the expression: ${simplifyErr.message}`
-            );
+            // Check if there's a variable to differentiate with respect to
+            const variableMatch = equation.match(/[a-zA-Z]/g);
+            if (variableMatch && variableMatch.length > 0) {
+              const variable = variableMatch[0]; // Use first variable found
+              derivativeResult = derivative(equation, variable).toString();
+              steps.push(`Derivative with respect to ${variable}: ${derivativeResult}`);
+            }
+          } catch (err) {
+            derivativeResult = "";
           }
         }
+
+        const solutionObj = {
+          equation,
+          simplified: simplified || "N/A",
+          result: result || "N/A",
+          derivative: derivativeResult || "N/A",
+          steps: steps
+        };
+
+        setSolution(solutionObj);
+        setHistory(prev => [solutionObj, ...prev.slice(0, 4)]);
+        setIsCalculating(false);
+      } catch (err) {
+        setError("Error processing the input: " + (err.message || "Unknown error"));
+        setSolution("");
+        setIsCalculating(false);
       }
-      if (!error) {
-        setHistory((prevHistory) => [
-          {
-            equation: processedEquation,
-            solution,
-            type: detectedType,
-            timestamp: new Date().toLocaleTimeString(),
-          },
-          ...prevHistory.slice(0, 9),
-        ]);
-      }
-    } catch (err) {
-      setError(`Error: ${err.message}`);
-    }
+    }, 300);
   };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      solveEquation();
+      handleSolve();
     }
   };
+
+  const loadFromHistory = (item) => {
+    setEquation(item.equation);
+    setSolution(item);
+    setError("");
+  };
+
   const clearAll = () => {
     setEquation("");
     setSolution("");
     setError("");
   };
-  const exampleEquations = [
-    { text: "3x + 2 = 8", advanced: true, type: "general" },
-    { text: "x^2 - 4 = 0", advanced: true, type: "general" },
-    { text: "log(x) = 2", advanced: true, type: "logarithmic" },
-    { text: "sin(x) = 0.5", advanced: true, type: "trigonometric" },
-    { text: "2^x = 8", advanced: true, type: "exponential" },
-    { text: "e^x = 10", advanced: true, type: "exponential" },
-    { text: "(sin(x))^2 + (cos(x))^2", advanced: false, type: "trigonometric" },
-    { text: "sin(30) + cos(60)", advanced: false, type: "trigonometric" },
-  ];
-  const insertExample = (example) => {
-    setEquation(example.text);
-    setAdvancedMode(example.advanced);
-    setEquationType(example.type);
+
+  // Function to provide examples to users
+  const useExample = (exampleEquation) => {
+    setEquation(exampleEquation);
+    setSolution("");
+    setError("");
   };
+
   return (
-    <div className={`${currentTheme.background} min-h-screen p-4 mt-20`}>
-      <div
-        className={`max-w-lg mx-auto ${currentTheme.card} rounded-lg shadow-lg p-6 ${currentTheme.text}`}
-      >
-        <h1 className="text-2xl font-bold mb-4">Equation Solver</h1>
-        <div className="mb-4">
-          <div className="flex items-center mb-2">
+    <div className={`flex flex-col items-center w-full max-w-3xl mx-auto p-4 md:p-6 transition-colors duration-200 ${themeStyles.container}`}>
+      <div className={`w-full rounded-lg shadow-lg overflow-hidden ${themeStyles.cardBg} transition-colors duration-200`}>
+        {/* Header */}
+        <div className={`${themeStyles.header} p-4 md:p-6 transition-colors duration-200`}>
+          <h2 className={`text-xl md:text-2xl font-bold ${themeStyles.headerText}`}>Advanced Math Solver</h2>
+          <p className={`${themeStyles.headerSubtext} text-sm md:text-base mt-1`}>
+            Solve equations, simplify expressions, and calculate derivatives
+          </p>
+        </div>
+
+        {/* Input Area */}
+        <div className="p-4 md:p-6">
+          <div className="relative">
             <input
               type="text"
               value={equation}
               onChange={(e) => setEquation(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Enter equation or expression (e.g., sin(x) = 0.5 or log(x) = 2)"
-              className={`w-full p-2 ${currentTheme.text} bg-opacity-10 border ${currentTheme.border} rounded`}
+              placeholder="e.g., 2*x + 3 = 7, x^2 - 4 = 0, or sin(pi/6)"
+              className={`w-full p-3 border rounded-lg outline-none transition-all text-base md:text-lg
+                ${themeStyles.inputBg} ${themeStyles.inputBorder} ${themeStyles.inputFocus}`}
             />
+            {equation && (
+              <button 
+                onClick={clearAll}
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 
+                  ${isDark ? 'text-gray-400 hover:text-gray-200' : 'text-gray-400 hover:text-gray-600'}`}
+                aria-label="Clear input"
+              >
+                ✕
+              </button>
+            )}
           </div>
-          <div className="flex space-x-2 mb-4">
+
+          <div className="flex space-x-2 mt-4">
             <button
-              onClick={solveEquation}
-              className={`p-2 ${currentTheme.primary} text-white rounded`}
+              onClick={handleSolve}
+              disabled={isCalculating}
+              className={`flex-1 font-medium py-2 px-4 rounded-lg transition-colors duration-200 
+                flex items-center justify-center disabled:opacity-70 ${themeStyles.primaryButton}`}
             >
-              Solve
+              {isCalculating ? (
+                <span>Calculating...</span>
+              ) : (
+                <span>Solve</span>
+              )}
             </button>
+            
             <button
               onClick={clearAll}
-              className={`p-2 ${currentTheme.secondary} rounded`}
+              className={`font-medium py-2 px-4 rounded-lg transition-colors duration-200 ${themeStyles.secondaryButton}`}
             >
               Clear
             </button>
           </div>
-          <div className="flex items-center mb-4">
-            <input
-              type="checkbox"
-              id="advancedMode"
-              checked={advancedMode}
-              onChange={() => setAdvancedMode(!advancedMode)}
-              className="mr-2"
-            />
-            <label htmlFor="advancedMode">
-              Advanced Mode (for equations with variables)
-            </label>
-          </div>
-          {advancedMode && (
-            <div className="mb-4">
-              <label className="block mb-1">Variable to solve for:</label>
-              <input
-                type="text"
-                value={variable}
-                onChange={(e) => setVariable(e.target.value)}
-                className={`w-16 p-1 ${currentTheme.text} bg-opacity-10 border ${currentTheme.border} rounded`}
-                maxLength={1}
-              />
-            </div>
-          )}
-        </div>
-        {error && (
-          <div className="mb-4 p-2 bg-red-100 text-red-800 rounded">
-            {error}
-          </div>
-        )}
-        {solution && (
-          <div className={`mb-6 p-4 ${currentTheme.highlight} rounded`}>
-            <span className="font-bold">Solution:</span> {solution}
-            {equationType !== "general" && (
-              <div className="text-sm mt-1">
-                Equation type detected: {equationType}
-              </div>
-            )}
-          </div>
-        )}
-        <div className="mb-6">
-          <h3 className="font-bold mb-2">Examples:</h3>
-          <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-            {exampleEquations.map((ex, index) => (
-              <button
-                key={index}
-                onClick={() => insertExample(ex)}
-                className={`p-1 text-sm ${currentTheme.secondary} rounded`}
-              >
-                {ex.text}
-              </button>
-            ))}
-          </div>
-        </div>
-        {history.length > 0 && (
-          <div>
-            <h3 className="font-bold mb-2">History:</h3>
-            <div
-              className={`max-h-60 overflow-y-auto border ${currentTheme.border} rounded p-2`}
+          
+          {/* Example buttons */}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <span className={`text-xs ${themeStyles.resultLabel}`}>Try:</span>
+            <button 
+              onClick={() => useExample("2*x + 3 = 7")}
+              className={`text-xs px-2 py-1 rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}
             >
-              {history.map((item, index) => (
-                <div
-                  key={index}
-                  className={`p-2 mb-1 ${currentTheme.highlight} rounded text-sm cursor-pointer`}
-                  onClick={() => setEquation(item.equation)}
-                >
-                  <div>
-                    <strong>{item.equation}</strong>
-                  </div>
-                  <div>{item.solution}</div>
-                  <div className="text-xs opacity-70">
-                    {item.type !== "general" && `${item.type} • `}
-                    {item.timestamp}
-                  </div>
+              2*x + 3 = 7
+            </button>
+            <button 
+              onClick={() => useExample("x^2 - 4 = 0")}
+              className={`text-xs px-2 py-1 rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}
+            >
+              x^2 - 4 = 0
+            </button>
+            <button 
+              onClick={() => useExample("x^2 + 2*x + 1 = 0")}
+              className={`text-xs px-2 py-1 rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}
+            >
+              x^2 + 2*x + 1 = 0
+            </button>
+            <button 
+              onClick={() => useExample("sin(pi/6) + cos(pi/3)")}
+              className={`text-xs px-2 py-1 rounded ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}
+            >
+              sin(pi/6) + cos(pi/3)
+            </button>
+          </div>
+        </div>
+
+        {/* Results Area */}
+        {error && (
+          <div className={`mx-4 md:mx-6 mb-4 p-3 border-l-4 rounded ${themeStyles.errorBg}`}>
+            <p className="font-medium">Error</p>
+            <p className={themeStyles.errorText}>{error}</p>
+          </div>
+        )}
+
+        {solution && (
+          <div className={`mx-4 md:mx-6 mb-4 p-4 rounded-lg border transition-colors duration-200 ${themeStyles.resultBox}`}>
+            <h3 className={`text-lg font-semibold mb-2 ${themeStyles.resultTitle}`}>Solution</h3>
+            
+            <div className="space-y-2">
+              <div className="flex flex-col md:flex-row">
+                <span className={`font-medium min-w-24 ${themeStyles.resultLabel}`}>Input:</span>
+                <span className={themeStyles.resultText}>{solution.equation}</span>
+              </div>
+              
+              {solution.simplified !== "N/A" && (
+                <div className="flex flex-col md:flex-row">
+                  <span className={`font-medium min-w-24 ${themeStyles.resultLabel}`}>Simplified:</span>
+                  <span className={themeStyles.resultText}>{solution.simplified}</span>
                 </div>
+              )}
+              
+              <div className="flex flex-col md:flex-row">
+                <span className={`font-medium min-w-24 ${themeStyles.resultLabel}`}>Result:</span>
+                <span className={themeStyles.resultText}>{solution.result}</span>
+              </div>
+              
+              {solution.derivative !== "N/A" && solution.derivative && (
+                <div className="flex flex-col md:flex-row">
+                  <span className={`font-medium min-w-24 ${themeStyles.resultLabel}`}>Derivative:</span>
+                  <span className={themeStyles.resultText}>{solution.derivative}</span>
+                </div>
+              )}
+              
+              {/* Solution steps */}
+              {solution.steps && solution.steps.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-blue-200 dark:border-gray-700">
+                  <span className={`font-medium ${themeStyles.resultLabel}`}>Steps:</span>
+                  <ol className={`mt-1 pl-5 list-decimal ${themeStyles.resultText}`}>
+                    {solution.steps.map((step, index) => (
+                      <li key={index} className="mt-1">{step}</li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* History Section */}
+        {history.length > 0 && (
+          <div className={`border-t px-4 md:px-6 py-4 transition-colors duration-200 ${themeStyles.divider}`}>
+            <h3 className={`text-sm font-medium mb-2 ${themeStyles.historyTitle}`}>Recent Calculations</h3>
+            <div className="space-y-2">
+              {history.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => loadFromHistory(item)}
+                  className={`w-full text-left p-2 rounded transition-colors duration-150 
+                    focus:outline-none focus:ring-2 ${isDark ? 'focus:ring-purple-500' : 'focus:ring-blue-500'} 
+                    ${themeStyles.historyItem}`}
+                >
+                  <div className={`text-sm font-medium ${themeStyles.historyText}`}>{item.equation}</div>
+                  <div className={`text-xs ${themeStyles.historySubtext}`}>= {item.result}</div>
+                </button>
               ))}
             </div>
           </div>
         )}
-        <div className="mt-6 text-sm opacity-70">
-          <p>Supported operations:</p>
-          <ul className="list-disc ml-5 mt-1">
-            <li>Algebraic: +, -, *, /, ^, (), etc.</li>
-            <li>Logarithmic: log(x), ln(x), log10(x)</li>
-            <li>
-              Trigonometric: sin(x), cos(x), tan(x), asin(x), acos(x), atan(x)
-            </li>
-            <li>Exponential: e^x, exp(x), a^x</li>
-            <li>Mathematical identities (e.g., sin²(x) + cos²(x) = 1)</li>
-          </ul>
-        </div>
+      </div>
+
+      {/* Information */}
+      <div className={`mt-6 text-sm text-center max-w-xl ${themeStyles.infoText}`}>
+        <p>Supports linear equations (ax + b = c), quadratic equations (ax² + bx + c = 0), and expressions.</p>
+        <p className="mt-1">Use "pi" for π, "*" for multiplication, "^" for exponents, and standard functions like sin(), cos(), etc.</p>
       </div>
     </div>
   );
 };
-export default EquationSolver;
+
+export default MathSolver;
