@@ -2,9 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../ThemeProvider"; // Import theme context
 
 const Mathematics = [
+  { name: "Scientific Calculator", path: "/math/scientific-calculator" },
   { name: "Matrix Calculator", path: "/math/matrix-calculator" },
   { name: "Graph Plotter", path: "/math/graph-plotter" },
-  { name: "Equation Solver", path: "/math/equation-solver" },
 ];
 
 const Maths = () => {

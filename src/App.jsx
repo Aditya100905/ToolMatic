@@ -46,7 +46,7 @@ import FrequencyConverter from "./converters/FrequencyConverter.jsx";
 import BgRemover from "./Images/BGRemover.jsx";
 
 
-import ScientificCalculator from "./Basic-Maths/ScientificCalculator";
+import ScientificCalculator from "./Maths/ScientificCalculator.jsx";
 
 
 // routing at utilities page......
@@ -88,9 +88,7 @@ const utilities = {
 
   "Text": ["Word Counter", "Case Converter", "Text Cleaner"],
 
- "Advanced Mathematics": ["Matrix Calculator", "Graph Plotter", "Equation Solver"],
-
- "Basic Mathematics": ["Scientific Calculator", ""],
+ "Advanced Mathematics": ["Scientific Calculator", "Matrix Calculator", "Graph Plotter", ],
 
   "Bases & Bitwise Operators": ["Base Converter", "Bitwise Operators", "Complement", "Binary, Gray, BCD Converter"],
   
@@ -254,10 +252,10 @@ const App = () => {
           <Route path="/math/matrix-calculator" element={<MatrixSolver />} />
           <Route path="/math/graph-plotter" element={<GraphPlotter theme={theme} />}/>
           <Route path="/math/equation-solver" element={<EquationSolver theme={theme} />}/>
+          <Route path="/math/scientific-calculator" element={<ScientificCalculator theme={theme} />}/>
           {/* <Route path="/math/calculator" element={<Calculator />} /> */}
 
 {/* Basic */}
-          <Route path="/math/scientific-calculator" element={<ScientificCalculator theme={theme} />}/>
 
 
 
