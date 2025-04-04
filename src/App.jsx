@@ -44,6 +44,7 @@ import PowerConverter from "./converters/PowerConverter.jsx";
 import FrequencyConverter from "./converters/FrequencyConverter.jsx";
 
 import BgRemover from "./Images/BGRemover.jsx";
+import QrGenerator from "./general/QrGenerator.jsx";
 
 
 import ScientificCalculator from "./Maths/ScientificCalculator.jsx";
@@ -93,7 +94,7 @@ const utilities = {
   "Bases & Bitwise Operators": ["Base Converter", "Bitwise Operators", "Complement", "Binary, Gray, BCD Converter"],
   
   "Unit Converters": ["Length Converter", "Mass Converter", "Temperature Converter","Time Converter","Frequency Converter", "Area Converter", "Volume Converter", "Density Converter", "Energy Converter","Power Converter", "Speed Converter"],
-
+  "General Utilities": ["Qr Generator", ],
   "Images": ["BG Remover"]
 };
 
@@ -131,7 +132,8 @@ const utilityRoutes = {
   "Speed Converter": "/converters/speed-converter",
   "Power Converter": "/converters/power-converter",
   "Frequency Converter": "/converters/frequency-converter",
-  "BG Remover": "/images/bg-remover"
+  "BG Remover": "/images/bg-remover",
+  "Qr Generator": "general/qr-generator",
 };
 
 const MainContent = ({ theme }) => {
@@ -283,6 +285,11 @@ const App = () => {
 
 
           <Route path="/images/bg-remover" element={<BgRemover theme={theme} />} />
+
+
+          <Route path="/general/qr-generator" element={<QrGenerator theme={theme} />} />
+
+
 
           {/* <Route path="/programming/regex-tester" element={<RegexTester />} />
           <Route path="/programming/base64-encoder" element={<Base64Encoder />} /> */}
