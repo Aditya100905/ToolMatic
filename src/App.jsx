@@ -41,6 +41,7 @@ import PowerConverter from "./converters/PowerConverter.jsx";
 import FrequencyConverter from "./converters/FrequencyConverter.jsx";
 import BgRemover from "./Images/BGRemover.jsx";
 import QrGenerator from "./general/QrGenerator.jsx";
+import UrlShortner from "./general/UrlShortner.jsx";
 import ScientificCalculator from "./Maths/ScientificCalculator.jsx";
 
 import Formatter from "./pages/Utilities/Formatter";
@@ -544,6 +545,10 @@ const App = () => {
           <Route
             path="/general/qr-generator"
             element={<QrGenerator theme={theme} />}
+          />
+          <Route
+            path="/general/url-shortner"
+            element={<UrlShortner theme={theme} />}
           />
         </Routes>
         {/* <Footer /> */}

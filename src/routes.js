@@ -35,7 +35,7 @@ export const utilities = {
       "Power Converter",
       "Speed Converter",
     ],
-    "General Utilities": ["Qr Generator"],
+    "General Utilities": ["Qr Generator", "Url Shortner"],
     "Images": ["BG Remover"],
   };
   
@@ -75,5 +75,6 @@ export const utilities = {
     "Frequency Converter": "/converters/frequency-converter",
     "BG Remover": "/images/bg-remover",
     "Qr Generator": "/general/qr-generator",
+    "Url Shortner": "/general/url-shortner",
   };
   
