@@ -8,6 +8,7 @@ const categories = [
     { name: "Math Tools", path: "/math", description: "Calculate and solve engineering problems." },
     { name: "Bases & Bitwise Operators", path: "/bases-and-bitwise", description: "Deals in numbers among different bases and their operations" },
     { name: "Unit Converters", path: "/converters", description: "Convert different units among themselves including local traditional units" },
+    { name: "General Utilities", path: "/general", description: "General Utilities like QR handeling and url shortner" },
 ];
 
 const Utilities = () => {

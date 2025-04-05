@@ -10,7 +10,7 @@ export const utilities = {
       "JSON Formatter",
     ],
     "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images"],
-    "Text": ["Word Counter", "Case Converter", "Text Cleaner"],
+    "Text": ["Word Counter", "Case Converter", "Text Cleaner","Text Comparison"],
     "Advanced Mathematics": [
       "Scientific Calculator",
       "Matrix Calculator",
@@ -36,7 +36,6 @@ export const utilities = {
       "Speed Converter",
     ],
     "General Utilities": ["Qr Generator", "Url Shortner"],
-    "Images": ["BG Remover"],
   };
   
   // Define route mappings for each utility
@@ -54,6 +53,7 @@ export const utilities = {
     "Word Counter": "/text/word-counter",
     "Case Converter": "/text/case-converter",
     "Text Cleaner": "/text/text-cleaning",
+    "Text Comparison": "/text/text-comparison",
     "Matrix Calculator": "/math/matrix-calculator",
     "Graph Plotter": "/math/graph-plotter",
     "Equation Solver": "/math/equation-solver",
@@ -73,7 +73,7 @@ export const utilities = {
     "Speed Converter": "/converters/speed-converter",
     "Power Converter": "/converters/power-converter",
     "Frequency Converter": "/converters/frequency-converter",
-    "BG Remover": "/images/bg-remover",
+    // "BG Remover": "/images/bg-remover",
     "Qr Generator": "/general/qr-generator",
     "Url Shortner": "/general/url-shortner",
   };

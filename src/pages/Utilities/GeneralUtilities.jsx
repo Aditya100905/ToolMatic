@@ -1,32 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../ThemeProvider"; // Import theme context
 
-const text = [
-  { name: "Word Counter", path: "/text/word-counter" },
-  { name: "Text Case Converter", path: "/text/case-converter" },
-  { name: "Text Clean Up", path: "/text/text-cleaning" },
-  { name: "Text Comparison", path: "/text/text-comparison" },
+const gen = [
+  { name: "QR Generator", path: "/general/qr-generator" },
+  { name: "Url Shortner", path: "/general/url-shortner" },
 ];
 
-const Text = () => {
+const General = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
 
   return (
     <div className="container mx-auto mt-16 p-6">
-      <h2 className="text-2xl font-bold mb-4">Text Utilities</h2>
+      <h2 className="text-2xl font-bold mb-4">General Utilities</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {text.map((text) => (
+        {gen.map((genUti) => (
           <div
-            key={text.name}
+            key={genUti.name}
             className={`p-6 rounded-lg shadow-md cursor-pointer transition-all ${
               theme === "dark"
                 ? "bg-[#222] hover:bg-[#333] text-white"
                 : "bg-white hover:bg-gray-200 text-black"
             }`}
-            onClick={() => navigate(text.path)}
+            onClick={() => navigate(genUti.path)}
           >
-            <h3 className="text-xl font-semibold">{text.name}</h3>
+            <h3 className="text-xl font-semibold">{genUti.name}</h3>
           </div>
         ))}
       </div>
@@ -34,4 +32,4 @@ const Text = () => {
   );
 };
 
-export default Text;
+export default General;
