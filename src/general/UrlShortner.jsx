@@ -221,34 +221,7 @@ const FullURLShortener = ({ theme = 'light' }) => {
     link.href = url;
     link.click();
   };
-  
-  // Import history from JSON file
-//   const importHistory = (event) => {
-//     const file = event.target.files[0];
-//     if (file) {
-//       const reader = new FileReader();
-//       reader.onload = (e) => {
-//         try {
-//           const importedData = JSON.parse(e.target.result);
-//           if (Array.isArray(importedData)) {
-//             // Merge with existing history, avoiding duplicates by ID
-//             const existingIds = new Set(urlHistory.map(item => item.id));
-//             const newItems = importedData.filter(item => !existingIds.has(item.id));
-            
-//             setUrlHistory(prev => [...newItems, ...prev]);
-//             setSuccess(`Imported ${newItems.length} URL(s) successfully`);
-//           } else {
-//             setError('Invalid import file format');
-//           }
-//         } catch (err) {
-//           console.error('Error importing history:', err);
-//           setError('Failed to import history. Invalid file format.');
-//         }
-//       };
-//       reader.readAsText(file);
-//     }
-//   };
-  
+
   // Simulate fetching stats for a URL
   const fetchUrlStats = (urlItem) => {
     setIsLoading(true);
@@ -455,22 +428,6 @@ const FullURLShortener = ({ theme = 'light' }) => {
         >
           Export History
         </button>
-        {/* <div>
-          <label 
-            htmlFor="import-history" 
-            className={`${themeColors.buttonSecondary} px-4 py-2 rounded-md text-sm cursor-pointer inline-block`}
-          >
-            Import History
-          </label>
-          <input
-            id="import-history"
-            type="file"
-            accept=".json"
-            className="hidden"
-            onChange={importHistory}
-            onClick={(e) => e.target.value = null} // Reset file input
-          />
-        </div> */}
       </div>
       <div className="mt-3 text-sm">
         <span className={`${themeColors.secondaryText}`}>
