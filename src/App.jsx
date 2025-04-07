@@ -24,7 +24,7 @@ import PDFtoImages from "./PDFTools/PDFtoImages";
 import SplitPDF from "./PDFTools/SplitPDF";
 import MatrixSolver from "./Maths/MatrixSolver";
 import GraphPlotter from "./Maths/GraphPlotter";
-import EquationSolver from "./Maths/EquationSolver";
+import ScientificCalculator from "./Maths/ScientificCalculator.jsx";
 import BaseConverter from "./DSD/BaseConverter.jsx";
 import BitwiseOperators from "./DSD/BitwiseOperators.jsx";
 import BinaryGrayBCDConverter from "./DSD/BinaryGrayBCDConverter.jsx";
@@ -43,7 +43,7 @@ import FrequencyConverter from "./converters/FrequencyConverter.jsx";
 // import BgRemover from "./Images/BGRemover.jsx";
 import QrGenerator from "./general/QrGenerator.jsx";
 import UrlShortner from "./general/UrlShortner.jsx";
-import ScientificCalculator from "./Maths/ScientificCalculator.jsx";
+import CurrencyConverter from './general/CurrencyConverter.jsx'
 
 import Formatter from "./pages/Utilities/Formatter";
 import PDF from "./pages/Utilities/PDF";
@@ -475,10 +475,6 @@ const App = () => {
             element={<GraphPlotter theme={theme} />}
           />
           <Route
-            path="/math/equation-solver"
-            element={<EquationSolver theme={theme} />}
-          />
-          <Route
             path="/math/scientific-calculator"
             element={<ScientificCalculator theme={theme} />}
           />
@@ -556,6 +552,10 @@ const App = () => {
           <Route
             path="/general/url-shortner"
             element={<UrlShortner theme={theme} />}
+          />
+          <Route
+            path="/general/currency-converter"
+            element={<CurrencyConverter theme={theme} />}
           />
         </Routes>
         {/* <Footer /> */}
