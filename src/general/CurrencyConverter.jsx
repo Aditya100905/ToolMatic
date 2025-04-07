@@ -37,7 +37,6 @@ const CurrencyConverter = ({ theme = "dark" }) => {
       shadow: "shadow-xl",
       border: "",
       inputBorder: "border border-[#444444]",
-      inputBorder: "border border-[#444444]",
     },
     light: {
       bg: "bg-gray-100",
