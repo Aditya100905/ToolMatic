@@ -1,6 +1,3 @@
-// config.js
-
-// Define utility categories and their items
 export const utilities = {
   "Code Formatter": [
     "HTML Formatter",
@@ -37,6 +34,8 @@ export const utilities = {
     "Speed Converter",
   ],
   "General Utilities": ["Qr Generator", "Url Shortner", "Currency Converter"],
+
+  Design: ["CSS Animations",],
 };
 
 // Define route mappings for each utility
@@ -73,8 +72,9 @@ export const utilityRoutes = {
   "Speed Converter": "/converters/speed-converter",
   "Power Converter": "/converters/power-converter",
   "Frequency Converter": "/converters/frequency-converter",
-  // "BG Remover": "/images/bg-remover",
   "Qr Generator": "/general/qr-generator",
   "Url Shortner": "/general/url-shortner",
   "Currency Converter": "/general/currency-converter",
+  
+  "CSS Animations": "/design/css-animations",
 };

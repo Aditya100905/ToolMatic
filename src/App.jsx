@@ -52,9 +52,12 @@ import Maths from "./pages/Utilities/Maths";
 import BaseAndBitwiseOperator from "./pages/Utilities/BaseAndBitwiseOperator";
 import Converters from "./pages/Utilities/Converters.jsx";
 
+import CssAnimations from './Design/CssAnimations.jsx'
+
 // Import the utilities config and route mappings
 import { utilities, utilityRoutes } from "./routes.js";
 import General from "./pages/Utilities/GeneralUtilities.jsx";
+import Design from "./pages/Utilities/Design.jsx";
 
 // Enhanced SVG Icons with animation properties
 const MenuIcon = () => (
@@ -314,7 +317,6 @@ const MainContent = ({ theme }) => {
         />
       )}
 
-      {/* Main content with improved grid and card design */}
       <main className={`transition-all duration-300 ${
         sidebarOpen ? "md:pl-72" : "pl-0"
       }`}>
@@ -425,6 +427,7 @@ const App = () => {
           <Route path="/pdf-tools" element={<PDF />} />
           <Route path="/math" element={<Maths />} />
           <Route path="/general" element={<General />} />
+          <Route path="/design" element={<Design />} />
           <Route
             path="/bases-and-bitwise"
             element={<BaseAndBitwiseOperator />}
@@ -539,6 +542,11 @@ const App = () => {
           <Route
             path="/converters/speed-converter"
             element={<SpeedConverter theme={theme} />}
+          />
+
+          <Route
+            path="/design/css-animations"
+            element={<CssAnimations theme={theme} />}
           />
 {/* 
           <Route
