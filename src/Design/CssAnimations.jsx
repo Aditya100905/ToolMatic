@@ -1,11 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
-  Copy, X, Check, Sliders, Heart, Search, Download,
-  Play, Pause, RefreshCw, Grid, List, Info, 
-} from 'lucide-react';
-
-
-// Separated stylesheet for better organization
+  Copy,
+  X,
+  Check,
+  Sliders,
+  Heart,
+  Search,
+  Download,
+  Play,
+  Pause,
+  RefreshCw,
+  Grid,
+  List,
+  Info,
+  Globe,
+  LogIn,
+  AlertCircle,
+  Repeat,
+  Sparkles,
+  Infinity,
+} from "lucide-react";
 const styleSheet = `
 @keyframes fadeIn {from{opacity:0}to{opacity:1}}
 .fade-in{animation:fadeIn 1.5s ease forwards}
@@ -130,64 +144,74 @@ const styleSheet = `
   transition: all 0.2s ease;
 }
 `;
-
-// Component definitions
 const CategoryPill = ({ label, active, onClick, theme, icon }) => (
   <button
     onClick={onClick}
     className={`category-pill px-3 py-1.5 text-sm font-medium rounded-full transition-all flex items-center gap-1.5
-      ${active 
-        ? theme === 'dark' 
-          ? 'bg-blue-600 text-white' 
-          : 'bg-blue-500 text-white' 
-        : theme === 'dark' 
-          ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
-          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+      ${
+        active
+          ? theme === "dark"
+            ? "bg-blue-600 text-white"
+            : "bg-blue-500 text-white"
+          : theme === "dark"
+            ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+      }`}
   >
     {icon && icon}
     {label}
   </button>
 );
-
-const AnimationCard = ({ animation, theme, isSelected, onSelect, isFavorite, onToggleFavorite, customizationOptions }) => {
-  const [isPlaying, setIsPlaying] = useState(true);
+const AnimationCard = ({
+  animation,
+  theme,
+  isSelected,
+  onSelect,
+  isFavorite,
+  onToggleFavorite,
+  customizationOptions,
+}) => {
+  const [isPlaying, setIsPlaying] = useState(!0);
   const [speed, setSpeed] = useState(1);
-  const [isCustomizing, setIsCustomizing] = useState(false);
-  
+  const [isCustomizing, setIsCustomizing] = useState(!1);
   const category = animationCategories[animation];
-  const displayName = animation.replace(/([A-Z])/g, ' $1').trim();
-  
+  const displayName = animation.replace(/([A-Z])/g, " $1").trim();
   const getCategoryColor = () => {
-    switch(category) {
-      case 'entrance': return 'border-blue-500';
-      case 'attention': return 'border-purple-500';
-      case 'continuous': return 'border-green-500';
-      case 'special': return 'border-orange-500';
-      default: return 'border-gray-300';
+    switch (category) {
+      case "entrance":
+        return "border-blue-500";
+      case "attention":
+        return "border-purple-500";
+      case "continuous":
+        return "border-green-500";
+      case "special":
+        return "border-orange-500";
+      default:
+        return "border-gray-300";
     }
   };
-
   const cardStyle = {
-    animationDuration: customizationOptions?.duration 
-      ? `${customizationOptions.duration}s` 
-      : undefined
+    animationDuration: customizationOptions?.duration
+      ? `${customizationOptions.duration}s`
+      : undefined,
   };
-  
   return (
-    <div 
+    <div
       className={`anim-grid-item relative cursor-pointer rounded-lg overflow-hidden shadow
-        ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-750' : 'bg-white hover:bg-gray-50'} 
-        ${isSelected ? theme === 'dark' ? 'ring-2 ring-blue-500' : 'ring-2 ring-blue-400' : ''}
+        ${theme === "dark" ? "bg-gray-800 hover:bg-gray-750" : "bg-white hover:bg-gray-50"} 
+        ${isSelected ? (theme === "dark" ? "ring-2 ring-blue-500" : "ring-2 ring-blue-400") : ""}
         border-l-4 ${getCategoryColor()}`}
       onClick={onSelect}
     >
       <div className="p-3 h-full flex flex-col">
         <div className="flex justify-between items-center mb-2">
-          <h3 className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+          <h3
+            className={`text-sm font-medium ${theme === "dark" ? "text-gray-200" : "text-gray-700"}`}
+          >
             {displayName}
           </h3>
           <div className="flex items-center gap-1">
-            <button 
+            <button
               onClick={(e) => {
                 e.stopPropagation();
                 setIsPlaying(!isPlaying);
@@ -197,53 +221,66 @@ const AnimationCard = ({ animation, theme, isSelected, onSelect, isFavorite, onT
             >
               {isPlaying ? <Pause size={14} /> : <Play size={14} />}
             </button>
-            <button 
+            <button
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleFavorite(animation);
               }}
               className={`p-1 rounded-full transition-transform duration-200 hover:scale-110 
-                ${isFavorite ? 'text-yellow-400' : theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}
+                ${isFavorite ? "text-red-500" : theme === "dark" ? "text-gray-500" : "text-gray-400"}`}
               title={isFavorite ? "Remove from favorites" : "Add to favorites"}
             >
               <Heart size={14} fill={isFavorite ? "currentColor" : "none"} />
             </button>
           </div>
         </div>
-        
-        <div className={`flex-1 flex items-center justify-center relative overflow-hidden rounded-md
-          ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
-          <div 
-            className={`${isPlaying ? animation === 'typewriter' ? 'typewriter' : animationClassNames[animation] : ''}`}
+        <div
+          className={`flex-1 flex items-center justify-center relative overflow-hidden rounded-md
+          ${theme === "dark" ? "bg-gray-900" : "bg-gray-100"}`}
+        >
+          <div
+            className={`${isPlaying ? (animation === "typewriter" ? "typewriter" : animationClassNames[animation]) : ""}`}
             style={cardStyle}
           >
             {animationDisplayElements[animation](theme)}
           </div>
         </div>
-        
         <div className="mt-2 flex items-center justify-between">
-          <span className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+          <span
+            className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}
+          >
             {category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
-          <span className={`text-xs font-mono ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-            .{animation.replace(/([A-Z])/g, '-$1').toLowerCase()}
+          <span
+            className={`text-xs font-mono ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}
+          >
+            .{animation.replace(/([A-Z])/g, "-$1").toLowerCase()}
           </span>
         </div>
       </div>
     </div>
   );
 };
-
-const CodeDisplay = ({ code, theme, language = 'css', onCopy, showLineNumbers = true }) => {
+const CodeDisplay = ({
+  code,
+  theme,
+  language = "css",
+  onCopy,
+  showLineNumbers = !0,
+}) => {
   return (
     <div className="code-container relative rounded-lg overflow-hidden">
-      <pre className={`p-4 overflow-auto max-h-72 text-sm scrollbar-custom font-mono
-        ${theme === 'dark' ? 'bg-gray-900 text-gray-300' : 'bg-gray-100 text-gray-800'}`}>
+      <pre
+        className={`p-4 overflow-auto max-h-72 text-sm scrollbar-custom font-mono
+        ${theme === "dark" ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-800"}`}
+      >
         {showLineNumbers ? (
           <code className="relative">
-            {code.split('\n').map((line, i) => (
+            {code.split("\n").map((line, i) => (
               <div key={i} className="table-row">
-                <span className={`table-cell pr-4 text-right select-none opacity-50 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
+                <span
+                  className={`table-cell pr-4 text-right select-none opacity-50 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}
+                >
                   {i + 1}
                 </span>
                 <span className="table-cell">{line}</span>
@@ -268,64 +305,59 @@ const CodeDisplay = ({ code, theme, language = 'css', onCopy, showLineNumbers = 
     </div>
   );
 };
-
-// Animation utility functions
 const animationCategories = {
-  fadeIn: 'entrance', 
-  slideIn: 'entrance', 
-  rotateIn: 'entrance', 
-  bounceInUp: 'entrance', 
-  typewriter: 'entrance',
-  slideFromTop: 'entrance',
-  elasticScale: 'entrance',
-  revealText: 'entrance',
-  shake: 'attention', 
-  pulse: 'attention', 
-  heartbeat: 'attention', 
-  wobble: 'attention', 
-  jello: 'attention', 
-  rubberBand: 'attention',
-  skewBounce: 'attention',
-  float: 'continuous', 
-  flip: 'continuous', 
-  swing: 'continuous', 
-  gradientMove: 'continuous', 
-  expandRotate: 'continuous',
-  glowPulse: 'special', 
-  ripple: 'special', 
-  shimmer: 'special', 
-  morphSVG: 'special', 
-  stackedCards: 'special'
+  fadeIn: "entrance",
+  slideIn: "entrance",
+  rotateIn: "entrance",
+  bounceInUp: "entrance",
+  typewriter: "entrance",
+  slideFromTop: "entrance",
+  elasticScale: "entrance",
+  revealText: "entrance",
+  shake: "attention",
+  pulse: "attention",
+  heartbeat: "attention",
+  wobble: "attention",
+  jello: "attention",
+  rubberBand: "attention",
+  skewBounce: "attention",
+  float: "continuous",
+  flip: "continuous",
+  swing: "continuous",
+  gradientMove: "continuous",
+  expandRotate: "continuous",
+  glowPulse: "special",
+  ripple: "special",
+  shimmer: "special",
+  morphSVG: "special",
+  stackedCards: "special",
 };
-
-// Mapping for class names
 const animationClassNames = {
-  fadeIn: 'fade-in',
-  slideIn: 'slide-in',
-  float: 'floating',
-  shake: 'shake',
-  flip: 'flip',
-  pulse: 'pulse',
-  glowPulse: 'glow-pulse',
-  rubberBand: 'rubber-band',
-  rotateIn: 'rotate-in',
-  bounceInUp: 'bounce-in-up',
-  swing: 'swing',
-  gradientMove: 'gradient-move',
-  expandRotate: 'expand-rotate',
-  heartbeat: 'heartbeat',
-  jello: 'jello',
-  ripple: 'ripple',
-  wobble: 'wobble',
-  shimmer: 'shimmer',
-  morphSVG: 'morph-path',
-  stackedCards: 'card-stack',
-  skewBounce: 'skew-bounce',
-  slideFromTop: 'slide-from-top',
-  elasticScale: 'elastic-scale',
-  revealText: 'reveal-text'
+  fadeIn: "fade-in",
+  slideIn: "slide-in",
+  float: "floating",
+  shake: "shake",
+  flip: "flip",
+  pulse: "pulse",
+  glowPulse: "glow-pulse",
+  rubberBand: "rubber-band",
+  rotateIn: "rotate-in",
+  bounceInUp: "bounce-in-up",
+  swing: "swing",
+  gradientMove: "gradient-move",
+  expandRotate: "expand-rotate",
+  heartbeat: "heartbeat",
+  jello: "jello",
+  ripple: "ripple",
+  wobble: "wobble",
+  shimmer: "shimmer",
+  morphSVG: "morph-path",
+  stackedCards: "card-stack",
+  skewBounce: "skew-bounce",
+  slideFromTop: "slide-from-top",
+  elasticScale: "elastic-scale",
+  revealText: "reveal-text",
 };
-
 const animationSnippets = {
   fadeIn: `@keyframes fadeIn {
   from { opacity: 0; }
@@ -629,61 +661,196 @@ const animationSnippets = {
 }
 .reveal-text {
   animation: revealText 1.5s forwards cubic-bezier(0.86, 0, 0.07, 1);
-}`
+}`,
 };
-
-// Elements to display in each animation preview
 const animationDisplayElements = {
-  fadeIn: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Hello</div>,
-  slideIn: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Slide</div>,
-  float: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Float</div>,
-  shake: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Shake</div>,
-  flip: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Flip</div>,
-  pulse: (theme) => <div className={`w-16 h-16 rounded-full ${theme === 'dark' ? 'bg-blue-500' : 'bg-blue-600'}`}></div>,
-  glowPulse: (theme) => <div className={`w-16 h-16 rounded-full ${theme === 'dark' ? 'bg-blue-500' : 'bg-blue-600'}`}></div>,
-  typewriter: (theme) => <div className={`font-mono ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Typing...</div>,
-  rubberBand: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Rubber</div>,
-  rotateIn: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Rotate</div>,
-  bounceInUp: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Bounce</div>,
-  swing: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Swing</div>,
+  fadeIn: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Hello
+    </div>
+  ),
+  slideIn: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Slide
+    </div>
+  ),
+  float: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Float
+    </div>
+  ),
+  shake: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Shake
+    </div>
+  ),
+  flip: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Flip
+    </div>
+  ),
+  pulse: (theme) => (
+    <div
+      className={`w-16 h-16 rounded-full ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+    ></div>
+  ),
+  glowPulse: (theme) => (
+    <div
+      className={`w-16 h-16 rounded-full ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+    ></div>
+  ),
+  typewriter: (theme) => (
+    <div
+      className={`font-mono ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Typing...
+    </div>
+  ),
+  rubberBand: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Rubber
+    </div>
+  ),
+  rotateIn: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Rotate
+    </div>
+  ),
+  bounceInUp: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Bounce
+    </div>
+  ),
+  swing: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Swing
+    </div>
+  ),
   gradientMove: (theme) => <div className="w-16 h-16 rounded-lg"></div>,
-  expandRotate: (theme) => <div className={`w-16 h-16 rounded-lg ${theme === 'dark' ? 'bg-blue-500' : 'bg-blue-600'}`}></div>,
-  heartbeat: (theme) => <Heart size={32} className={`${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`} />,
-  jello: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Jello</div>,
-  ripple: (theme) => <div className={`w-12 h-12 rounded-full ${theme === 'dark' ? 'bg-blue-500' : 'bg-blue-600'}`}></div>,
-  wobble: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Wobble</div>,
-  shimmer: (theme) => <div className={`w-24 h-8 rounded-md ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-300'}`}></div>,
+  expandRotate: (theme) => (
+    <div
+      className={`w-16 h-16 rounded-lg ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+    ></div>
+  ),
+  heartbeat: (theme) => (
+    <Heart
+      size={32}
+      className={`${theme === "dark" ? "text-red-400" : "text-red-600"}`}
+    />
+  ),
+  jello: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Jello
+    </div>
+  ),
+  ripple: (theme) => (
+    <div
+      className={`w-12 h-12 rounded-full ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+    ></div>
+  ),
+  wobble: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Wobble
+    </div>
+  ),
+  shimmer: (theme) => (
+    <div
+      className={`w-24 h-8 rounded-md ${theme === "dark" ? "bg-gray-700" : "bg-gray-300"}`}
+    ></div>
+  ),
   morphSVG: () => (
     <svg width="100" height="40" viewBox="0 0 100 40">
-      <path 
-        d="M10,10 C50,30 60,30 90,10" 
-        stroke="#3182CE" 
-        strokeWidth="4" 
-        fill="none" 
+      <path
+        d="M10,10 C50,30 60,30 90,10"
+        stroke="#3182CE"
+        strokeWidth="4"
+        fill="none"
         className="morph-path"
       />
     </svg>
   ),
   stackedCards: (theme) => (
     <div className="card-stack w-24 h-16">
-      <div className={`stacked-card rounded-md p-2 ${theme === 'dark' ? 'bg-blue-500' : 'bg-blue-600'}`}>
-        <div className={`text-xs font-bold text-center ${theme === 'dark' ? 'text-white' : 'text-white'}`}>Card 1</div>
+      <div
+        className={`stacked-card rounded-md p-2 ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+      >
+        <div
+          className={`text-xs font-bold text-center ${theme === "dark" ? "text-white" : "text-white"}`}
+        >
+          Card 1
+        </div>
       </div>
-      <div className={`stacked-card rounded-md p-2 ${theme === 'dark' ? 'bg-blue-400' : 'bg-blue-500'}`}>
-        <div className={`text-xs font-bold text-center ${theme === 'dark' ? 'text-white' : 'text-white'}`}>Card 2</div>
+      <div
+        className={`stacked-card rounded-md p-2 ${theme === "dark" ? "bg-blue-400" : "bg-blue-500"}`}
+      >
+        <div
+          className={`text-xs font-bold text-center ${theme === "dark" ? "text-white" : "text-white"}`}
+        >
+          Card 2
+        </div>
       </div>
-      <div className={`stacked-card rounded-md p-2 ${theme === 'dark' ? 'bg-blue-300' : 'bg-blue-400'}`}>
-        <div className={`text-xs font-bold text-center ${theme === 'dark' ? 'text-white' : 'text-white'}`}>Card 3</div>
+      <div
+        className={`stacked-card rounded-md p-2 ${theme === "dark" ? "bg-blue-300" : "bg-blue-400"}`}
+      >
+        <div
+          className={`text-xs font-bold text-center ${theme === "dark" ? "text-white" : "text-white"}`}
+        >
+          Card 3
+        </div>
       </div>
     </div>
   ),
-  skewBounce: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Skew</div>,
-  slideFromTop: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Drop</div>,
-  elasticScale: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Pop</div>,
-  revealText: (theme) => <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>Reveal</div>,
+  skewBounce: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Skew
+    </div>
+  ),
+  slideFromTop: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Drop
+    </div>
+  ),
+  elasticScale: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Pop
+    </div>
+  ),
+  revealText: (theme) => (
+    <div
+      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+    >
+      Reveal
+    </div>
+  ),
 };
-
-// Usage examples for each animation
 const animationUsageExamples = {
   fadeIn: `<div class="fade-in">Content that fades in</div>`,
   slideIn: `<div class="slide-in">Content that slides in from left</div>`,
@@ -715,150 +882,189 @@ const animationUsageExamples = {
   skewBounce: `<div class="skew-bounce">Bouncy skew animation</div>`,
   slideFromTop: `<div class="slide-from-top">Slides in from top</div>`,
   elasticScale: `<div class="elastic-scale">Scales with elastic effect</div>`,
-  revealText: `<h2 class="reveal-text">Text reveals from left to right</h2>`
+  revealText: `<h2 class="reveal-text">Text reveals from left to right</h2>`,
 };
-
-// Animation customization options
 const getDefaultCustomizationOptions = () => ({
   duration: 1,
   delay: 0,
-  timing: 'ease',
-  iterations: 'infinite'
+  timing: "ease",
+  iterations: "infinite",
 });
-
-// Modified AnimationsLibrary to accept theme prop
-const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
+const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
   const [selectedAnimation, setSelectedAnimation] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [view, setView] = useState('grid');
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [view, setView] = useState("grid");
   const [favoriteAnimations, setFavoriteAnimations] = useState([]);
-  const [copiedCode, setCopiedCode] = useState(false);
-  const [customizationOptions, setCustomizationOptions] = useState(getDefaultCustomizationOptions());
-  const [showCustomizationPanel, setShowCustomizationPanel] = useState(false);
 
-  // Rest of the component logic remains the same
+  const [AllCount, setAllCount] = useState(25); // newly added
+  const [favoritesCount, setFavoritesCount] = useState(0); // newly added
+  const [EntranceCount, setEntranceCount] = useState(8); // newly added
+  const [AttentionCount, setAttentionCount] = useState(7); // newly added
+  const [ContinuousCount, setcontinuousCount] = useState(5); // newly added
+  const [SpecialCount, setSpecialCount] = useState(5); // newly added
 
-  // Filtered animations logic
-  const filteredAnimations = Object.keys(animationCategories).filter(animation => {
-    const matchesCategory = selectedCategory === 'all' || 
-      (selectedCategory === 'favorites' && favoriteAnimations.includes(animation)) || 
-      animationCategories[animation] === selectedCategory;
-    const matchesSearch = animation.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      animationCategories[animation].toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const [copiedCode, setCopiedCode] = useState(!1);
+  const [customizationOptions, setCustomizationOptions] = useState(
+    getDefaultCustomizationOptions()
+  );
+  const [showCustomizationPanel, setShowCustomizationPanel] = useState(!1);
 
-  const categories = ['all', 'favorites', 'entrance', 'attention', 'continuous', 'special'];
+  // useEffect(() => {
+  //   const storedFavorites = localStorage.getItem("favoriteAnimations");
+  //   if (storedFavorites) {
+  //     setFavoriteAnimations(JSON.parse(storedFavorites));
+  //   }
+  // }, []);
 
-  // Select an animation
+  // newly added
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem("favoriteAnimations");
+    if (storedFavorites) {
+      const parsedFavorites = JSON.parse(storedFavorites);
+      setFavoriteAnimations(parsedFavorites);
+      setFavoritesCount(parsedFavorites.length); // Set initial count here
+    }
+  }, []);
+
+  const filteredAnimations = Object.keys(animationCategories).filter(
+    (animation) => {
+      const matchesCategory =
+        selectedCategory === "all" ||
+        (selectedCategory === "favorites" &&
+          favoriteAnimations.includes(animation)) ||
+        animationCategories[animation] === selectedCategory;
+      const matchesSearch =
+        animation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        animationCategories[animation]
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    }
+  );
+  const categories = [
+    "all",
+    "favorites",
+    "entrance",
+    "attention",
+    "continuous",
+    "special",
+  ];
   const handleSelectAnimation = (animation) => {
     setSelectedAnimation(animation);
     setCustomizationOptions(getDefaultCustomizationOptions());
-    setShowCustomizationPanel(false);
+    setShowCustomizationPanel(!1);
   };
-  
-  // Toggle favorite status
+
+  // const toggleFavorite = (animation) => {
+  //   setFavoriteAnimations((prev) => {
+  //     const updatedFavorites = prev.includes(animation)
+  //       ? prev.filter((a) => a !== animation)
+  //       : [...prev, animation];
+
+  //     // Save the updated list to localStorage
+  //     localStorage.setItem(
+  //       "favoriteAnimations",
+  //       JSON.stringify(updatedFavorites)
+  //     );
+
+  //     return updatedFavorites;
+  //   });
+  // };
+
+  // // new;y added
   const toggleFavorite = (animation) => {
-    setFavoriteAnimations(prev => 
-      prev.includes(animation) 
-        ? prev.filter(a => a !== animation)
-        : [...prev, animation]
-    );
+    setFavoriteAnimations((prev) => {
+      const updatedFavorites = prev.includes(animation)
+        ? prev.filter((a) => a !== animation)
+        : [...prev, animation];
+
+      localStorage.setItem(
+        "favoriteAnimations",
+        JSON.stringify(updatedFavorites)
+      );
+      setFavoritesCount(updatedFavorites.length); // Update count here
+      return updatedFavorites;
+    });
   };
-  
-  // Copy code to clipboard
+
   const copyCodeToClipboard = (code) => {
     navigator.clipboard.writeText(code);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+    setCopiedCode(!0);
+    setTimeout(() => setCopiedCode(!1), 2000);
   };
-  
-  // Update customization options
   const updateCustomizationOption = (option, value) => {
-    setCustomizationOptions(prev => ({
-      ...prev,
-      [option]: value
-    }));
+    setCustomizationOptions((prev) => ({ ...prev, [option]: value }));
   };
-  
-  // Generate customized CSS code
   const getCustomizedCode = () => {
-    if (!selectedAnimation) return '';
-    
+    if (!selectedAnimation) return "";
     const originalCode = animationSnippets[selectedAnimation];
     let customizedCode = originalCode;
-    
     if (customizationOptions.duration !== 1) {
-      customizedCode = customizedCode.replace(
-        /animation:.*?;/g, 
-        (match) => match.replace(/\d+(\.\d+)?s/, `${customizationOptions.duration}s`)
+      customizedCode = customizedCode.replace(/animation:.*?;/g, (match) =>
+        match.replace(/\d+(\.\d+)?s/, `${customizationOptions.duration}s`)
       );
     }
-    
     if (customizationOptions.delay > 0) {
-      customizedCode = customizedCode.replace(
-        /animation:.*?;/g, 
-        (match) => {
-          if (match.includes('delay')) {
-            return match.replace(/\d+(\.\d+)?s delay/, `${customizationOptions.delay}s delay`);
-          } else {
-            return match.replace(';', ` ${customizationOptions.delay}s;`);
-          }
+      customizedCode = customizedCode.replace(/animation:.*?;/g, (match) => {
+        if (match.includes("delay")) {
+          return match.replace(
+            /\d+(\.\d+)?s delay/,
+            `${customizationOptions.delay}s delay`
+          );
+        } else {
+          return match.replace(";", ` ${customizationOptions.delay}s;`);
         }
-      );
+      });
     }
-    
-    if (customizationOptions.timing !== 'ease') {
-      customizedCode = customizedCode.replace(
-        /animation:.*?;/g, 
-        (match) => {
-          return match.replace(/(linear|ease|ease-in|ease-out|ease-in-out)/, customizationOptions.timing);
+    if (customizationOptions.timing !== "ease") {
+      customizedCode = customizedCode.replace(/animation:.*?;/g, (match) => {
+        return match.replace(
+          /(linear|ease|ease-in|ease-out|ease-in-out)/,
+          customizationOptions.timing
+        );
+      });
+    }
+    if (customizationOptions.iterations !== "infinite") {
+      customizedCode = customizedCode.replace(/animation:.*?;/g, (match) => {
+        if (match.includes("infinite")) {
+          return match.replace(/infinite/, customizationOptions.iterations);
+        } else {
+          const insertPoint = match.lastIndexOf(";");
+          return `${match.substring(0, insertPoint)} ${customizationOptions.iterations}${match.substring(insertPoint)}`;
         }
-      );
+      });
     }
-    
-    if (customizationOptions.iterations !== 'infinite') {
-      customizedCode = customizedCode.replace(
-        /animation:.*?;/g, 
-        (match) => {
-          if (match.includes('infinite')) {
-            return match.replace(/infinite/, customizationOptions.iterations);
-          } else {
-            const insertPoint = match.lastIndexOf(';');
-            return `${match.substring(0, insertPoint)} ${customizationOptions.iterations}${match.substring(insertPoint)}`;
-          }
-        }
-      );
-    }
-    
     return customizedCode;
   };
-  
   const getAnimationUsageCode = () => {
-    if (!selectedAnimation) return '';
+    if (!selectedAnimation) return "";
     return animationUsageExamples[selectedAnimation];
   };
-  
-
   return (
-    <div className={`min-h-screen mt-16 transition-colors duration-200 ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
+    <div
+      className={`min-h-screen mt-20 transition-colors duration-200 ${theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"}`}
+    >
       <style>{styleSheet}</style>
-      
-      <header className={`py-4 px-6 border-b ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} sticky top-0 z-10`}>
+      <header
+        className={`py-4 px-6 border-b ${theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} sticky top-0 z-10`}
+      >
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>
+              <div
+                className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+              >
                 CSS Animation Library
               </div>
-            
             </div>
-            
-            {/* Rest of the header remains the same */}
+            {}
             <div className="relative flex-1 max-w-md">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search size={16} className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+                <Search
+                  size={16}
+                  className={`${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}
+                />
               </div>
               <input
                 type="text"
@@ -866,69 +1072,162 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search animations..."
                 className={`pl-10 pr-4 py-2 w-full rounded-lg ${
-                  theme === 'dark' 
-                    ? 'bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500'
-                    : 'bg-white border-gray-300 placeholder-gray-500 text-gray-900 focus:ring-blue-500 focus:border-blue-500'
+                  theme === "dark"
+                    ? "bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                    : "bg-white border-gray-300 placeholder-gray-500 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
                 } transition-colors duration-200`}
               />
             </div>
-            
-            {/* View toggle buttons */}
-            <div className="flex items-center gap-2 md:justify-end">
-
-
-            </div>
+            {}
+            <div className="flex items-center gap-2 md:justify-end"></div>
           </div>
-          
-          {/* Category pills */}
+          {}
           <div className="mt-4 flex gap-2 overflow-x-auto pb-2 scrollbar-custom">
-            {categories.map(category => (
-              <CategoryPill
-                key={category}
-                label={category.charAt(0).toUpperCase() + category.slice(1)}
-                active={selectedCategory === category}
-                onClick={() => setSelectedCategory(category)}
-                theme={theme}
-                icon={category === 'favorites' ? <Heart size={14} /> : null}
-              />
-            ))}
+            {categories.map((category) => {
+              let icon;
+              let count;
+
+              switch (category) {
+                case "all":
+                  icon = (
+                    <Globe size={20} className="animate-spin text-green-500" />
+                  );
+                  count = `(${AllCount})`;
+                  break;
+
+                case "favorites":
+                  icon = (
+                    <Heart
+                      size={20}
+                      className="animate-pulse fill-red-500 text-red-500"
+                    />
+                  );
+                  count = `(${favoritesCount})`;
+                  break;
+
+                case "entrance":
+                  icon = (
+                    <LogIn size={14} className="animate-ping text-green-500" />
+                  );
+                  count = `(${EntranceCount})`;
+                  break;
+
+                case "attention":
+                  icon = (
+                    <AlertCircle
+                      size={20}
+                      className="animate-pulse text-yellow-500"
+                    />
+                  );
+                  count = `(${AttentionCount})`;
+                  break;
+
+                case "continuous":
+                  icon = (
+                    <Repeat
+                      size={20}
+                      className="animate-spin text-purple-500"
+                    />
+                  );
+                  count = `(${ContinuousCount})`;
+                  break;
+
+                case "special":
+                  icon = (
+                    <div className="relative">
+                      <span className="absolute inset-0 animate-ping text-pink-500">
+                        <Sparkles size={20} />
+                      </span>
+                      <Sparkles
+                        size={20}
+                        className="animate-pulse text-pink-500"
+                      />
+                    </div>
+                  );
+                  count = `(${SpecialCount})`;
+                  break;
+
+                default:
+                  icon = null;
+                  count = "";
+              }
+
+              const labelText =
+                category.charAt(0).toUpperCase() +
+                category.slice(1) +
+                " " +
+                count;
+
+              return (
+                <CategoryPill
+                  key={category}
+                  label={labelText}
+                  active={selectedCategory === category}
+                  onClick={() => setSelectedCategory(category)}
+                  theme={theme}
+                  icon={icon}
+                />
+              );
+            })}
           </div>
         </div>
       </header>
-
       <main className="container mx-auto py-6 px-6">
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Animation Grid/List */}
-          <div className={`${selectedAnimation ? 'lg:w-3/5' : 'w-full'}`}>
+          {}
+          <div className={`${selectedAnimation ? "lg:w-3/5" : "w-full"}`}>
             {filteredAnimations.length === 0 ? (
-              <div className={`p-8 rounded-lg text-center ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
-                <div className="text-5xl mb-4">😕</div>
-                <h3 className="text-xl font-medium mb-2">No animations found</h3>
-                <p className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Try adjusting your search or filter criteria
-                </p>
+              <div
+                className={`p-8 rounded-lg text-center ${theme === "dark" ? "bg-gray-800" : "bg-white"}`}
+              >
+                <div className="flex flex-col mb-5 items-center justify-center text-center">
+                  <div className="relative md:mb-15 my-8 md:my-10">
+                    <div className="relative">
+                      <span className="absolute inset-0 animate-ping text-pink-500">
+                        <Infinity
+                          size={100}
+                          className="animate-spin text-purple-400"
+                        />
+                      </span>
+                      <Infinity
+                        size={100}
+                        className="animate-ping text-purple-500"
+                      />
+                    </div>
+                  </div>
+
+                  <h3 className={`text-2xl md:text-3xl font-semibold ${theme === "dark"
+                      ? " text-gray-200"
+                      : " text-gray-700"} mb-1`}>
+                    No Animations Found
+                  </h3>
+                </div>
+
                 <button
                   onClick={() => {
-                    setSearchQuery('');
-                    setSelectedCategory('all');
+                    setSearchQuery("");
+                    setSelectedCategory("all");
                   }}
                   className={`mt-4 px-4 py-2 rounded-md flex items-center justify-center gap-2 ${
-                    theme === 'dark' 
-                      ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
-                      : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                    theme === "dark"
+                      ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
+                      : "bg-gray-200 hover:bg-gray-300 text-gray-800"
                   }`}
                 >
                   <RefreshCw size={16} />
-                  Reset filters
+                  Go To All{" "}
+                  <Globe size={20} className="animate-spin text-green-500" />
                 </button>
               </div>
             ) : (
-              <div className={`${
-                view === 'grid' 
-                  ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'
-                  : 'flex flex-col gap-3'
-              }`}>
-                {filteredAnimations.map(animation => (
+              <div
+                className={`${
+                  view === "grid"
+                    ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                    : "flex flex-col gap-3"
+                }`}
+              >
+                {filteredAnimations.map((animation) => (
                   <AnimationCard
                     key={animation}
                     animation={animation}
@@ -943,46 +1242,62 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
               </div>
             )}
           </div>
-          
-          {/* Animation Detail Panel */}
+          {}
           {selectedAnimation && (
-            <div className={`lg:w-2/5 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg overflow-hidden`}>
-              <div className="flex justify-between items-center p-4 border-b 
-                             ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}">
+            <div
+              className={`lg:w-2/5 ${theme === "dark" ? "bg-gray-800" : "bg-white"} rounded-lg shadow-lg overflow-hidden`}
+            >
+              <div
+                className="flex justify-between items-center p-4 border-b 
+                             ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}"
+              >
                 <h2 className="text-xl font-bold">
-                  {selectedAnimation.replace(/([A-Z])/g, ' $1').trim()}
+                  {selectedAnimation.replace(/([A-Z])/g, " $1").trim()}
                 </h2>
                 <div className="flex gap-2">
                   <button
                     onClick={() => toggleFavorite(selectedAnimation)}
                     className={`p-1.5 rounded-full transition-all duration-200 ${
-                      favoriteAnimations.includes(selectedAnimation) 
-                        ? 'text-yellow-400' 
-                        : theme === 'dark' ? 'text-gray-400 hover:text-yellow-300' : 'text-gray-500 hover:text-yellow-400'
+                      favoriteAnimations.includes(selectedAnimation)
+                        ? "text-yellow-400"
+                        : theme === "dark"
+                          ? "text-gray-400 hover:text-yellow-300"
+                          : "text-gray-500 hover:text-yellow-400"
                     }`}
-                    title={favoriteAnimations.includes(selectedAnimation) ? "Remove from favorites" : "Add to favorites"}
+                    title={
+                      favoriteAnimations.includes(selectedAnimation)
+                        ? "Remove from favorites"
+                        : "Add to favorites"
+                    }
                   >
-                    <Heart size={18} fill={favoriteAnimations.includes(selectedAnimation) ? "currentColor" : "none"} />
+                    <Heart
+                      size={18}
+                      fill={
+                        favoriteAnimations.includes(selectedAnimation)
+                          ? "currentColor"
+                          : "none"
+                      }
+                    />
                   </button>
-                  
                   <button
-                    onClick={() => setShowCustomizationPanel(!showCustomizationPanel)}
+                    onClick={() =>
+                      setShowCustomizationPanel(!showCustomizationPanel)
+                    }
                     className={`p-1.5 rounded-full ${
-                      theme === 'dark' 
-                        ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
-                        : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
+                      theme === "dark"
+                        ? "text-gray-400 hover:text-gray-200 hover:bg-gray-700"
+                        : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"
                     }`}
                     title="Customize animation"
                   >
                     <Sliders size={18} />
                   </button>
-                  
                   <button
                     onClick={() => setSelectedAnimation(null)}
                     className={`p-1.5 rounded-full ${
-                      theme === 'dark' 
-                        ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
-                        : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
+                      theme === "dark"
+                        ? "text-gray-400 hover:text-gray-200 hover:bg-gray-700"
+                        : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"
                     }`}
                     title="Close panel"
                   >
@@ -990,45 +1305,55 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
                   </button>
                 </div>
               </div>
-              
-              {/* Animation Preview */}
-              <div className={`p-8 flex items-center justify-center ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>
-                <div 
+              {}
+              <div
+                className={`p-8 flex items-center justify-center ${theme === "dark" ? "bg-gray-900" : "bg-gray-100"}`}
+              >
+                <div
                   className={animationClassNames[selectedAnimation]}
                   style={{
                     animationDuration: `${customizationOptions.duration}s`,
-                    animationDelay: customizationOptions.delay > 0 ? `${customizationOptions.delay}s` : undefined,
+                    animationDelay:
+                      customizationOptions.delay > 0
+                        ? `${customizationOptions.delay}s`
+                        : undefined,
                     animationTimingFunction: customizationOptions.timing,
-                    animationIterationCount: customizationOptions.iterations
+                    animationIterationCount: customizationOptions.iterations,
                   }}
                 >
                   {animationDisplayElements[selectedAnimation](theme)}
                 </div>
               </div>
-              
-              {/* Customization Panel */}
+              {}
               {showCustomizationPanel && (
-                <div className={`p-4 border-t ${theme === 'dark' ? 'border-gray-700 bg-gray-850' : 'border-gray-200 bg-gray-50'}`}>
+                <div
+                  className={`p-4 border-t ${theme === "dark" ? "border-gray-700 bg-gray-850" : "border-gray-200 bg-gray-50"}`}
+                >
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="font-medium">Customize Animation</h3>
                     <button
-                      onClick={() => setCustomizationOptions(getDefaultCustomizationOptions())}
+                      onClick={() =>
+                        setCustomizationOptions(
+                          getDefaultCustomizationOptions()
+                        )
+                      }
                       className={`text-xs px-2 py-1 rounded ${
-                        theme === 'dark' 
-                          ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
-                          : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                        theme === "dark"
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-300"
+                          : "bg-gray-200 hover:bg-gray-300 text-gray-700"
                       }`}
                     >
                       Reset
                     </button>
                   </div>
-                  
                   <div className="space-y-4">
-                    {/* Duration */}
+                    {}
                     <div>
                       <div className="flex justify-between mb-1">
-                        <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                          Duration: {customizationOptions.duration}s
+                        <label
+                          className={`text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          Duration:{customizationOptions.duration}s
                         </label>
                       </div>
                       <input
@@ -1037,16 +1362,22 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
                         max="5"
                         step="0.1"
                         value={customizationOptions.duration}
-                        onChange={(e) => updateCustomizationOption('duration', parseFloat(e.target.value))}
+                        onChange={(e) =>
+                          updateCustomizationOption(
+                            "duration",
+                            parseFloat(e.target.value)
+                          )
+                        }
                         className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
                       />
                     </div>
-                    
-                    {/* Delay */}
+                    {}
                     <div>
                       <div className="flex justify-between mb-1">
-                        <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                          Delay: {customizationOptions.delay}s
+                        <label
+                          className={`text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          Delay:{customizationOptions.delay}s
                         </label>
                       </div>
                       <input
@@ -1055,23 +1386,31 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
                         max="3"
                         step="0.1"
                         value={customizationOptions.delay}
-                        onChange={(e) => updateCustomizationOption('delay', parseFloat(e.target.value))}
+                        onChange={(e) =>
+                          updateCustomizationOption(
+                            "delay",
+                            parseFloat(e.target.value)
+                          )
+                        }
                         className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
                       />
                     </div>
-                    
-                    {/* Timing Function */}
+                    {}
                     <div>
-                      <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <label
+                        className={`block text-sm font-medium mb-1 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+                      >
                         Timing Function
                       </label>
                       <select
                         value={customizationOptions.timing}
-                        onChange={(e) => updateCustomizationOption('timing', e.target.value)}
+                        onChange={(e) =>
+                          updateCustomizationOption("timing", e.target.value)
+                        }
                         className={`w-full p-2 rounded-md ${
-                          theme === 'dark' 
-                            ? 'bg-gray-700 border-gray-600 text-white' 
-                            : 'bg-white border-gray-300 text-gray-900'
+                          theme === "dark"
+                            ? "bg-gray-700 border-gray-600 text-white"
+                            : "bg-white border-gray-300 text-gray-900"
                         }`}
                       >
                         <option value="ease">ease</option>
@@ -1079,22 +1418,30 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
                         <option value="ease-in">ease-in</option>
                         <option value="ease-out">ease-out</option>
                         <option value="ease-in-out">ease-in-out</option>
-                        <option value="cubic-bezier(0.68, -0.55, 0.27, 1.55)">bounce</option>
+                        <option value="cubic-bezier(0.68, -0.55, 0.27, 1.55)">
+                          bounce
+                        </option>
                       </select>
                     </div>
-                    
-                    {/* Iteration Count */}
+                    {}
                     <div>
-                      <label className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <label
+                        className={`block text-sm font-medium mb-1 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+                      >
                         Iterations
                       </label>
                       <select
                         value={customizationOptions.iterations}
-                        onChange={(e) => updateCustomizationOption('iterations', e.target.value)}
+                        onChange={(e) =>
+                          updateCustomizationOption(
+                            "iterations",
+                            e.target.value
+                          )
+                        }
                         className={`w-full p-2 rounded-md ${
-                          theme === 'dark' 
-                            ? 'bg-gray-700 border-gray-600 text-white' 
-                            : 'bg-white border-gray-300 text-gray-900'
+                          theme === "dark"
+                            ? "bg-gray-700 border-gray-600 text-white"
+                            : "bg-white border-gray-300 text-gray-900"
                         }`}
                       >
                         <option value="infinite">infinite</option>
@@ -1107,28 +1454,36 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
                   </div>
                 </div>
               )}
-          {/* Code Display */}
-          <div className="p-4">
+              {}
+              <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>CSS Code</h3>
+                  <h3
+                    className={`font-medium ${theme === "dark" ? "text-gray-200" : "text-gray-800"}`}
+                  >
+                    CSS Code
+                  </h3>
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => copyCodeToClipboard(getCustomizedCode())}
                       className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-md transition-colors
-                        ${theme === 'dark' 
-                          ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
-                          : 'bg-gray-200 hover:bg-gray-300 text-gray-800'}`}
+                        ${
+                          theme === "dark"
+                            ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
+                            : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                        }`}
                     >
                       {copiedCode ? <Check size={14} /> : <Copy size={14} />}
-                      {copiedCode ? 'Copied!' : 'Copy code'}
+                      {copiedCode ? "Copied!" : "Copy code"}
                     </button>
                     <a
                       href={`data:text/css;charset=utf-8,${encodeURIComponent(getCustomizedCode())}`}
                       download={`${selectedAnimation}.css`}
                       className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-md transition-colors
-                        ${theme === 'dark' 
-                          ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
-                          : 'bg-gray-200 hover:bg-gray-300 text-gray-800'}`}
+                        ${
+                          theme === "dark"
+                            ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
+                            : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                        }`}
                     >
                       <Download size={14} />
                       Download
@@ -1142,22 +1497,27 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
                   onCopy={() => copyCodeToClipboard(getCustomizedCode())}
                 />
               </div>
-              
-              {/* Usage Example */}
-              <div className={`p-4 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+              {}
+              <div
+                className={`p-4 border-t ${theme === "dark" ? "border-gray-700" : "border-gray-200"}`}
+              >
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className={`font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
+                  <h3
+                    className={`font-medium ${theme === "dark" ? "text-gray-200" : "text-gray-800"}`}
+                  >
                     Usage Example
                   </h3>
                   <button
                     onClick={() => copyCodeToClipboard(getAnimationUsageCode())}
                     className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-md transition-colors
-                      ${theme === 'dark' 
-                        ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
-                        : 'bg-gray-200 hover:bg-gray-300 text-gray-800'}`}
+                      ${
+                        theme === "dark"
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
+                          : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                      }`}
                   >
                     {copiedCode ? <Check size={14} /> : <Copy size={14} />}
-                    {copiedCode ? 'Copied!' : 'Copy example'}
+                    {copiedCode ? "Copied!" : "Copy example"}
                   </button>
                 </div>
                 <CodeDisplay
@@ -1167,36 +1527,55 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
                   onCopy={() => copyCodeToClipboard(getAnimationUsageCode())}
                 />
               </div>
-              <div className={`p-4 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
-                <h3 className={`font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
-                  Tips & Usage
+              <div
+                className={`p-4 border-t ${theme === "dark" ? "border-gray-700" : "border-gray-200"}`}
+              >
+                <h3
+                  className={`font-medium mb-2 ${theme === "dark" ? "text-gray-200" : "text-gray-800"}`}
+                >
+                  Tips&Usage
                 </h3>
-                <div className={`text-sm space-y-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div
+                  className={`text-sm space-y-2 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+                >
                   <p>
-                    <span className="font-medium">Category:</span> {animationCategories[selectedAnimation].charAt(0).toUpperCase() + animationCategories[selectedAnimation].slice(1)}
+                    <span className="font-medium">Category:</span>
+                    {animationCategories[selectedAnimation]
+                      .charAt(0)
+                      .toUpperCase() +
+                      animationCategories[selectedAnimation].slice(1)}
                   </p>
                   <p>
-                    <span className="font-medium">Best for:</span> {
+                    <span className="font-medium">Best for:</span>
+                    {
                       {
-                        'entrance': 'Introducing new elements or transitions between pages',
-                        'attention': 'Drawing focus to important elements or alerts',
-                        'continuous': 'Maintaining visual interest with subtle movement',
-                        'special': 'Creating unique interactive experiences'
+                        entrance:
+                          "Introducing new elements or transitions between pages",
+                        attention:
+                          "Drawing focus to important elements or alerts",
+                        continuous:
+                          "Maintaining visual interest with subtle movement",
+                        special: "Creating unique interactive experiences",
                       }[animationCategories[selectedAnimation]]
                     }
                   </p>
                   <p>
-                    <span className="font-medium">Performance:</span> {
-                      ['fadeIn', 'slideIn', 'pulse', 'glowPulse'].includes(selectedAnimation)
-                        ? 'High - Uses well-optimized properties'
-                        : ['float', 'shake', 'heartbeat', 'ripple'].includes(selectedAnimation)
-                          ? 'Medium - Generally performs well across devices'
-                          : 'Use sparingly - May cause performance issues on low-end devices'
-                    }
+                    <span className="font-medium">Performance:</span>
+                    {["fadeIn", "slideIn", "pulse", "glowPulse"].includes(
+                      selectedAnimation
+                    )
+                      ? "High - Uses well-optimized properties"
+                      : ["float", "shake", "heartbeat", "ripple"].includes(
+                            selectedAnimation
+                          )
+                        ? "Medium - Generally performs well across devices"
+                        : "Use sparingly - May cause performance issues on low-end devices"}
                   </p>
                   <div className="flex items-center gap-1 mt-3">
                     <Info size={16} className="text-blue-500" />
-                    <span className="text-xs">Remember to include both keyframes and class in your CSS</span>
+                    <span className="text-xs">
+                      Remember to include both keyframes and class in your CSS
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1204,10 +1583,7 @@ const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
           )}
         </div>
       </main>
-
     </div>
   );
 };
-
 export default AnimationsLibrary;
-
