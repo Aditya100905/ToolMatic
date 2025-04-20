@@ -35,7 +35,7 @@ export const utilities = {
   ],
   "General Utilities": ["Qr Generator", "Url Shortner", "Currency Converter"],
 
-  Design: ["Animations Library",],
+  Design: ["Animations Library", "Grids Library"],
 };
 
 // Define route mappings for each utility
@@ -77,4 +77,5 @@ export const utilityRoutes = {
   "Currency Converter": "/general/currency-converter",
   
   "Animations Library": "/design/animations",
+  "Grids Library": "/design/grids",
 };

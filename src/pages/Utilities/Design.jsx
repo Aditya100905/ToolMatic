@@ -3,6 +3,7 @@ import { useTheme } from "../../ThemeProvider"; // Import theme context
 
 const designing = [
   { name: "Animations Library", path: "/design/animations" },
+  { name: "Grids Library", path: "/design/grids" },
 ];
 
 const designs = () => {

@@ -53,6 +53,7 @@ import BaseAndBitwiseOperator from "./pages/Utilities/BaseAndBitwiseOperator";
 import Converters from "./pages/Utilities/Converters.jsx";
 
 import CssAnimations from './Design/CssAnimations.jsx'
+import CssGrids from './Design/CssGrids.jsx'
 
 // Import the utilities config and route mappings
 import { utilities, utilityRoutes } from "./routes.js";
@@ -547,6 +548,10 @@ const App = () => {
           <Route
             path="/design/animations"
             element={<CssAnimations theme={theme} />}
+          />
+          <Route
+            path="/design/grids"
+            element={<CssGrids theme={theme} />}
           />
 {/* 
           <Route
