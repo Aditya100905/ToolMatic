@@ -545,7 +545,7 @@ const App = () => {
           />
 
           <Route
-            path="/design/css-animations"
+            path="/design/animations"
             element={<CssAnimations theme={theme} />}
           />
 {/* 

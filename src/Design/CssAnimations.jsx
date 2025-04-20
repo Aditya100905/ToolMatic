@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Copy, Settings, X, Check, Sliders, Heart, Search, Download, Play, 
-  Pause, Monitor, Smartphone, RefreshCw, ChevronRight, ChevronDown, BookOpen,
-  Maximize, Minimize, Grid, List, Info, ExternalLink } from 'lucide-react';
+import {
+  Copy, X, Check, Sliders, Heart, Search, Download,
+  Play, Pause, RefreshCw, Grid, List, Info, 
+} from 'lucide-react';
+
 
 // Separated stylesheet for better organization
 const styleSheet = `
@@ -416,7 +418,8 @@ const animationSnippets = {
     transform: none;
     opacity: 1;
   }
-}
+};
+
 .rotate-in {
   animation: rotateIn 1s infinite;
 }`,
@@ -480,6 +483,7 @@ const animationSnippets = {
   42% { transform: scale(1.3); }
   70% { transform: scale(1); }
 }
+
 .heartbeat {
   animation: heartbeat 1.5s ease-in-out infinite;
 }`,
@@ -564,7 +568,7 @@ const animationSnippets = {
 .morph-path {
   animation: morphPath 3s ease-in-out infinite;
 }`,
-stackedCards: `/* Stacked cards with hover effect */
+  stackedCards: `/* Stacked cards with hover effect */
 .card-stack {
   position: relative;
 }
@@ -722,9 +726,8 @@ const getDefaultCustomizationOptions = () => ({
   iterations: 'infinite'
 });
 
-// Main component
-const AnimationsLibrary = () => {
-  const [theme, setTheme] = useState('light');
+// Modified AnimationsLibrary to accept theme prop
+const AnimationsLibrary = ({ theme = 'light', onThemeChange }) => {
   const [selectedAnimation, setSelectedAnimation] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -733,21 +736,21 @@ const AnimationsLibrary = () => {
   const [copiedCode, setCopiedCode] = useState(false);
   const [customizationOptions, setCustomizationOptions] = useState(getDefaultCustomizationOptions());
   const [showCustomizationPanel, setShowCustomizationPanel] = useState(false);
-  
-  // Filter animations based on selected category and search
+
+  // Rest of the component logic remains the same
+
+  // Filtered animations logic
   const filteredAnimations = Object.keys(animationCategories).filter(animation => {
     const matchesCategory = selectedCategory === 'all' || 
-                           selectedCategory === 'favorites' && favoriteAnimations.includes(animation) ||
-                           animationCategories[animation] === selectedCategory;
-    
-    const matchesSearch = animation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         animationCategories[animation].toLowerCase().includes(searchQuery.toLowerCase());
-    
+      (selectedCategory === 'favorites' && favoriteAnimations.includes(animation)) || 
+      animationCategories[animation] === selectedCategory;
+    const matchesSearch = animation.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      animationCategories[animation].toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-  
+
   const categories = ['all', 'favorites', 'entrance', 'attention', 'continuous', 'special'];
-  
+
   // Select an animation
   const handleSelectAnimation = (animation) => {
     setSelectedAnimation(animation);
@@ -837,11 +840,11 @@ const AnimationsLibrary = () => {
     return animationUsageExamples[selectedAnimation];
   };
   
+
   return (
     <div className={`min-h-screen mt-16 transition-colors duration-200 ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
       <style>{styleSheet}</style>
       
-      {/* Header */}
       <header className={`py-4 px-6 border-b ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} sticky top-0 z-10`}>
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -849,21 +852,10 @@ const AnimationsLibrary = () => {
               <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>
                 CSS Animation Library
               </div>
-              
-              <button 
-                onClick={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')} 
-                className={`p-2 rounded-full ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
-                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-                title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-              >
-                {theme === 'dark' ? (
-                  <Monitor size={20} />
-                ) : (
-                  <Smartphone size={20} />
-                )}
-              </button>
+            
             </div>
             
+            {/* Rest of the header remains the same */}
             <div className="relative flex-1 max-w-md">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search size={16} className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
@@ -881,35 +873,14 @@ const AnimationsLibrary = () => {
               />
             </div>
             
+            {/* View toggle buttons */}
             <div className="flex items-center gap-2 md:justify-end">
-              <button
-                onClick={() => setView('grid')}
-                className={`p-2 rounded ${
-                  view === 'grid' 
-                    ? theme === 'dark' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-700' 
-                    : theme === 'dark' ? 'text-gray-400 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-200'
-                }`}
-                aria-label="Grid view"
-                title="Grid view"
-              >
-                <Grid size={16} />
-              </button>
-              <button
-                onClick={() => setView('list')}
-                className={`p-2 rounded ${
-                  view === 'list' 
-                    ? theme === 'dark' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-700' 
-                    : theme === 'dark' ? 'text-gray-400 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-200'
-                }`}
-                aria-label="List view"
-                title="List view"
-              >
-                <List size={16} />
-              </button>
+
+
             </div>
           </div>
           
-          {/* Categories */}
+          {/* Category pills */}
           <div className="mt-4 flex gap-2 overflow-x-auto pb-2 scrollbar-custom">
             {categories.map(category => (
               <CategoryPill
@@ -924,7 +895,7 @@ const AnimationsLibrary = () => {
           </div>
         </div>
       </header>
-      
+
       <main className="container mx-auto py-6 px-6">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Animation Grid/List */}
@@ -1196,8 +1167,6 @@ const AnimationsLibrary = () => {
                   onCopy={() => copyCodeToClipboard(getAnimationUsageCode())}
                 />
               </div>
-              
-              {/* Additional Info */}
               <div className={`p-4 border-t ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
                 <h3 className={`font-medium mb-2 ${theme === 'dark' ? 'text-gray-200' : 'text-gray-800'}`}>
                   Tips & Usage
@@ -1235,9 +1204,10 @@ const AnimationsLibrary = () => {
           )}
         </div>
       </main>
-      
+
     </div>
   );
 };
 
 export default AnimationsLibrary;
+

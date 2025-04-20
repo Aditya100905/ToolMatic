@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../ThemeProvider"; // Import theme context
 
 const designing = [
-  { name: "CSS Animations", path: "/design/css-animations" },
+  { name: "Animations Library", path: "/design/animations" },
 ];
 
 const designs = () => {
