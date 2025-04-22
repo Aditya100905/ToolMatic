@@ -16,7 +16,7 @@ const Utilities = () => {
     const { theme } = useTheme(); // Get theme from context
 
     return (
-        <div className={`min-h-screen pt-24 px-6 ${theme === "dark" ? "bg-[#121212] text-white" : "bg-gray-50 text-black"} transition-all`}>
+        <div className={`min-h-screen mb-5 pt-24 px-6 ${theme === "dark" ? "bg-[#121212] text-white" : "bg-gray-50 text-black"} transition-all`}>
             <h2 className="text-4xl font-bold text-center mb-12">Utility Categories</h2>
 
             {/* Categories Grid */}

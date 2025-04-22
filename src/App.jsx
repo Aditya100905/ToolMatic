@@ -54,7 +54,8 @@ import Converters from "./pages/Utilities/Converters.jsx";
 
 import CssAnimations from './Design/CssAnimations.jsx'
 import CssGrids from './Design/CssGrids.jsx'
-import CssGradients from "./Design/CssGradients.jsx";
+import CssGradients from "./Design/CssGradients.jsx"
+import TypeWriter from "./Design/TypeWriter.jsx"
 
 // Import the utilities config and route mappings
 import { utilities, utilityRoutes } from "./routes.js";
@@ -559,6 +560,11 @@ const App = () => {
             path="/design/gradients"
             element={<CssGradients theme={theme} />}
           />
+          <Route
+            path="/design/typography"
+            element={<TypeWriter theme={theme} />}
+          />
+
 {/* 
           <Route
             path="/images/bg-remover"
