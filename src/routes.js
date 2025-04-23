@@ -5,7 +5,7 @@ export const utilities = {
     "JS Formatter",
     "JSON Formatter",
   ],
-  "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images"],
+  "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images", "Compress PDFs"],
 
   Text: ["Word Counter", "Case Converter", "Text Cleaner", "Text Comparison"],
 

@@ -22,6 +22,7 @@ import JSONFormatter from "./Formatter/JSONFormatter";
 import MergePDF from "./PDFTools/MergePDF";
 import PDFtoImages from "./PDFTools/PDFtoImages";
 import SplitPDF from "./PDFTools/SplitPDF";
+import CompressPDF from "./PDFTools/CompressPDF.jsx";
 import MatrixSolver from "./Maths/MatrixSolver";
 import GraphPlotter from "./Maths/GraphPlotter";
 import ScientificCalculator from "./Maths/ScientificCalculator.jsx";
@@ -459,6 +460,10 @@ const App = () => {
           <Route
             path="/pdf-tools/pdf-to-images"
             element={<PDFtoImages theme={theme} />}
+          />
+          <Route
+            path="/pdf-tools/compress"
+            element={<CompressPDF theme={theme} />}
           />
 
           <Route
