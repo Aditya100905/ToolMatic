@@ -3,7 +3,7 @@ import { useTheme } from "../../ThemeProvider"; // Import theme context
 
 const gen = [
   { name: "QR Generator", path: "/general/qr-generator" },
-  { name: "Url Shortner", path: "/general/url-shortner" },
+  { name: "Url Shortener", path: "/general/url-shortner" },
   { name: "Currency Converter", path: "/general/currency-converter" },
 ];
 

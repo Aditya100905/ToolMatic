@@ -33,7 +33,7 @@ export const utilities = {
     "Power Converter",
     "Speed Converter",
   ],
-  "General Utilities": ["Qr Generator", "Url Shortner", "Currency Converter"],
+  "General Utilities": ["Qr Generator", "Url Shortener", "Currency Converter"],
 
   Design: ["Animations Library", "Layout Builder", "Gradients Studio", "Typography Library"],
 };
@@ -73,7 +73,7 @@ export const utilityRoutes = {
   "Power Converter": "/converters/power-converter",
   "Frequency Converter": "/converters/frequency-converter",
   "Qr Generator": "/general/qr-generator",
-  "Url Shortner": "/general/url-shortner",
+  "Url Shortener": "/general/url-shortner",
   "Currency Converter": "/general/currency-converter",
   
   "Animations Library": "/design/animations",
