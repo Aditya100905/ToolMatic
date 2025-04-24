@@ -5,7 +5,7 @@ export const utilities = {
     "JS Formatter",
     "JSON Formatter",
   ],
-  "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images", "Compress PDFs"],
+  "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images","Images to PDF", "Compress PDFs"],
 
   Text: ["Word Counter", "Case Converter", "Text Cleaner", "Text Comparison"],
 
@@ -50,6 +50,7 @@ export const utilityRoutes = {
   "Compress PDFs": "/pdf-tools/compress",
   "Word to PDF": "/pdf-tools/word-converter",
   "PDF to Images": "/pdf-tools/pdf-to-images",
+  "Images to PDF": "pdf-tools/images-to-pdf",
   "Word Counter": "/text/word-counter",
   "Case Converter": "/text/case-converter",
   "Text Cleaner": "/text/text-cleaning",
