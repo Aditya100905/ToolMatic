@@ -13,4 +13,4 @@ export default function FileUploader({ onChange, hasFiles, accept = "application
       </label>
     </div>
   );
-}
+} 
