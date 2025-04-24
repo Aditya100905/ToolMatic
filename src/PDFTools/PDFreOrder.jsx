@@ -56,8 +56,43 @@ export default function PDFReordering() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   };
 
-  // Process uploaded files - keeping original file order
-  const processFiles = useCallback((uploadedFiles) => {
+//   // Process uploaded files - keeping original file order
+//   const processFiles = useCallback((uploadedFiles) => {
+//     const pdfFiles = uploadedFiles.filter((file) => file.type === "application/pdf");
+    
+//     if (pdfFiles.length !== uploadedFiles.length) {
+//       setError("Only PDF files are allowed!");
+//     }
+    
+//     if (pdfFiles.length > 0) {
+//       const newFileIds = { ...fileIds };
+//       const newFiles = [...files];
+//       const fileOrder = newFiles.length; // Starting order for newly added files
+      
+//       pdfFiles.forEach((file, index) => {
+//         if (!newFileIds[file.name]) {
+//           const fileId = generateUniqueId();
+//           newFileIds[file.name] = fileId;
+//           // Store file with its order to maintain upload sequence
+//           file.order = fileOrder + index;
+//         }
+//       });
+      
+//       setFileIds(newFileIds);
+//       setFiles((prevFiles) => [...prevFiles, ...pdfFiles]);
+      
+//       // Set default output filename based on first file
+//       if (prevFiles.length === 0 && pdfFiles.length > 0) {
+//         const defaultFileName = pdfFiles[0].name.replace(/\.pdf$/i, "") + "-reordered.pdf";
+//         setOutputFileName(defaultFileName);
+//       }
+      
+//       setError("");
+//     }
+//   }, [fileIds, files]);
+
+// Process uploaded files - keeping original file order
+const processFiles = useCallback((uploadedFiles) => {
     const pdfFiles = uploadedFiles.filter((file) => file.type === "application/pdf");
     
     if (pdfFiles.length !== uploadedFiles.length) {
@@ -79,13 +114,14 @@ export default function PDFReordering() {
       });
       
       setFileIds(newFileIds);
-      setFiles((prevFiles) => [...prevFiles, ...pdfFiles]);
-      
-      // Set default output filename based on first file
-      if (prevFiles.length === 0 && pdfFiles.length > 0) {
-        const defaultFileName = pdfFiles[0].name.replace(/\.pdf$/i, "") + "-reordered.pdf";
-        setOutputFileName(defaultFileName);
-      }
+      setFiles((prevFiles) => {
+        // Set default output filename based on first file
+        if (prevFiles.length === 0 && pdfFiles.length > 0) {
+          const defaultFileName = pdfFiles[0].name.replace(/\.pdf$/i, "") + "-reordered.pdf";
+          setOutputFileName(defaultFileName);
+        }
+        return [...prevFiles, ...pdfFiles];
+      });
       
       setError("");
     }
@@ -624,7 +660,7 @@ export default function PDFReordering() {
                             {formatBytes(file.size)}
                           </span>
                           {filePages.length > 0 && (
-                            <span className="text-xs ml-2 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded-full">
+                            <span className="text-xs ml-2 bg-blue-100 dark:bg-blue-900 flex-wrap text-center text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded-full">
                               {filePages.length} pages
                             </span>
                           )}
@@ -779,7 +815,7 @@ export default function PDFReordering() {
             
             {pages.length > 0 && (
               <div 
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[500px] overflow-y-auto p-2"
+                className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto p-2"
                 onDragOver={handleDragOver}
               >
                 {[...pages]
@@ -806,13 +842,13 @@ export default function PDFReordering() {
                           isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
                         }`}
                       >
-                        <div className="w-full aspect-[3/4] flex items-center justify-center bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                        <div className="w-full aspect-[99/100] flex items-center justify-center bg-gray-100 dark:bg-gray-700 overflow-hidden">
                           <img
                             src={page.src}
                             alt={`Page ${page.originalPage} of ${page.fileName}`}
                             className="max-w-full max-h-full object-contain"
                             style={{
-                              maxHeight: "150px",
+                              maxHeight: "175px",
                             }}
                           />
                         </div>

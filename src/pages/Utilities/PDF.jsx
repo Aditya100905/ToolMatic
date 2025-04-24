@@ -6,6 +6,7 @@ const Pdf_Utilities = [
   { name: "Split PDF", path: "/pdf-tools/split" },
   { name: "PDFs to Images", path: "/pdf-tools/pdf-to-images" },
   { name: "Images to PDFs", path: "/pdf-tools/images-to-pdf" },
+  { name: "PDFs Reorder", path: "/pdf-tools/pdf-reorder" },
   { name: "Compress PDFs", path: "/pdf-tools/compress" },
 ];
 

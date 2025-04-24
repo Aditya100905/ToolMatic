@@ -5,7 +5,14 @@ export const utilities = {
     "JS Formatter",
     "JSON Formatter",
   ],
-  "PDF Tools": ["Merge PDFs", "Split PDFs", "PDF to Images","Images to PDF", "Compress PDFs"],
+  "PDF Tools": [
+    "Merge PDFs",
+    "Split PDFs",
+    "PDF to Images",
+    "Images to PDF",
+    "PDF Reorder",
+    "Compress PDFs",
+  ],
 
   Text: ["Word Counter", "Case Converter", "Text Cleaner", "Text Comparison"],
 
@@ -35,7 +42,12 @@ export const utilities = {
   ],
   "General Utilities": ["Qr Generator", "Url Shortener", "Currency Converter"],
 
-  Design: ["Animations Library", "Layout Builder", "Gradients Studio", "Typography Library"],
+  Design: [
+    "Animations Library",
+    "Layout Builder",
+    "Gradients Studio",
+    "Typography Library",
+  ],
 };
 
 // Define route mappings for each utility
@@ -45,23 +57,29 @@ export const utilityRoutes = {
   "JS Formatter": "/formatters/js",
   // "TS Formatter": "/formatters/ts",
   "JSON Formatter": "/formatters/json",
+
   "Merge PDFs": "/pdf-tools/merge",
   "Split PDFs": "/pdf-tools/split",
   "Compress PDFs": "/pdf-tools/compress",
   "Word to PDF": "/pdf-tools/word-converter",
   "PDF to Images": "/pdf-tools/pdf-to-images",
   "Images to PDF": "pdf-tools/images-to-pdf",
+  "PDF Reorder": "pdf-tools/pdf-reorder",
+
   "Word Counter": "/text/word-counter",
   "Case Converter": "/text/case-converter",
   "Text Cleaner": "/text/text-cleaning",
   "Text Comparison": "/text/text-comparison",
+
   "Matrix Calculator": "/math/matrix-calculator",
   "Graph Plotter": "/math/graph-plotter",
   "Scientific Calculator": "/math/scientific-calculator",
+
   "Base Converter": "/bases-and-bitwise/base-converter",
   "Bitwise Operators": "/bases-and-bitwise/bitwise-operators",
   "Binary, Gray, BCD Converter": "/bases-and-bitwise/binary-gray-bcd",
   Complement: "/bases-and-bitwise/complement",
+
   "Length Converter": "/converters/length-converter",
   "Mass Converter": "/converters/mass-converter",
   "Temperature Converter": "/converters/temperature-converter",
@@ -73,12 +91,13 @@ export const utilityRoutes = {
   "Speed Converter": "/converters/speed-converter",
   "Power Converter": "/converters/power-converter",
   "Frequency Converter": "/converters/frequency-converter",
+
   "Qr Generator": "/general/qr-generator",
   "Url Shortener": "/general/url-shortner",
   "Currency Converter": "/general/currency-converter",
-  
+
   "Animations Library": "/design/animations",
   "Layout Builder": "/design/grids",
   "Gradients Studio": "/design/gradients",
-  "Typography Library": "/design/typography"
+  "Typography Library": "/design/typography",
 };
