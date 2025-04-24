@@ -63,6 +63,7 @@ import { utilities, utilityRoutes } from "./routes.js";
 import General from "./pages/Utilities/GeneralUtilities.jsx";
 import Design from "./pages/Utilities/Design.jsx";
 import ImageToPDF from "./PDFTools/ImageToPDF.jsx";
+import PDFReordering from "./PDFTools/PDFreOrder.jsx";
 
 // Enhanced SVG Icons with animation properties
 const MenuIcon = () => (
@@ -465,6 +466,10 @@ const App = () => {
           <Route
             path="pdf-tools/images-to-pdf"
             element={<ImageToPDF theme={theme} />}
+          />
+          <Route
+            path="pdf-tools/pdf-reorder"
+            element={<PDFReordering theme={theme} />}
           />
           <Route
             path="/pdf-tools/compress"
