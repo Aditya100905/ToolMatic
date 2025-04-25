@@ -5,6 +5,9 @@ const gen = [
   { name: "QR Generator", path: "/general/qr-generator" },
   { name: "Url Shortener", path: "/general/url-shortner" },
   { name: "Currency Converter", path: "/general/currency-converter" },
+  { name: "Text Claning", path: "/general/text-cleaner" },
+  { name: "Text Compare", path: "/general/text-compare" },
+  { name: "Json Formatter", path: "/general/json-formatter" },
 ];
 
 const General = () => {

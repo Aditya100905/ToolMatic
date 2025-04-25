@@ -23,6 +23,7 @@
     "file-saver": "^2.0.5",
     "framer-motion": "^12.5.0",
     "html2pdf.js": "^0.10.2",
+    "icons": "^1.0.0",
     "js-beautify": "^1.15.3",
     "jspdf": "^3.0.0",
     "katex": "^0.16.21",

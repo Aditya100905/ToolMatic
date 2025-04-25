@@ -1,10 +1,4 @@
 export const utilities = {
-  "Code Formatter": [
-    "HTML Formatter",
-    "CSS Formatter",
-    "JS Formatter",
-    "JSON Formatter",
-  ],
   "PDF Tools": [
     "Merge PDFs",
     "Split PDFs",
@@ -14,33 +8,19 @@ export const utilities = {
     "Compress PDFs",
   ],
 
-  Text: ["Word Counter", "Case Converter", "Text Cleaner", "Text Comparison"],
-
   "Advanced Mathematics": [
     "Scientific Calculator",
     "Matrix Calculator",
     "Graph Plotter",
   ],
-  "Bases & Bitwise Operators": [
-    "Base Converter",
-    "Bitwise Operators",
-    "Complement",
-    "Binary, Gray, BCD Converter",
+  "General Utilities": [
+    "Qr Generator",
+    "Url Shortener",
+    "Currency Converter",
+    "JSON Formatter",
+    "Text Cleaner",
+    "Text Comparison",
   ],
-  "Unit Converters": [
-    "Length Converter",
-    "Mass Converter",
-    "Temperature Converter",
-    "Time Converter",
-    "Frequency Converter",
-    "Area Converter",
-    "Volume Converter",
-    "Density Converter",
-    "Energy Converter",
-    "Power Converter",
-    "Speed Converter",
-  ],
-  "General Utilities": ["Qr Generator", "Url Shortener", "Currency Converter"],
 
   Design: [
     "Animations Library",
@@ -52,12 +32,7 @@ export const utilities = {
 
 // Define route mappings for each utility
 export const utilityRoutes = {
-  "HTML Formatter": "/formatters/html",
-  "CSS Formatter": "/formatters/css",
-  "JS Formatter": "/formatters/js",
-  // "TS Formatter": "/formatters/ts",
-  "JSON Formatter": "/formatters/json",
-
+  
   "Merge PDFs": "/pdf-tools/merge",
   "Split PDFs": "/pdf-tools/split",
   "Compress PDFs": "/pdf-tools/compress",
@@ -65,33 +40,14 @@ export const utilityRoutes = {
   "PDF to Images": "/pdf-tools/pdf-to-images",
   "Images to PDF": "pdf-tools/images-to-pdf",
   "PDF Reorder": "pdf-tools/pdf-reorder",
-
-  "Word Counter": "/text/word-counter",
-  "Case Converter": "/text/case-converter",
-  "Text Cleaner": "/text/text-cleaning",
-  "Text Comparison": "/text/text-comparison",
+  
+  "Text Cleaner": "/general/text-cleaner",
+  "Text Comparison": "/general/text-compare",
+  "JSON Formatter": "/general/json-formatter",
 
   "Matrix Calculator": "/math/matrix-calculator",
   "Graph Plotter": "/math/graph-plotter",
   "Scientific Calculator": "/math/scientific-calculator",
-
-  "Base Converter": "/bases-and-bitwise/base-converter",
-  "Bitwise Operators": "/bases-and-bitwise/bitwise-operators",
-  "Binary, Gray, BCD Converter": "/bases-and-bitwise/binary-gray-bcd",
-  Complement: "/bases-and-bitwise/complement",
-
-  "Length Converter": "/converters/length-converter",
-  "Mass Converter": "/converters/mass-converter",
-  "Temperature Converter": "/converters/temperature-converter",
-  "Area Converter": "/converters/area-converter",
-  "Volume Converter": "/converters/volume-converter",
-  "Density Converter": "/converters/density-converter",
-  "Time Converter": "/converters/time-converter",
-  "Energy Converter": "/converters/energy-converter",
-  "Speed Converter": "/converters/speed-converter",
-  "Power Converter": "/converters/power-converter",
-  "Frequency Converter": "/converters/frequency-converter",
-
   "Qr Generator": "/general/qr-generator",
   "Url Shortener": "/general/url-shortner",
   "Currency Converter": "/general/currency-converter",
