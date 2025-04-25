@@ -13,6 +13,7 @@ export const utilities = {
     "Matrix Calculator",
     "Graph Plotter",
   ],
+
   "General Utilities": [
     "Qr Generator",
     "Url Shortener",
@@ -30,30 +31,53 @@ export const utilities = {
   ],
 };
 
-// Define route mappings for each utility
 export const utilityRoutes = {
-  
-  "Merge PDFs": "/pdf-tools/merge",
-  "Split PDFs": "/pdf-tools/split",
-  "Compress PDFs": "/pdf-tools/compress",
-  "Word to PDF": "/pdf-tools/word-converter",
-  "PDF to Images": "/pdf-tools/pdf-to-images",
-  "Images to PDF": "pdf-tools/images-to-pdf",
-  "PDF Reorder": "pdf-tools/pdf-reorder",
-  
-  "Text Cleaner": "/general/text-cleaner",
-  "Text Comparison": "/general/text-compare",
-  "JSON Formatter": "/general/json-formatter",
+  "Merge PDFs": "/utilities/merge",
+  "Split PDFs": "/utilities/split",
+  "Compress PDFs": "/utilities/compress",
+  "Word to PDF": "/utilities/word-converter",
+  "PDF to Images": "/utilities/pdf-to-images",
+  "Images to PDF": "/utilities/images-to-pdf",
+  "PDF Reorder": "/utilities/pdf-reorder",
 
-  "Matrix Calculator": "/math/matrix-calculator",
-  "Graph Plotter": "/math/graph-plotter",
-  "Scientific Calculator": "/math/scientific-calculator",
-  "Qr Generator": "/general/qr-generator",
-  "Url Shortener": "/general/url-shortner",
-  "Currency Converter": "/general/currency-converter",
+  "Text Cleaner": "/utilities/text-cleaner",
+  "Text Comparison": "/utilities/text-compare",
+  "JSON Formatter": "/utilities/json-formatter",
 
-  "Animations Library": "/design/animations",
-  "Layout Builder": "/design/grids",
-  "Gradients Studio": "/design/gradients",
-  "Typography Library": "/design/typography",
+  "Matrix Calculator": "/utilities/matrix-calculator",
+  "Graph Plotter": "/utilities/graph-plotter",
+  "Scientific Calculator": "/utilities/scientific-calculator",
+  "Qr Generator": "/utilities/qr-generator",
+  "Url Shortener": "/utilities/url-shortner",
+  "Currency Converter": "/utilities/currency-converter",
+
+  "Animations Library": "/utilities/animations",
+  "Layout Builder": "/utilities/grids",
+  "Gradients Studio": "/utilities/gradients",
+  "Typography Library": "/utilities/typography",
+};
+
+export const utilityDescriptions = {
+  "Merge PDFs": "Combine multiple PDF files into one",
+  "Split PDFs": "Separate pages from a PDF into multiple files",
+  "PDF to Images": "Convert PDF pages into image files",
+  "Images to PDF": "Create a PDF from image files",
+  "PDF Reorder": "Rearrange the pages in a PDF document",
+  "Compress PDFs": "Reduce the file size of a PDF",
+
+  "Scientific Calculator": "Perform scientific and advanced calculations",
+  "Matrix Calculator": "Compute operations on matrices",
+  "Graph Plotter": "Plot mathematical graphs and functions",
+
+  "Qr Generator": "Generate QR codes from text or URLs",
+  "Url Shortener": "Shorten long URLs for easy sharing",
+  "Currency Converter": "Convert between different currencies",
+  "JSON Formatter": "Beautify and format JSON data",
+  "Text Cleaner": "Clean and sanitize text from unwanted characters",
+  "Text Comparison": "Compare two text inputs for differences",
+
+  "Animations Library": "Browse and use CSS animations",
+  "Layout Builder": "Design layouts using responsive grids",
+  "Gradients Studio": "Create and preview gradient designs",
+  "Typography Library": "Explore font styles and text combinations",
 };

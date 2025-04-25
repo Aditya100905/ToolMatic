@@ -44,7 +44,9 @@ const App = () => {
   }, []);
 
   return (
-    <SearchContext.Provider value={{ searchTerm, setSearchTerm, searchFocused, setSearchFocused }}>
+    <SearchContext.Provider
+      value={{ searchTerm, setSearchTerm, searchFocused, setSearchFocused }}
+    >
       <Router>
         <div
           className={`${
@@ -82,79 +84,85 @@ const App = () => {
 
             {/* General Utilities */}
             <Route
-              path="/general/json-formatter"
+              path="/utilities/json-formatter"
               element={<JSONFormatter theme={theme} />}
             />
             <Route
-              path="/general/text-cleaner"
+              path="/utilities/text-cleaner"
               element={<TextCleaning theme={theme} />}
             />
             <Route
-              path="/general/text-compare"
+              path="/utilities/text-compare"
               element={<TextComparison theme={theme} />}
             />
             <Route
-              path="/general/qr-generator"
+              path="/utilities/qr-generator"
               element={<QrGenerator theme={theme} />}
             />
             <Route
-              path="/general/url-shortner"
+              path="/utilities/url-shortner"
               element={<UrlShortner theme={theme} />}
             />
             <Route
-              path="/general/currency-converter"
+              path="/utilities/currency-converter"
               element={<CurrencyConverter theme={theme} />}
             />
 
             {/* PDF Tools */}
-            <Route path="/pdf-tools/merge" element={<MergePDF theme={theme} />} />
-            <Route path="/pdf-tools/split" element={<SplitPDF theme={theme} />} />
             <Route
-              path="/pdf-tools/pdf-to-images"
+              path="/utilities/merge"
+              element={<MergePDF theme={theme} />}
+            />
+            <Route
+              path="/utilities/split"
+              element={<SplitPDF theme={theme} />}
+            />
+            <Route
+              path="/utilities/pdf-to-images"
               element={<PDFtoImages theme={theme} />}
             />
             <Route
-              path="/pdf-tools/images-to-pdf"
+              path="/utilities/images-to-pdf"
               element={<ImageToPDF theme={theme} />}
             />
             <Route
-              path="/pdf-tools/pdf-reorder"
+              path="/utilities/pdf-reorder"
               element={<PDFReordering theme={theme} />}
             />
             <Route
-              path="/pdf-tools/compress"
+              path="/utilities/compress"
               element={<CompressPDF theme={theme} />}
             />
 
             {/* Math Tools */}
             <Route
-              path="/math/matrix-calculator"
+              path="/utilities/matrix-calculator"
               element={<MatrixSolver theme={theme} />}
             />
             <Route
-              path="/math/graph-plotter"
+              path="/utilities/graph-plotter"
               element={<GraphPlotter theme={theme} />}
             />
             <Route
-              path="/math/scientific-calculator"
+              path="/utilities/scientific-calculator"
               element={<ScientificCalculator theme={theme} />}
             />
 
             {/* Design Tools */}
             <Route
-              path="/design/animations"
+              path="/utilities/animations"
               element={<CssAnimations theme={theme} />}
             />
             <Route
-              path="/design/grids"
+              path="/utilities/grids"
               element={<CssGrids theme={theme} />}
             />
             <Route
-              path="/design/gradients"
+              path="/utilities/gradients"
               element={<CssGradients theme={theme} />}
             />
             <Route
-              path="/design/typography"
+              path="/utilities/typography"
               element={<TypeWriter theme={theme} />}
             />
           </Routes>
