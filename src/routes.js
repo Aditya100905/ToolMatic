@@ -31,6 +31,10 @@ export const utilities = {
     "Gradients Studio",
     "Typography Library",
   ],
+
+  "Dev Tools":[
+    "API Request Tester",
+  ]
 };
 
 export const utilityRoutes = {
@@ -59,6 +63,8 @@ export const utilityRoutes = {
   "Layout Builder": "/utilities/grids",
   "Gradients Studio": "/utilities/gradients",
   "Typography Library": "/utilities/typography",
+
+  "API Request Tester": "/utilities/api-request-tester",
 };
 
 export const utilityDescriptions = {
@@ -84,4 +90,6 @@ export const utilityDescriptions = {
   "Layout Builder": "Design layouts using responsive grids",
   "Gradients Studio": "Create and preview gradient designs",
   "Typography Library": "Explore font styles and text combinations",
+  
+  "APIRequestTester": "Send, test, and debug HTTP API requests easily",
 };

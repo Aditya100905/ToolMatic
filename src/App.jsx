@@ -45,6 +45,7 @@ import TypeWriter from "./Design/TypeWriter.jsx";
 import UtilityPage from "./UtilityPage";
 import { utilities, utilityRoutes } from "./routes.js";
 import StatisticsProbabilityTool from "./Maths/StatisticsProbabilityTool.jsx";
+import APIRequestTester from "./developer/APIRequestTester.jsx";
 
 // Contexts
 export const SearchContext = createContext();
@@ -213,6 +214,13 @@ const App = () => {
               <Route
                 path="/utilities/typography"
                 element={<TypeWriter theme={theme} />}
+              />
+
+
+              {/* Dev Tools */}
+              <Route
+                path="/utilities/api-request-tester"
+                element={<APIRequestTester theme={theme} />}
               />
             </Route>
 
