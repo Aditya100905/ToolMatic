@@ -11,6 +11,7 @@ export const utilities = {
   "Advanced Mathematics": [
     "Scientific Calculator",
     "Matrix Calculator",
+    "Complex Number Calculator",
     "Graph Plotter",
   ],
 
@@ -43,13 +44,14 @@ export const utilityRoutes = {
   "Text Cleaner": "/utilities/text-cleaner",
   "Text Comparison": "/utilities/text-compare",
   "JSON Formatter": "/utilities/json-formatter",
+  "Qr Generator": "/utilities/qr-generator",
+  "Url Shortener": "/utilities/url-shortner",
+  "Currency Converter": "/utilities/currency-converter",
 
   "Matrix Calculator": "/utilities/matrix-calculator",
   "Graph Plotter": "/utilities/graph-plotter",
   "Scientific Calculator": "/utilities/scientific-calculator",
-  "Qr Generator": "/utilities/qr-generator",
-  "Url Shortener": "/utilities/url-shortner",
-  "Currency Converter": "/utilities/currency-converter",
+  "Complex Number Calculator" : "/utilities/complex-numbers-calculator",
 
   "Animations Library": "/utilities/animations",
   "Layout Builder": "/utilities/grids",

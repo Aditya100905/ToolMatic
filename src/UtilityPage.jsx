@@ -312,14 +312,14 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
       {/* Navbar */}
       <Navbar onSearch={handleSearchUpdate} />
 
-      {/* Sidebar - openable on all screen sizes */}
+      {/* Sidebar - improved styling and transitions */}
       <aside
         ref={sidebarRef}
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } fixed z-20 w-72 h-screen pt-16 ${
           theme === "dark"
-            ? "bg-[#1a1a1a] border-r border-gray-800"
+            ? "bg-gray-900 border-r border-gray-800"
             : "bg-white border-r border-gray-200"
         } shadow-xl transition-all duration-300 transform top-0 left-0 overflow-y-auto`}
       >
@@ -330,19 +330,21 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
             <button
               onClick={toggleSidebar}
               className={`p-2 rounded-full transition-all duration-200 ${
-                theme === "dark" ? "hover:bg-gray-800" : "hover:bg-gray-100"
+                theme === "dark" 
+                  ? "hover:bg-gray-800 text-gray-300 hover:text-white" 
+                  : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
               }`}
             >
               <CloseIcon />
             </button>
           </div>
 
-          {/* Recently viewed section */}
+          {/* Recently viewed section - improved styling */}
           {recentlyViewed.length > 0 && (
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-3">
                 <ClockIcon />
-                <h3 className="text-sm uppercase tracking-wider opacity-70">
+                <h3 className="text-sm uppercase tracking-wider opacity-70 font-medium">
                   Recently Used
                 </h3>
               </div>
@@ -354,7 +356,7 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
                     className={`px-3 py-2 cursor-pointer rounded-md text-sm transition-all duration-200 flex items-center gap-2 ${
                       theme === "dark"
                         ? "hover:bg-gray-800 hover:text-blue-400"
-                        : "hover:bg-gray-100 hover:text-blue-600"
+                        : "hover:bg-blue-50 hover:text-blue-600"
                     }`}
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
@@ -366,7 +368,7 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
             </div>
           )}
 
-          {/* Categories */}
+          {/* Categories - improved styling */}
           <div className="flex items-center gap-2 mb-4">
             <CategoryIcon />
             <h2 className="text-lg font-bold">Categories</h2>
@@ -400,16 +402,16 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
         </div>
       </aside>
 
-      {/* Main content - all utilities on single page */}
+      {/* Main content - improved spacing and styling */}
       <main
         className={`transition-all duration-300 ${sidebarOpen ? "sm:pl-72" : ""}`}
       >
         {/* Add proper spacing to account for fixed navbar */}
-        <div className="container mx-auto p-4 pt-24 pb-16">
+        <div className="container mx-auto p-4 pt-24 pb-20 max-w-7xl">
           {/* Display search results or all categories */}
           {localSearchTerm && (
-            <div className="mb-8 text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100/50">
+            <div className="mb-10 text-center">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-100/50 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -454,6 +456,7 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
               </button>
             </div>
           ) : (
+            // Improved category sections with better spacing
             Object.keys(filteredUtilities).map((category) => {
               const categoryId = `category-${category.replace(/\s+/g, "-").toLowerCase()}`;
 
@@ -461,20 +464,25 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
                 <div
                   key={category}
                   id={categoryId}
-                  className="mb-16 scroll-mt-24 animate-fadeIn"
+                  className="mb-20 scroll-mt-24 animate-fadeIn"
                 >
-                  {/* Category Title */}
-                  <div className="mb-8 mx-auto w-full">
-                    <h2 className="text-2xl md:text-3xl font-bold relative inline-block pb-2 transform -translate-x-1/2 left-1/2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-1 after:bg-blue-500 after:rounded-full">
-                      {category}
-                      <span className="ml-3 inline-flex items-center justify-center bg-blue-100 text-blue-800 text-sm font-medium rounded-full h-6 px-3">
-                        {filteredUtilities[category].length}
-                      </span>
-                    </h2>
+                  {/* Category Title - improved styling */}
+                  <div className="mb-8 mx-auto w-full text-center">
+                    <div className="flex items-center justify-center">
+                      <h2 className="text-2xl md:text-3xl font-bold relative inline-block pb-3">
+                        {category}
+                        {/* Improved badge styling */}
+                        <span className="ml-3 inline-flex items-center justify-center bg-blue-100 text-blue-800 text-sm font-medium rounded-full h-7 min-w-7 px-3">
+                          {filteredUtilities[category].length}
+                        </span>
+                      </h2>
+                    </div>
+                    {/* Improved accent line */}
+                    <div className="w-24 h-1 mx-auto mt-2 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
                   </div>
 
-                  {/* Utilities Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Utilities Grid - improved spacing */}
+                  <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {filteredUtilities[category].map((utility) => (
                       <div
                         key={utility}
@@ -482,74 +490,93 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
                         className={`relative overflow-hidden rounded-xl cursor-pointer group transition-all duration-300
                           ${
                             theme === "dark"
-                              ? "bg-gradient-to-br from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700"
-                              : "bg-gradient-to-br from-white to-gray-50 hover:from-blue-50 hover:to-white"
+                              ? "bg-gray-800 hover:bg-gray-750"
+                              : "bg-white hover:bg-blue-50/30"
                           }
-                          shadow-md hover:shadow-lg border
+                          shadow-lg hover:shadow-xl border
                           ${
                             theme === "dark"
-                              ? "border-gray-700 hover:border-blue-900"
-                              : "border-gray-200 hover:border-blue-200"
+                              ? "border-gray-700 hover:border-blue-500/50"
+                              : "border-gray-200 hover:border-blue-300"
                           }
-                          transform hover:-translate-y-1`}
+                          transform hover:-translate-y-1 hover:scale-[1.02]`}
                       >
-                        {/* Hover Ripple */}
-                        <div className="absolute inset-0 w-full h-full bg-blue-500/10 scale-0 rounded-full group-hover:scale-150 transition-all duration-700 opacity-0 group-hover:opacity-100"></div>
-
-                        {/* Card Content */}
-                        <div className="p-6 h-full flex flex-col justify-between z-10 relative">
+                        {/* Top accent bar with gradient */}
+                        <div
+                          className={`h-1.5 w-full 
+                            ${
+                              theme === "dark" 
+                                ? "bg-gradient-to-r from-blue-600 to-indigo-500" 
+                                : "bg-gradient-to-r from-blue-400 to-indigo-400"
+                            }`}
+                        ></div>
+                        
+                        {/* Card Content with better spacing */}
+                        <div className="p-6 md:p-7 h-full flex flex-col justify-between relative">
                           <div>
-                            {/* Title */}
-                            <div className="flex items-center gap-2 mb-3">
-                              <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                              <h3
-                                className={`text-lg font-semibold transition-colors duration-200 ${
+                            {/* Title with improved styling */}
+                            <h3
+                              className={`text-lg font-semibold mb-3 transition-colors duration-200 
+                                ${
                                   theme === "dark"
-                                    ? "text-gray-100 group-hover:text-blue-300"
-                                    : "text-gray-800 group-hover:text-blue-600"
+                                    ? "text-white group-hover:text-blue-300"
+                                    : "text-gray-800 group-hover:text-blue-700"
                                 }`}
-                              >
-                                {utility}
-                              </h3>
-                            </div>
-                            {/* Description */}
-                            <p
-                              className={`text-sm ${
-                                theme === "dark"
-                                  ? "text-gray-400"
-                                  : "text-gray-600"
-                              }`}
                             >
-                              {utilityDescriptions[utility] ||
-                                "No description available."}
+                              {utility}
+                            </h3>
+                            
+                            {/* Description with better styling */}
+                            <p
+                              className={`text-sm line-clamp-2 
+                                ${
+                                  theme === "dark"
+                                    ? "text-gray-300"
+                                    : "text-gray-600"
+                                }`}
+                            >
+                              {utilityDescriptions[utility] || "No description available."}
                             </p>
                           </div>
 
-                          {/* Icon */}
-                          <div
-                            className={`mt-5 flex justify-end items-center ${
-                              theme === "dark"
-                                ? "text-blue-400"
-                                : "text-blue-600"
-                            }`}
-                          >
+                          {/* Footer with icon in better position */}
+                          <div className="mt-6 flex justify-between items-center">
+                            {/* Category badge */}
+                            <span
+                              className={`text-xs font-medium px-2 py-1 rounded-full
+                                ${
+                                  theme === "dark"
+                                    ? "bg-gray-700 text-gray-300"
+                                    : "bg-gray-100 text-gray-600"
+                                }`}
+                            >
+                              {category}
+                            </span>
+                            
+                            {/* Arrow icon with better styling */}
                             <div
-                              className={`p-2 rounded-full transition-all duration-300 ${
-                                theme === "dark"
-                                  ? "bg-blue-900/30 group-hover:bg-blue-800/50"
-                                  : "bg-blue-100 group-hover:bg-blue-200"
-                              }`}
+                              className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300
+                                ${
+                                  theme === "dark"
+                                    ? "bg-blue-900/40 group-hover:bg-blue-800"
+                                    : "bg-blue-100 group-hover:bg-blue-200"
+                                }
+                                ${
+                                  theme === "dark"
+                                    ? "text-blue-400 group-hover:text-blue-300"
+                                    : "text-blue-600 group-hover:text-blue-700"
+                                }
+                                transform group-hover:scale-110`}
                             >
                               <ArrowRightIcon />
                             </div>
                           </div>
                         </div>
 
-                        {/* Background Glow */}
-                        <div
-                          className={`absolute -bottom-2 -right-2 w-24 h-24 rounded-full blur-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-300 ${
-                            theme === "dark" ? "bg-blue-500" : "bg-blue-300"
-                          }`}
+                        {/* Decorative corner accent */}
+                        <div 
+                          className={`absolute -bottom-12 -right-12 w-24 h-24 rotate-45 opacity-0 group-hover:opacity-20 transition-opacity duration-300
+                            ${theme === "dark" ? "bg-blue-500" : "bg-blue-400"}`}
                         ></div>
                       </div>
                     ))}
@@ -561,7 +588,7 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
         </div>
       </main>
 
-      {/* Mobile sidebar toggle button - floating with pulse animation */}
+      {/* Mobile sidebar toggle button - floating with pulse animation - improved styling */}
       <button
         onClick={toggleSidebar}
         className={`fixed z-30 bottom-6 right-6 p-3 rounded-full shadow-lg transition-all duration-300 focus:outline-none ${
@@ -574,9 +601,10 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
         {sidebarOpen ? <CloseIcon /> : <MenuIcon />}
       </button>
 
+      {/* Backdrop overlay when sidebar is open - improved styling */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-opacity-50 backdrop-blur z-10 sm:hidden"
+          className="fixed inset-0 bg-opacity-40 backdrop-blur-sm z-10 sm:hidden"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}
@@ -584,26 +612,26 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
   );
 };
 
-// Add necessary CSS animations
+// Add necessary CSS animations with improved transitions
 const style = document.createElement("style");
 style.textContent = `
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
   }
   
   @keyframes pulseSubtle {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+    50% { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
+    100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
   }
   
   .animate-fadeIn {
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 0.6s ease-out;
   }
   
   .animate-pulse-subtle {
-    animation: pulseSubtle 2s infinite;
+    animation: pulseSubtle 2.5s infinite;
   }
 `;
 document.head.appendChild(style);
