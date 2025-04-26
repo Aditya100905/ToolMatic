@@ -11,8 +11,9 @@ export const utilities = {
   "Advanced Mathematics": [
     "Scientific Calculator",
     "Matrix Calculator",
-    "Complex Number Calculator",
     "Graph Plotter",
+    "Complex Number Calculator",
+    "Statistics & Probability Tool"
   ],
 
   "General Utilities": [
@@ -52,6 +53,7 @@ export const utilityRoutes = {
   "Graph Plotter": "/utilities/graph-plotter",
   "Scientific Calculator": "/utilities/scientific-calculator",
   "Complex Number Calculator" : "/utilities/complex-numbers-calculator",
+  "Statistics & Probability Tool" : "/utilities/stats-probability",
 
   "Animations Library": "/utilities/animations",
   "Layout Builder": "/utilities/grids",

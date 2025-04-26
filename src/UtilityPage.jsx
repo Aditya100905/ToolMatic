@@ -308,7 +308,7 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-transparent via-transparent to-blue-50/10">
+    <div className="relative  min-h-screen bg-gradient-to-br from-transparent via-transparent to-blue-50/10">
       {/* Navbar */}
       <Navbar onSearch={handleSearchUpdate} />
 
@@ -319,7 +319,7 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } fixed z-20 w-72 h-screen pt-16 ${
           theme === "dark"
-            ? "bg-gray-900 border-r border-gray-800"
+            ? "bg-[#0e0e0e] border-r border-gray-800"
             : "bg-white border-r border-gray-200"
         } shadow-xl transition-all duration-300 transform top-0 left-0 overflow-y-auto`}
       >
@@ -404,7 +404,7 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
 
       {/* Main content - improved spacing and styling */}
       <main
-        className={`transition-all duration-300 ${sidebarOpen ? "sm:pl-72" : ""}`}
+        className={`transition-all ${theme === "dark" ? "bg-[#0e0e0e]" : "bg-white"} duration-300 ${sidebarOpen ? "sm:pl-72" : ""}`}
       >
         {/* Add proper spacing to account for fixed navbar */}
         <div className="container mx-auto p-4 pt-24 pb-20 max-w-7xl">

@@ -1180,7 +1180,7 @@ ${htmlCode}`;
 
   return (
     <div
-      className={`typography-library mt-16 ${theme === "dark" ? "bg-gray-900 text-gray-200" : "bg-white text-gray-800"} p-4 rounded-lg shadow-lg`}
+      className={`typography-library mt-16 ${theme === "dark" ? "bg-[#0e0e0e] text-gray-200" : "bg-white text-gray-800"} p-4 rounded-lg shadow-lg`}
     >
       <style dangerouslySetInnerHTML={{ __html: styleSheet }} />
 

@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   Outlet,
+  useLocation,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useState, createContext, useEffect } from "react";
@@ -43,6 +44,7 @@ import TypeWriter from "./Design/TypeWriter.jsx";
 
 import UtilityPage from "./UtilityPage";
 import { utilities, utilityRoutes } from "./routes.js";
+import StatisticsProbabilityTool from "./Maths/StatisticsProbabilityTool.jsx";
 
 // Contexts
 export const SearchContext = createContext();
@@ -50,11 +52,23 @@ export const ThemeHistoryContext = createContext();
 
 window.appRoutes = { utilities, utilityRoutes };
 
+// ScrollToTop component that will scroll the window up on every navigation
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+}
+
 // Main layout: renders Navbar, Toasts, and matched child route
 const MainLayout = ({ theme }) => (
   <div
     className={`${theme === "dark" ? "bg-black text-white" : "bg-gray-100 text-black"} min-h-screen`}
   >
+    <ScrollToTop />
     <Navbar />
     <ToastContainer
       position="top-right"
@@ -177,6 +191,10 @@ const App = () => {
               <Route
                 path="/utilities/scientific-calculator"
                 element={<ScientificCalculator theme={theme} />}
+              />
+              <Route
+                path="/utilities/stats-probability"
+                element={<StatisticsProbabilityTool theme={theme} />}
               />
 
               {/* Design Tools */}
