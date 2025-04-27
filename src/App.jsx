@@ -17,7 +17,6 @@ import NotFound from "./pages/NotFound.jsx";
 // General Utilities
 import TextCleaning from "./general/TextCleaning.jsx";
 import TextComparison from "./general/TextComparison.jsx";
-import JSONFormatter from "./general/JSONFormatter.jsx";
 import QrGenerator from "./general/QrGenerator.jsx";
 import UrlShortner from "./general/UrlShortner.jsx";
 import CurrencyConverter from "./general/CurrencyConverter.jsx";
@@ -35,6 +34,7 @@ import MatrixSolver from "./Maths/MatrixSolver";
 import GraphPlotter from "./Maths/GraphPlotter";
 import ScientificCalculator from "./Maths/ScientificCalculator.jsx";
 import ComplexNumberCalculator from "./Maths/ComplexNumberCalculator.jsx";
+import StatisticsProbabilityTool from "./Maths/StatisticsProbabilityTool.jsx";
 
 // Design Tools
 import CssAnimations from "./Design/CssAnimations.jsx";
@@ -42,11 +42,17 @@ import CssGrids from "./Design/CssGrids.jsx";
 import CssGradients from "./Design/CssGradients.jsx";
 import TypeWriter from "./Design/TypeWriter.jsx";
 
+
+// Dev Tools
+import APIRequestTester from "./developer/APIRequestTester.jsx";
+import MarkdownHtmlConverter from "./developer/MarkdownHtmlConverter.jsx";
+import JSONFormatter from "./developer/JSONFormatter.jsx";
+
+
+
 import UtilityPage from "./UtilityPage";
 import { utilities, utilityRoutes } from "./routes.js";
-import StatisticsProbabilityTool from "./Maths/StatisticsProbabilityTool.jsx";
-import APIRequestTester from "./developer/APIRequestTester.jsx";
-import MarkdownHtmlConverter from "./MarkdownHtmlConverter.jsx";
+
 
 // Contexts
 export const SearchContext = createContext();
