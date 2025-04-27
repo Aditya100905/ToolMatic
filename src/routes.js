@@ -33,8 +33,9 @@ export const utilities = {
 
   "Dev Tools":[
     "JSON Formatter",
-    "API Request Tester",
+    // "API Request Tester",
     "Markdown & Html Converter",
+    "Json Csv Converters",
   ]
 };
 
@@ -65,8 +66,9 @@ export const utilityRoutes = {
   "Typography Library": "/utilities/typography",
   
   "JSON Formatter": "/utilities/json-formatter",
-  "API Request Tester": "/utilities/api-request-tester",
-  "Markdown & Html Converter": "/utilities/markdown-html-converter"
+  // "API Request Tester": "/utilities/api-request-tester",
+  "Markdown & Html Converter": "/utilities/markdown-html-converter",
+  "Json Csv Converters":"/utilities/json-csv-converter",
 };
 
 export const utilityDescriptions = {
@@ -84,15 +86,16 @@ export const utilityDescriptions = {
   "Qr Generator": "Generate QR codes from text or URLs",
   "Url Shortener": "Shorten long URLs for easy sharing",
   "Currency Converter": "Convert between different currencies",
-  "JSON Formatter": "Beautify and format JSON data",
   "Text Cleaner": "Clean and sanitize text from unwanted characters",
   "Text Comparison": "Compare two text inputs for differences",
-
+  
   "Animations Library": "Browse and use CSS animations",
   "Layout Builder": "Design layouts using responsive grids",
   "Gradients Studio": "Create and preview gradient designs",
   "Typography Library": "Explore font styles and text combinations",
   
-  "APIRequestTester": "Send, test, and debug HTTP API requests easily",
-  "Markdown & Html Converter": "Convert Markdown to Html and vice versa with preview"
+  "JSON Formatter": "Beautify and format JSON data",
+  // "APIRequestTester": "Send, test, and debug HTTP API requests easily",
+  "Markdown & Html Converter": "Convert Markdown to Html and vice versa with preview",
+  "Json Csv Converters":"Convert among JSON, CSV, XML & more",
 };

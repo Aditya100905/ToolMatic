@@ -47,6 +47,7 @@ import TypeWriter from "./Design/TypeWriter.jsx";
 import APIRequestTester from "./developer/APIRequestTester.jsx";
 import MarkdownHtmlConverter from "./developer/MarkdownHtmlConverter.jsx";
 import JSONFormatter from "./developer/JSONFormatter.jsx";
+import JsonCsvXml from "./developer/JsonCsvXml.jsx";
 
 
 
@@ -155,6 +156,10 @@ const App = () => {
               <Route
                 path="/utilities/currency-converter"
                 element={<CurrencyConverter theme={theme} />}
+              />
+              <Route
+                path="/utilities/json-csv-converter"
+                element={<JsonCsvXml theme={theme} />}
               />
 
               {/* PDF Tools */}
