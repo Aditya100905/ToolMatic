@@ -20,7 +20,6 @@ export const utilities = {
     "Qr Generator",
     "Url Shortener",
     "Currency Converter",
-    "JSON Formatter",
     "Text Cleaner",
     "Text Comparison",
   ],
@@ -33,7 +32,9 @@ export const utilities = {
   ],
 
   "Dev Tools":[
+    "JSON Formatter",
     "API Request Tester",
+    "Markdown & Html Converter",
   ]
 };
 
@@ -48,23 +49,24 @@ export const utilityRoutes = {
 
   "Text Cleaner": "/utilities/text-cleaner",
   "Text Comparison": "/utilities/text-compare",
-  "JSON Formatter": "/utilities/json-formatter",
   "Qr Generator": "/utilities/qr-generator",
   "Url Shortener": "/utilities/url-shortner",
   "Currency Converter": "/utilities/currency-converter",
-
+  
   "Matrix Calculator": "/utilities/matrix-calculator",
   "Graph Plotter": "/utilities/graph-plotter",
   "Scientific Calculator": "/utilities/scientific-calculator",
   "Complex Number Calculator" : "/utilities/complex-numbers-calculator",
   "Statistics & Probability Tool" : "/utilities/stats-probability",
-
+  
   "Animations Library": "/utilities/animations",
   "Layout Builder": "/utilities/grids",
   "Gradients Studio": "/utilities/gradients",
   "Typography Library": "/utilities/typography",
-
+  
+  "JSON Formatter": "/utilities/json-formatter",
   "API Request Tester": "/utilities/api-request-tester",
+  "Markdown & Html Converter": "/utilities/markdown-html-converter"
 };
 
 export const utilityDescriptions = {
@@ -92,4 +94,5 @@ export const utilityDescriptions = {
   "Typography Library": "Explore font styles and text combinations",
   
   "APIRequestTester": "Send, test, and debug HTTP API requests easily",
+  "Markdown & Html Converter": "Convert Markdown to Html and vice versa with preview"
 };

@@ -46,6 +46,7 @@ import UtilityPage from "./UtilityPage";
 import { utilities, utilityRoutes } from "./routes.js";
 import StatisticsProbabilityTool from "./Maths/StatisticsProbabilityTool.jsx";
 import APIRequestTester from "./developer/APIRequestTester.jsx";
+import MarkdownHtmlConverter from "./MarkdownHtmlConverter.jsx";
 
 // Contexts
 export const SearchContext = createContext();
@@ -222,6 +223,12 @@ const App = () => {
                 path="/utilities/api-request-tester"
                 element={<APIRequestTester theme={theme} />}
               />
+              <Route
+                path="/utilities/markdown-html-converter"
+                element={<MarkdownHtmlConverter theme={theme} />}
+              />
+
+
             </Route>
 
             {/* Fallback for unmatched routes */}
