@@ -31,12 +31,11 @@ export const utilities = {
     "Layout Builder",
     "Gradients Studio",
     "Typography Library",
-    "SVG Maker",
+    // "SVG Maker",
   ],
 
   "Dev Tools":[
     "JSON Formatter",
-    // "API Request Tester",
     "Markdown & Html Converter",
     "Json Csv Converters",
   ]
@@ -67,10 +66,9 @@ export const utilityRoutes = {
   "Layout Builder": "/utilities/grids",
   "Gradients Studio": "/utilities/gradients",
   "Typography Library": "/utilities/typography",
-  "SVG Maker" : "/utilities/svg-maker",
+  // "SVG Maker" : "/utilities/svg-maker",
   
   "JSON Formatter": "/utilities/json-formatter",
-  // "API Request Tester": "/utilities/api-request-tester",
   "Markdown & Html Converter": "/utilities/markdown-html-converter",
   "Json Csv Converters":"/utilities/json-csv-converter",
 };
@@ -97,10 +95,9 @@ export const utilityDescriptions = {
   "Layout Builder": "Design layouts using responsive grids",
   "Gradients Studio": "Create and preview gradient designs",
   "Typography Library": "Explore font styles and text combinations",
-  "SVG Maker" : "Create the SVGs with customisations",
+  // "SVG Maker" : "Create the SVGs with customisations",
   
   "JSON Formatter": "Beautify and format JSON data",
-  // "APIRequestTester": "Send, test, and debug HTTP API requests easily",
   "Markdown & Html Converter": "Convert Markdown to Html and vice versa with preview",
   "Json Csv Converters":"Convert among JSON, CSV, XML & more",
 };
