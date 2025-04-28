@@ -7,7 +7,8 @@ import {
   Copy,
   Download,
   Grid,
-  Trash
+  Trash,
+  AlertTriangle
 } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -72,6 +73,50 @@ const areEquationsEquivalent = (expr1, expr2) => {
   }
 };
 
+// Utility function to validate equation across multiple points
+const validateEquation = (expression) => {
+  try {
+    // Test equation at multiple points
+    const testPoints = [-100, -10, -1, 0, 1, 10, 100];
+    let validPoints = 0;
+    let warnings = [];
+    
+    for (const x of testPoints) {
+      try {
+        const result = math.evaluate(expression, { x });
+        if (isFinite(result)) {
+          validPoints++;
+        }
+      } catch (error) {
+        // Specific point failed
+      }
+    }
+    
+    // Check if equation is valid for at least some points
+    if (validPoints === 0) {
+      return {
+        valid: false,
+        message: "Equation is not plottable at any test points",
+        severity: "error"
+      };
+    } else if (validPoints < testPoints.length) {
+      return {
+        valid: true,
+        message: `Equation has discontinuities or undefined regions`,
+        severity: "warning"
+      };
+    }
+    
+    return { valid: true };
+  } catch (err) {
+    return {
+      valid: false,
+      message: err.message,
+      severity: "error"
+    };
+  }
+};
+
 const UltimateGraphPlotter = ({ 
   theme = 'light', 
   initialEquations = ['x^2'] 
@@ -82,7 +127,9 @@ const UltimateGraphPlotter = ({
       id: `eq-${index}`, 
       expression: expr, 
       color: generateDistinctRandomColor(index),
-      isVisible: true
+      isVisible: true,
+      hasWarnings: false,
+      warningMessage: ''
     }))
   );
   const [currentEquation, setCurrentEquation] = useState('');
@@ -96,6 +143,11 @@ const UltimateGraphPlotter = ({
   });
   // Add state for grid visibility
   const [showGrid, setShowGrid] = useState(true);
+  // Add state for equation validation status
+  const [validationStatus, setValidationStatus] = useState({
+    isValid: true,
+    message: ""
+  });
 
   // Refs
   const canvasRef = useRef(null);
@@ -199,6 +251,38 @@ const UltimateGraphPlotter = ({
     ctx.moveTo(width/2 + graphState.offsetX, 0);
     ctx.lineTo(width/2 + graphState.offsetX, height);
     ctx.stroke();
+    
+    // Add axis labels and values
+    ctx.font = '12px Arial';
+    ctx.fillStyle = gridConfig.axes;
+    ctx.textAlign = 'center';
+    
+    // X-axis values
+    const xValueInterval = Math.max(1, Math.round(10 / graphState.scale));  // Adjust interval based on zoom
+    for (let i = -20; i <= 20; i += xValueInterval) {
+      if (i === 0) continue; // Skip zero as it's the origin
+      
+      const xPos = width/2 + graphState.offsetX + i * gridSize;
+      // Only draw if within bounds
+      if (xPos > 0 && xPos < width) {
+        ctx.fillText(i.toString(), xPos, height/2 + graphState.offsetY + 20);
+      }
+    }
+    
+    // Y-axis values
+    const yValueInterval = Math.max(1, Math.round(10 / graphState.scale));
+    for (let i = -20; i <= 20; i += yValueInterval) {
+      if (i === 0) continue; // Skip zero as it's the origin
+      
+      const yPos = height/2 + graphState.offsetY - i * gridSize;
+      // Only draw if within bounds
+      if (yPos > 0 && yPos < height) {
+        ctx.fillText(i.toString(), width/2 + graphState.offsetX - 20, yPos + 4);
+      }
+    }
+    
+    // Origin label
+    ctx.fillText("0", width/2 + graphState.offsetX - 10, height/2 + graphState.offsetY + 20);
   };
 
   // Draw Equations
@@ -219,6 +303,8 @@ const UltimateGraphPlotter = ({
         // and adjusting resolution based on complexity
         const step = 1; // Can be adjusted for performance
         let lastY = null;
+        let pointsDrawn = 0;
+        let discontinuities = 0;
         
         for (let px = 0; px < width; px += step) {
           // Convert screen x to mathematical x
@@ -238,25 +324,77 @@ const UltimateGraphPlotter = ({
                 ctx.moveTo(px, screenY);
               } else {
                 // Only connect points if the jump isn't too extreme
-                if (Math.abs(screenY - lastY) < height) {
+                if (Math.abs(screenY - lastY) < height / 4) {  // Lowered threshold for better discontinuity detection
                   ctx.lineTo(px, screenY);
                 } else {
                   ctx.moveTo(px, screenY);
+                  discontinuities++;
                 }
               }
               lastY = screenY;
+              pointsDrawn++;
             } else {
               lastY = null;
+              discontinuities++;
             }
           } catch (err) {
             // Skip this point silently
             lastY = null;
+            discontinuities++;
           }
         }
         
         ctx.stroke();
+        
+        // If no points were drawn or too many discontinuities, update equation with warning
+        if (pointsDrawn === 0 && !eq.hasWarnings) {
+          // Update equation with warning, but only if not already warned
+          setEquations(prev => 
+            prev.map(e => 
+              e.id === eq.id ? { 
+                ...e, 
+                hasWarnings: true, 
+                warningMessage: "No valid points to plot in current view" 
+              } : e
+            )
+          );
+        } else if (discontinuities > width / 10 && !eq.hasWarnings) {  // If more than 10% are discontinuities
+          setEquations(prev => 
+            prev.map(e => 
+              e.id === eq.id ? { 
+                ...e, 
+                hasWarnings: true, 
+                warningMessage: "Function has many discontinuities" 
+              } : e
+            )
+          );
+        } else if (pointsDrawn > 0 && discontinuities < width / 10 && eq.hasWarnings) {
+          // Clear warning if function is now plotting correctly
+          setEquations(prev => 
+            prev.map(e => 
+              e.id === eq.id ? { 
+                ...e, 
+                hasWarnings: false, 
+                warningMessage: "" 
+              } : e
+            )
+          );
+        }
       } catch (err) {
         console.error(`Error drawing equation ${eq.expression}:`, err);
+        
+        // Update equation with error warning
+        if (!eq.hasWarnings) {
+          setEquations(prev => 
+            prev.map(e => 
+              e.id === eq.id ? { 
+                ...e, 
+                hasWarnings: true, 
+                warningMessage: "Error plotting function" 
+              } : e
+            )
+          );
+        }
       }
     });
   };
@@ -478,6 +616,48 @@ const UltimateGraphPlotter = ({
     renderCanvas();
   }, [graphState, equations, renderCanvas]);
 
+  // Live validation of current equation
+  useEffect(() => {
+    // Don't validate empty input
+    if (!currentEquation.trim()) {
+      setValidationStatus({ isValid: true, message: "" });
+      return;
+    }
+    
+    // Validate with delay to avoid unnecessary validation during typing
+    const validationTimer = setTimeout(() => {
+      try {
+        // Basic syntax check
+        math.parse(currentEquation);
+        
+        // Extended validation
+        const validationResult = validateEquation(currentEquation);
+        
+        if (!validationResult.valid) {
+          setValidationStatus({ 
+            isValid: false, 
+            message: validationResult.message || "Invalid equation"
+          });
+        } else if (validationResult.severity === "warning") {
+          setValidationStatus({ 
+            isValid: true, 
+            message: validationResult.message,
+            isWarning: true
+          });
+        } else {
+          setValidationStatus({ isValid: true, message: "" });
+        }
+      } catch (err) {
+        setValidationStatus({ 
+          isValid: false, 
+          message: `Syntax error: ${err.message}`
+        });
+      }
+    }, 500);
+    
+    return () => clearTimeout(validationTimer);
+  }, [currentEquation]);
+
   // Update color for a specific equation
   const updateEquationColor = (id, newColor) => {
     setEquations(prev => 
@@ -500,8 +680,13 @@ const UltimateGraphPlotter = ({
   const addEquation = (equation) => {
     try {
       // Validate equation
-      math.evaluate(equation, { x: 1 });
-
+      const validationResult = validateEquation(equation);
+      
+      if (!validationResult.valid) {
+        toast.error(`Cannot plot equation: ${validationResult.message}`);
+        return;
+      }
+      
       // Check if equation is mathematically equivalent to any existing equation
       const duplicateEquation = equations.find(eq => 
         areEquationsEquivalent(eq.expression, equation)
@@ -517,10 +702,20 @@ const UltimateGraphPlotter = ({
         id: `eq-${Date.now()}`,
         expression: equation,
         color: generateDistinctRandomColor(equations.length),
-        isVisible: true
+        isVisible: true,
+        hasWarnings: validationResult.severity === "warning",
+        warningMessage: validationResult.severity === "warning" ? validationResult.message : ''
       };
+      
       setEquations((prev) => [...prev, newEquation]);
       setCurrentEquation('');
+      
+      // Show warning if there's a non-critical issue
+      if (validationResult.severity === "warning") {
+        toast.warning(validationResult.message);
+      } else {
+        toast.success('Equation added successfully');
+      }
     } catch (err) {
       toast.error(`Invalid equation: ${err.message}`);
     }
@@ -531,6 +726,7 @@ const UltimateGraphPlotter = ({
     setEquations([]);
     toast.info('All equations cleared');
   };
+  
   // Function to download the graph with correct theme
   const downloadGraph = () => {
     const canvas = canvasRef.current;
@@ -544,8 +740,27 @@ const UltimateGraphPlotter = ({
     link.click();
     toast.success('Graph downloaded');
   };
+  
+  // Reset view to default state
+  const resetView = () => {
+    setGraphState({
+      scale: 1,
+      targetScale: 1,
+      offsetX: 0,
+      offsetY: 0,
+      velocity: { x: 0, y: 0 },
+      isDragging: false
+    });
+    ensureAnimationIsRunning();
+    toast.info('View reset to default');
+  };
 
   const currentTheme = themeStyles[theme];
+
+  // Function to provide examples for user
+  const insertExample = (example) => {
+    setCurrentEquation(example);
+  };
 
   return (
     <div className={`${currentTheme.background} mt-10 items-center min-h-screen`}>
@@ -554,157 +769,218 @@ const UltimateGraphPlotter = ({
           className={`w-full mb-0 mt-10 max-w-4xl mx-auto p-4 rounded-xl shadow-md ${currentTheme.container} sm:p-6`}
         >
           {/* Equation Input Section */}
-          <div className="flex space-x-2 mb-4">
-            <div className="flex-grow relative">
-              <input
-                type="text"
-                value={currentEquation}
-                onChange={(e) => setCurrentEquation(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    if (!currentEquation) return;
-                    addEquation(currentEquation);
-                  }
-                }}
-                placeholder="Enter equation (e.g., x^2, sin(x))"
-                className={`w-full p-2 border rounded ${currentTheme.input} ${currentTheme.text}`}
-              />
-              {currentEquation && (
-                <button
-                  onClick={() => setCurrentEquation('')}
-                  className={`absolute right-2 top-1/2 -translate-y-1/2 ${currentTheme.text}`}
-                >
-                  <X size={20} />
-                </button>
-              )}
-            </div>
+          <div className="flex flex-col mb-4">
+            <div className="flex space-x-2">
+              <div className="flex-grow relative">
+                <input
+                  type="text"
+                  value={currentEquation}
+                  onChange={(e) => setCurrentEquation(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      if (!currentEquation) return;
+                      addEquation(currentEquation);
+                    }
+                  }}
+                  placeholder="Enter equation (e.g., x^2, sin(x))"
+                  className={`w-full p-2 border rounded ${currentTheme.input} ${currentTheme.text} ${!validationStatus.isValid ? 'border-red-500' : validationStatus.isWarning ? 'border-yellow-500' : ''}`}
+                />
+                {currentEquation && (
+                  <button
+                    onClick={() => setCurrentEquation('')}
+                    className={`absolute right-2 top-1/2 -translate-y-1/2 ${currentTheme.text}`}
+                  >
+                    <X size={20} />
+                  </button>
+                )}
+              </div>
 
-            <button
-              onClick={() => {
-                if (!currentEquation) return;
-                addEquation(currentEquation);
-              }}
-              className="bg-blue-500 text-white p-2 rounded"
-            >
-              <Plus />
-            </button>
-          </div>
-
-          {/* Graph Container */}
-          <div
-            ref={containerRef}
-            className={`relative w-full aspect-video border rounded overflow-hidden ${currentTheme.container}`}
-          >
-            <canvas
-              ref={canvasRef}
-              className="w-full h-full cursor-grab touch-none"
-            />
-          </div>
-
-          {/* Controls Row */}
-          <div className="mt-2 flex justify-between flex-wrap gap-2">
-            {/* Left side controls */}
-            <div className="flex items-center space-x-2">
-              {/* Grid Toggle Button */}
               <button
-                onClick={() => setShowGrid(!showGrid)}
-                className={`flex items-center space-x-2 p-2 rounded ${
-                  theme === 'light' ? 'bg-gray-200 text-gray-800' : 'bg-gray-700 text-gray-100'
-                }`}
+                onClick={() => {
+                  if (!currentEquation) return;
+                  addEquation(currentEquation);
+                }}
+                disabled={!validationStatus.isValid}
+                className={`bg-blue-500 text-white p-2 rounded ${!validationStatus.isValid ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <Grid size={20} />
-                <span>{showGrid ? 'Hide Grid' : 'Show Grid'}</span>
+                <Plus />
               </button>
-              
-              {/* Clear All Equations Button - Only shown if more than 1 equation */}
-              {equations.length > 1 && (
-                <button
-                  onClick={clearAllEquations}
-                  className={`flex items-center space-x-2 p-2 rounded ${
-                    theme === 'light' ? 'bg-red-100 text-red-800' : 'bg-red-900 text-red-100'
-                  }`}
-                >
-                  <Trash size={20} />
-                  <span>Clear All</span>
-                </button>
-              )}
             </div>
             
-            {/* Right side controls */}
-            <button
-              onClick={downloadGraph}
-              className={`flex items-center space-x-2 p-2 rounded ${
-                theme === 'light' ? 'bg-gray-200 text-gray-800' : 'bg-gray-700 text-gray-100'
-              }`}
-            >
-              <Download size={20} />
-              <span>Download Graph</span>
-            </button>
-          </div>
-
-          {/* Equation List with Color Picker */}
-          <div className="mt-4 space-y-2">
-            {equations.map((eq) => (
-              <div
-                key={eq.id}
-                className={`flex justify-between items-center p-2 rounded ${
-                  theme === 'light' ? 'bg-gray-100' : 'bg-black'
-                } ${!eq.isVisible ? 'opacity-50' : ''}`}
-              >
-                <div className="flex items-center space-x-2">
-                  {/* Color Picker */}
-                  <input 
-                    type="color" 
-                    value={eq.color}
-                    onChange={(e) => updateEquationColor(eq.id, e.target.value)}
-                    className="w-6 h-6 p-0 border-none rounded-full cursor-pointer"
-                  />
-                  <span className={currentTheme.text}>{eq.expression}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => toggleEquationVisibility(eq.id)}
-                    className={`${
-                      theme === 'light' ? 'text-gray-500' : 'text-gray-400'
-                    }`}
-                  >
-                    {eq.isVisible ? 'Hide' : 'Show'}
-                  </button>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(eq.expression)
-                        .then(() => toast.success('Equation copied to clipboard'))
-                        .catch(() => toast.error('Failed to copy equation'));
-                    }}
-                    className={`${
-                      theme === 'light' ? 'text-blue-500' : 'text-blue-400'
-                    }`}
-                  >
-                    <Copy size={20} />
-                  </button>
-                  <button
-                    onClick={() => {
-                      setEquations((prev) => prev.filter((e) => e.id !== eq.id));
-                    }}
-                    className={`${
-                      theme === 'light' ? 'text-red-500' : 'text-red-400'
-                    }`}
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </div>
+            {/* Validation feedback */}
+            {currentEquation && !validationStatus.isValid && (
+              <div className="mt-2 text-red-500 flex items-center text-sm">
+                <AlertTriangle size={16} className="mr-1" />
+                {validationStatus.message}
               </div>
-            ))}
+            )}
+            {currentEquation && validationStatus.isValid && validationStatus.isWarning && (
+              <div className="mt-2 text-yellow-500 flex items-center text-sm">
+                <AlertTriangle size={16} className="mr-1" />
+                {validationStatus.message}
+              </div>
+            )}
+            
+            {/* Quick examples */}
+            <div className="mt-2 flex flex-wrap gap-2">
+              <span className={`${currentTheme.text} text-sm`}>Try:</span>
+              <button 
+                onClick={() => insertExample('sin(x)')}
+                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
+              >
+                sin(x)
+              </button>
+              <button 
+                onClick={() => insertExample('1/x')}
+                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
+              >
+                1/x
+              </button>
+              <button 
+                onClick={() => insertExample('sqrt(x)')}
+                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
+              >
+                sqrt(x)
+              </button>
+              <button 
+                onClick={() => insertExample('x^3 - 3*x')}
+                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
+              >
+                x³ - 3x
+              </button>
+              <button 
+                onClick={() => insertExample('tan(x)')}
+                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
+              >
+                tan(x)
+              </button>
+            </div>
           </div>
 
-          {/* Toast Container */}
-          <ToastContainer
-            theme={theme === 'light' ? 'light' : 'dark'}
-          />
+          {/* Graph Display Section */}
+          <div className="relative" ref={containerRef}>
+            <canvas
+              ref={canvasRef}
+              className="w-full h-64 md:h-96 rounded-lg cursor-grab"
+              style={{ touchAction: 'none' }}
+            />
+            
+            {/* Controls Overlay */}
+            <div className="absolute bottom-4 right-4 flex space-x-2">
+              <button 
+                onClick={resetView}
+                className="p-2 bg-blue-500 text-white rounded-full shadow-md"
+                title="Reset view"
+              >
+                <Grid size={18} />
+              </button>
+              <button 
+                onClick={() => setShowGrid(!showGrid)}
+                className={`p-2 ${showGrid ? 'bg-blue-500' : 'bg-gray-400'} text-white rounded-full shadow-md`}
+                title={`${showGrid ? 'Hide' : 'Show'} grid`}
+              >
+                <Grid size={18} />
+              </button>
+              <button 
+                onClick={downloadGraph}
+                className="p-2 bg-blue-500 text-white rounded-full shadow-md"
+                title="Download graph as PNG"
+              >
+                <Download size={18} />
+              </button>
+              <button 
+                onClick={clearAllEquations}
+                className="p-2 bg-red-500 text-white rounded-full shadow-md"
+                title="Clear all equations"
+              >
+                <Trash size={18} />
+              </button>
+            </div>
+          </div>
+
+          {/* Equations List Section */}
+          <div className="mt-4">
+            <h3 className={`${currentTheme.text} font-medium mb-2`}>Equations</h3>
+            <div className="max-h-64 overflow-y-auto pr-2">
+              {equations.length === 0 ? (
+                <div className={`${currentTheme.text} text-sm italic`}>
+                  No equations added yet. Enter an equation above to get started.
+                </div>
+              ) : (
+                equations.map((eq) => (
+                  <div
+                    key={eq.id}
+                    className={`flex items-center gap-2 p-2 mb-2 border rounded ${currentTheme.input} ${eq.isVisible ? '' : 'opacity-50'}`}
+                  >
+                    {/* Visibility toggle */}
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={eq.isVisible}
+                        onChange={() => toggleEquationVisibility(eq.id)}
+                        className="w-4 h-4"
+                      />
+                    </div>
+                    
+                    {/* Color picker */}
+                    <div className="flex items-center">
+                      <input
+                        type="color"
+                        value={eq.color}
+                        onChange={(e) => updateEquationColor(eq.id, e.target.value)}
+                        className="w-6 h-6 p-0 border-0 rounded"
+                      />
+                    </div>
+                    
+                    {/* Equation text */}
+                    <div className={`flex-grow ${currentTheme.text}`}>
+                      <span className="font-mono">{eq.expression}</span>
+                      {eq.hasWarnings && (
+                        <div className="text-yellow-500 text-xs mt-1 flex items-center">
+                          <AlertTriangle size={12} className="mr-1" />
+                          {eq.warningMessage}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Actions */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          // Copy to clipboard and input field
+                          navigator.clipboard.writeText(eq.expression);
+                          setCurrentEquation(eq.expression);
+                          toast.info('Equation copied');
+                        }}
+                        className={`p-1 ${currentTheme.text} hover:text-blue-500`}
+                        title="Copy equation"
+                      >
+                        <Copy size={16} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEquations(equations.filter((e) => e.id !== eq.id));
+                        }}
+                        className={`p-1 ${currentTheme.text} hover:text-red-500`}
+                        title="Delete equation"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         </div>
       </div>
+      <ToastContainer 
+        position="bottom-right"
+        theme={theme}
+        autoClose={3000}
+      />
     </div>
   );
-}
+};
 
 export default UltimateGraphPlotter;
