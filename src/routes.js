@@ -3,18 +3,19 @@ export const utilities = {
   "General Utilities": [
     "Qr Generator",
     "Url Shortener",
-    "Currency Converter",
+    "Password Generator",
     "Text Cleaner",
     "Text Comparison",
-  ], 
+     "Currency Converter",
+ ], 
   
   "PDF Tools": [
     "Merge PDFs",
     "Split PDFs",
+    "Compress PDFs",
     "PDF to Images",
     "Images to PDF",
     "PDF Reorder",
-    "Compress PDFs",
   ],
 
   "Advanced Mathematics": [
@@ -38,6 +39,7 @@ export const utilities = {
     "JSON Formatter",
     "Markdown & Html Converter",
     "Json Csv Converters",
+    "Regex Tester"
   ]
 };
 
@@ -55,6 +57,8 @@ export const utilityRoutes = {
   "Qr Generator": "/utilities/qr-generator",
   "Url Shortener": "/utilities/url-shortner",
   "Currency Converter": "/utilities/currency-converter",
+  "Password Generator": "/utilities/password-generator",
+
   
   "Matrix Calculator": "/utilities/matrix-calculator",
   "Graph Plotter": "/utilities/graph-plotter",
@@ -71,6 +75,8 @@ export const utilityRoutes = {
   "JSON Formatter": "/utilities/json-formatter",
   "Markdown & Html Converter": "/utilities/markdown-html-converter",
   "Json Csv Converters":"/utilities/json-csv-converter",
+  "Regex Tester" : "/utilities/regex-tester",
+
 };
 
 export const utilityDescriptions = {
@@ -90,6 +96,8 @@ export const utilityDescriptions = {
   "Currency Converter": "Convert between different currencies",
   "Text Cleaner": "Clean and sanitize text from unwanted characters",
   "Text Comparison": "Compare two text inputs for differences",
+  "Password Generator":"Generate random passwords",
+
   
   "Animations Library": "Browse and use CSS animations",
   "Layout Builder": "Design layouts using responsive grids",
@@ -100,4 +108,5 @@ export const utilityDescriptions = {
   "JSON Formatter": "Beautify and format JSON data",
   "Markdown & Html Converter": "Convert Markdown to Html and vice versa with preview",
   "Json Csv Converters":"Convert among JSON, CSV, XML & more",
+  "Regex Tester"  : "Test the strings and regex"
 };

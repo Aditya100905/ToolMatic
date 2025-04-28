@@ -43,14 +43,17 @@ import CssGradients from "./Design/CssGradients.jsx";
 import TypeWriter from "./Design/TypeWriter.jsx";
 
 // Dev Tools
-import APIRequestTester from "./developer/APIRequestTester.jsx";
 import MarkdownHtmlConverter from "./developer/MarkdownHtmlConverter.jsx";
 import JSONFormatter from "./developer/JSONFormatter.jsx";
 import JsonCsvXml from "./developer/JsonCsvXml.jsx";
+import FormatterMinifier from "./developer/Regex.jsx";
+
 
 import UtilityPage from "./UtilityPage";
 import { utilities, utilityRoutes } from "./routes.js";
 import SVGMaker from "./Design/SvgMaker.jsx";
+import PasswordGenerator from "./general/PasswordGenerator.jsx";
+import RegexTester from "./developer/Regex.jsx";
 
 // Contexts
 export const SearchContext = createContext();
@@ -180,6 +183,10 @@ const App = () => {
                   path="/utilities/json-csv-converter"
                   element={<JsonCsvXml theme={theme} />}
                 />
+                <Route
+                  path="/utilities/password-generator"
+                  element={<PasswordGenerator theme={theme} />}
+                />
 
                 {/* PDF Tools */}
                 <Route
@@ -252,13 +259,14 @@ const App = () => {
                 />
 
                 {/* Dev Tools */}
-                <Route
-                  path="/utilities/api-request-tester"
-                  element={<APIRequestTester theme={theme} />}
-                />
+
                 <Route
                   path="/utilities/markdown-html-converter"
                   element={<MarkdownHtmlConverter theme={theme} />}
+                />
+                <Route
+                  path="/utilities/regex-tester"
+                  element={<RegexTester theme={theme} />}
                 />
               </Route>
 
