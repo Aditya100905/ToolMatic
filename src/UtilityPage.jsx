@@ -248,26 +248,28 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
   };
 
   // Filter utilities based on search term
-  const getFilteredUtilities = () => {
-    if (!localSearchTerm) {
-      return availableUtilities; // Return all categories and utilities
-    }
+const getFilteredUtilities = () => {
+  if (!localSearchTerm) {
+    return availableUtilities; // Return all categories and utilities
+  }
 
-    // Filter utilities across all categories
-    const filtered = {};
+  const filtered = {};
+  const searchTerm = localSearchTerm.toLowerCase();
 
-    Object.keys(availableUtilities).forEach((category) => {
-      const matchingUtilities = availableUtilities[category].filter((utility) =>
-        utility.toLowerCase().includes(localSearchTerm.toLowerCase())
-      );
-
-      if (matchingUtilities.length > 0) {
-        filtered[category] = matchingUtilities;
-      }
+  Object.keys(availableUtilities).forEach((category) => {
+    const matchingUtilities = availableUtilities[category].filter((utility) => {
+      const words = utility.split(/\s+/); // Split utility into words
+      return words.some(word => word.toLowerCase().startsWith(searchTerm));
     });
 
-    return filtered;
-  };
+    if (matchingUtilities.length > 0) {
+      filtered[category] = matchingUtilities;
+    }
+  });
+
+  return filtered;
+};
+
 
   const filteredUtilities = getFilteredUtilities();
 
@@ -411,7 +413,7 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
           {/* Display search results or all categories */}
           {localSearchTerm && (
             <div className="mb-10 text-center">
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-100/50 shadow-sm">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -437,7 +439,7 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
           )}
 
           {Object.keys(filteredUtilities).length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 bg-gradient-to-b from-transparent to-gray-50 rounded-2xl shadow-sm border border-gray-100 p-8">
+            <div className="flex flex-col items-center justify-center py-16  p-8">
               <SearchIcon />
               <h3 className="text-xl font-medium mb-2">No utilities found</h3>
               <p className="text-center opacity-70 max-w-md">
