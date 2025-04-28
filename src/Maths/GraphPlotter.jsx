@@ -821,40 +821,33 @@ const UltimateGraphPlotter = ({
               </div>
             )}
             
-            {/* Quick examples */}
-            <div className="mt-2 flex flex-wrap gap-2">
-              <span className={`${currentTheme.text} text-sm`}>Try:</span>
-              <button 
-                onClick={() => insertExample('sin(x)')}
-                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
-              >
-                sin(x)
-              </button>
-              <button 
-                onClick={() => insertExample('1/x')}
-                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
-              >
-                1/x
-              </button>
-              <button 
-                onClick={() => insertExample('sqrt(x)')}
-                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
-              >
-                sqrt(x)
-              </button>
-              <button 
-                onClick={() => insertExample('x^3 - 3*x')}
-                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
-              >
-                x³ - 3x
-              </button>
-              <button 
-                onClick={() => insertExample('tan(x)')}
-                className={`text-sm px-2 py-1 rounded bg-blue-100 text-blue-800 ${theme === 'dark' ? 'bg-blue-900 text-blue-100' : ''}`}
-              >
-                tan(x)
-              </button>
-            </div>
+{/* Quick examples */}
+<div className="mt-2 flex flex-wrap gap-2">
+  <span className={`${currentTheme.text} text-sm`}>Try:</span>
+  {[
+    { label: 'sin(x)', value: 'sin(x)' },
+    { label: '1/x', value: '1/x' },
+    { label: 'sqrt(x)', value: 'sqrt(x)' },
+    { label: 'x³ - 3x', value: 'x^3 - 3*x' },
+    { label: 'tan(x)', value: 'tan(x)' },
+  ].map((example, index) => (
+    <button
+      key={index}
+      onClick={() => insertExample(example.value)}
+      className={`
+        text-sm px-3 py-1 rounded-md 
+        transition-colors duration-200
+        ${theme === 'dark' 
+          ? 'bg-blue-700 text-white hover:bg-blue-600' 
+          : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+        }
+      `}
+    >
+      {example.label}
+    </button>
+  ))}
+</div>
+
           </div>
 
           {/* Graph Display Section */}
