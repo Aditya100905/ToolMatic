@@ -53,6 +53,7 @@ import JsonCsvXml from "./developer/JsonCsvXml.jsx";
 
 import UtilityPage from "./UtilityPage";
 import { utilities, utilityRoutes } from "./routes.js";
+import SVGMaker from "./Design/SvgMaker.jsx";
 
 
 // Contexts
@@ -226,6 +227,10 @@ const App = () => {
               <Route
                 path="/utilities/typography"
                 element={<TypeWriter theme={theme} />}
+              />
+              <Route
+                path="/utilities/svg-maker"
+                element={<SVGMaker theme={theme} />}
               />
 
 

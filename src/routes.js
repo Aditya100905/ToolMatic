@@ -1,4 +1,13 @@
 export const utilities = {
+ 
+  "General Utilities": [
+    "Qr Generator",
+    "Url Shortener",
+    "Currency Converter",
+    "Text Cleaner",
+    "Text Comparison",
+  ], 
+  
   "PDF Tools": [
     "Merge PDFs",
     "Split PDFs",
@@ -16,19 +25,13 @@ export const utilities = {
     "Statistics & Probability Tool"
   ],
 
-  "General Utilities": [
-    "Qr Generator",
-    "Url Shortener",
-    "Currency Converter",
-    "Text Cleaner",
-    "Text Comparison",
-  ],
 
   Design: [
     "Animations Library",
     "Layout Builder",
     "Gradients Studio",
     "Typography Library",
+    "SVG Maker",
   ],
 
   "Dev Tools":[
@@ -64,6 +67,7 @@ export const utilityRoutes = {
   "Layout Builder": "/utilities/grids",
   "Gradients Studio": "/utilities/gradients",
   "Typography Library": "/utilities/typography",
+  "SVG Maker" : "/utilities/svg-maker",
   
   "JSON Formatter": "/utilities/json-formatter",
   // "API Request Tester": "/utilities/api-request-tester",
@@ -93,6 +97,7 @@ export const utilityDescriptions = {
   "Layout Builder": "Design layouts using responsive grids",
   "Gradients Studio": "Create and preview gradient designs",
   "Typography Library": "Explore font styles and text combinations",
+  "SVG Maker" : "Create the SVGs with customisations",
   
   "JSON Formatter": "Beautify and format JSON data",
   // "APIRequestTester": "Send, test, and debug HTTP API requests easily",

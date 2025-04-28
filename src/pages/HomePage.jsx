@@ -15,7 +15,7 @@ import {
   Calculator,
   Pen,
 } from "lucide-react";
-import { FaGlobeAsia } from "react-icons/fa";
+import { FaDev, FaGlobeAsia, FaToolbox } from "react-icons/fa";
 
 const Home = ({ theme }) => {
   const [mostPopular, setMostPopular] = useState([]);
@@ -85,6 +85,8 @@ const Home = ({ theme }) => {
         return <Pen size={20} />;
       case "General":
         return <FaGlobeAsia size={20} />;
+      case "Dev Tools":
+        return <FaToolbox size={20} />;
       default:
     }
   };
@@ -136,6 +138,7 @@ const Home = ({ theme }) => {
                     "Math",
                     "General",
                     "Design",
+                    "Dev Tools"
                   ].map((category) => (
                     <div
                       key={category}
