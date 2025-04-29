@@ -17,7 +17,7 @@ import {
   ArrowUturnRightIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/solid";
-import { useTheme } from "../ThemeProvider";
+import { useTheme } from "../../ThemeProvider";
 
 // Set the PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";

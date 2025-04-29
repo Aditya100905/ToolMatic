@@ -15,7 +15,7 @@ import {
   XMarkIcon,
   ScissorsIcon,
 } from "@heroicons/react/24/solid";
-import { useTheme } from "../ThemeProvider";
+import { useTheme } from "../../ThemeProvider";
 
 // Set worker source once
 pdfjsLib.GlobalWorkerOptions.workerSrc =

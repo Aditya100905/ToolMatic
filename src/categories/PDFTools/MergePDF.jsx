@@ -3,7 +3,7 @@ import { PDFDocument } from "pdf-lib";
 import { saveAs } from "file-saver";
 import FileUploader from "./FileUploader";
 import { XCircleIcon, ArrowsUpDownIcon, DocumentTextIcon, DocumentPlusIcon } from "@heroicons/react/24/solid";
-import { useTheme } from "../ThemeProvider";
+import { useTheme } from "../../ThemeProvider";
 
 export default function MergePDF() {
   const { theme } = useTheme();

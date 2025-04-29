@@ -3,7 +3,7 @@ import { PDFDocument } from "pdf-lib";
 import { saveAs } from "file-saver";
 import FileUploader from "./FileUploader";
 import { XCircleIcon, DocumentTextIcon, DocumentPlusIcon } from "@heroicons/react/24/solid";
-import { useTheme } from "../ThemeProvider";
+import { useTheme } from "../../ThemeProvider";
 
 export default function SplitPDF() {
   const { theme } = useTheme();

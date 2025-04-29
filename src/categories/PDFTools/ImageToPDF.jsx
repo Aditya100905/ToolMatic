@@ -15,7 +15,7 @@ import {
   ArrowDownIcon,
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
-import { useTheme } from "../ThemeProvider";
+import { useTheme } from "../../ThemeProvider";
 import { GripIcon } from "lucide-react";
 
 if (typeof window !== "undefined" && !window.Buffer) {

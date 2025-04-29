@@ -4,7 +4,7 @@ import {
   materialOceanic,
   prism,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { useTheme } from "../ThemeProvider";
+import { useTheme } from "../../ThemeProvider";
 import { toast } from "react-toastify";
 
 const detectFileType = (code) => {

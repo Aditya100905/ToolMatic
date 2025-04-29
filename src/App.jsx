@@ -15,45 +15,43 @@ import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound.jsx";
 
 // General Utilities
-import TextCleaning from "./general/TextCleaning.jsx";
-import TextComparison from "./general/TextComparison.jsx";
-import QrGenerator from "./general/QrGenerator.jsx";
-import UrlShortner from "./general/UrlShortner.jsx";
-import CurrencyConverter from "./general/CurrencyConverter.jsx";
+import TextCleaning from "./categories/general/TextCleaning.jsx";
+import TextComparison from "./categories/general/TextComparison.jsx";
+import QrGenerator from "./categories/general/QrGenerator.jsx";
+import UrlShortner from "./categories/general/UrlShortner.jsx";
+import CurrencyConverter from "./categories/general/CurrencyConverter.jsx";
+import PasswordGenerator from "./categories/general/PasswordGenerator.jsx";
 
 // PDF Tools
-import MergePDF from "./PDFTools/MergePDF";
-import PDFtoImages from "./PDFTools/PDFtoImages";
-import SplitPDF from "./PDFTools/SplitPDF";
-import CompressPDF from "./PDFTools/CompressPDF.jsx";
-import ImageToPDF from "./PDFTools/ImageToPDF.jsx";
-import PDFReordering from "./PDFTools/PDFreOrder.jsx";
+import MergePDF from "./categories/PDFTools/MergePDF.jsx";
+import PDFtoImages from "./categories/PDFTools/PDFtoImages.jsx";
+import SplitPDF from "./categories/PDFTools/SplitPDF.jsx";
+import CompressPDF from "./categories/PDFTools/CompressPDF.jsx";
+import ImageToPDF from "./categories/PDFTools/ImageToPDF.jsx";
+import PDFReordering from "./categories/PDFTools/PDFreOrder.jsx";
 
 // Maths Tools
-import MatrixSolver from "./Maths/MatrixSolver";
-import GraphPlotter from "./Maths/GraphPlotter";
-import ScientificCalculator from "./Maths/ScientificCalculator.jsx";
-import ComplexNumberCalculator from "./Maths/ComplexNumberCalculator.jsx";
-import StatisticsProbabilityTool from "./Maths/StatisticsProbabilityTool.jsx";
+import MatrixSolver from "./categories/Maths/MatrixSolver.jsx";
+import GraphPlotter from "./categories/Maths/GraphPlotter.jsx";
+import ScientificCalculator from "./categories/Maths/ScientificCalculator.jsx";
+import ComplexNumberCalculator from "./categories/Maths/ComplexNumberCalculator.jsx";
+import StatisticsProbabilityTool from "./categories/Maths/StatisticsProbabilityTool.jsx";
 
 // Design Tools
-import CssAnimations from "./Design/CssAnimations.jsx";
-import CssGrids from "./Design/CssGrids.jsx";
-import CssGradients from "./Design/CssGradients.jsx";
-import TypeWriter from "./Design/TypeWriter.jsx";
+import CssAnimations from "./categories/Design/CssAnimations.jsx";
+import CssGrids from "./categories/Design/CssGrids.jsx";
+import CssGradients from "./categories/Design/CssGradients.jsx";
+import TypeWriter from "./categories/Design/TypeWriter.jsx";
 
 // Dev Tools
-import MarkdownHtmlConverter from "./developer/MarkdownHtmlConverter.jsx";
-import JSONFormatter from "./developer/JSONFormatter.jsx";
-import JsonCsvXml from "./developer/JsonCsvXml.jsx";
-import FormatterMinifier from "./developer/Regex.jsx";
+import MarkdownHtmlConverter from "./categories/developer/MarkdownHtmlConverter.jsx";
+import JSONFormatter from "./categories/developer/JSONFormatter.jsx";
+import JsonCsvXml from "./categories/developer/JsonCsvXml.jsx";
+import RegexTester from "./categories/developer/Regex.jsx";
 
 
 import UtilityPage from "./UtilityPage";
 import { utilities, utilityRoutes } from "./routes.js";
-import SVGMaker from "./Design/SvgMaker.jsx";
-import PasswordGenerator from "./general/PasswordGenerator.jsx";
-import RegexTester from "./developer/Regex.jsx";
 
 // Contexts
 export const SearchContext = createContext();
@@ -252,10 +250,6 @@ const App = () => {
                 <Route
                   path="/utilities/typography"
                   element={<TypeWriter theme={theme} />}
-                />
-                <Route
-                  path="/utilities/svg-maker"
-                  element={<SVGMaker theme={theme} />}
                 />
 
                 {/* Dev Tools */}

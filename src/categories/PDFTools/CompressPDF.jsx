@@ -10,7 +10,7 @@ import {
   ArrowDownTrayIcon,
   ChartBarIcon,
 } from "@heroicons/react/24/solid";
-import { useTheme } from "../ThemeProvider";
+import { useTheme } from "../../ThemeProvider";
 
 export default function CompressPDF() {
   const { theme } = useTheme();

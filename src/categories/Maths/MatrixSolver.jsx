@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "../ThemeProvider";
+import { useTheme } from "../../ThemeProvider";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useUndoRedoState from "../hooks/useUndoRedoState"; // Custom hook to be created
+import useUndoRedoState from "../../hooks/useUndoRedoState"; // Custom hook to be created
 
 const MatrixSolver = () => {
   const { theme } = useTheme();

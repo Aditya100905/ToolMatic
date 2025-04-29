@@ -80,33 +80,36 @@ export const utilityRoutes = {
 };
 
 export const utilityDescriptions = {
-  "Merge PDFs": "Combine multiple PDF files into one",
-  "Split PDFs": "Separate pages from a PDF into multiple files",
-  "PDF to Images": "Convert PDF pages into image files",
-  "Images to PDF": "Create a PDF from image files",
-  "PDF Reorder": "Rearrange the pages in a PDF document",
-  "Compress PDFs": "Reduce the file size of a PDF",
+  // PDF Utilities
+  "Merge PDFs": "Combine multiple PDF documents into a single file while preserving content and order.",
+  "Split PDFs": "Extract specific pages or sections from a PDF and save them as new, individual PDF files.",
+  "PDF to Images": "Convert each page of a PDF file into high-resolution image formats.",
+  "Images to PDF": "Compile multiple image files into a single, well-structured PDF document.",
+  "PDF Reorder": "Change the sequence of pages in a PDF by dragging and rearranging them.",
+  "Compress PDFs": "Minimize PDF file size while maintaining acceptable quality for easier sharing and storage.",
 
-  "Scientific Calculator": "Perform scientific and advanced calculations",
-  "Matrix Calculator": "Compute operations on matrices",
-  "Graph Plotter": "Plot mathematical graphs and functions",
+  // Calculator Tools
+  "Scientific Calculator": "Perform complex mathematical operations including trigonometry, logarithms, and exponentiation.",
+  "Matrix Calculator": "Carry out matrix operations such as addition, multiplication, transposition, and inversion.",
+  "Graph Plotter": "Visualize mathematical functions and equations through interactive graph plotting.",
 
-  "Qr Generator": "Generate QR codes from text or URLs",
-  "Url Shortener": "Shorten long URLs for easy sharing",
-  "Currency Converter": "Convert between different currencies",
-  "Text Cleaner": "Clean and sanitize text from unwanted characters",
-  "Text Comparison": "Compare two text inputs for differences",
-  "Password Generator":"Generate random passwords",
+  // Utility Tools
+  "Qr Generator": "Generate scannable QR codes from URLs, text, or other data types.",
+  "Url Shortener": "Convert long URLs into short, manageable links ideal for sharing and tracking.",
+  "Currency Converter": "Convert values between global currencies using up-to-date exchange rates.",
+  "Text Cleaner": "Remove unwanted characters, extra spaces, HTML tags, and formatting from text.",
+  "Text Comparison": "Highlight the differences between two blocks of text using side-by-side comparison.",
+  "Password Generator": "Generate secure, random passwords with customizable character rules and length.",
 
-  
-  "Animations Library": "Browse and use CSS animations",
-  "Layout Builder": "Design layouts using responsive grids",
-  "Gradients Studio": "Create and preview gradient designs",
-  "Typography Library": "Explore font styles and text combinations",
-  // "SVG Maker" : "Create the SVGs with customisations",
-  
-  "JSON Formatter": "Beautify and format JSON data",
-  "Markdown & Html Converter": "Convert Markdown to Html and vice versa with preview",
-  "Json Csv Converters":"Convert among JSON, CSV, XML & more",
-  "Regex Tester"  : "Test the strings and regex"
+  // UI/UX Design Tools
+  "Animations Library": "Access a collection of reusable CSS animations with live previews and usage code.",
+  "Layout Builder": "Create responsive web layouts using grid/flexbox with a visual drag-and-drop interface.",
+  "Gradients Studio": "Design and preview custom CSS gradient backgrounds with angle, type, and color stops.",
+  "Typography Library": "Explore and preview typography combinations with font sizes, weights, and styles.",
+
+  // Developer Tools
+  "JSON Formatter": "Format and beautify raw JSON data to improve readability and structure.",
+  "Markdown & Html Converter": "Convert between Markdown and HTML formats with real-time preview functionality.",
+  "Json Csv Converters": "Transform data among JSON, CSV, XML, and other formats for seamless data interchange.",
+  "Regex Tester": "Test and validate regular expressions against sample strings with real-time match highlighting."
 };
