@@ -1,103 +1,112 @@
 export const utilities = {
-  "Code Formatter": [
-    "HTML Formatter",
-    "CSS Formatter",
-    "JS Formatter",
-    "JSON Formatter",
-  ],
+ 
+  "General Utilities": [
+    "Qr Generator",
+    "Url Shortener",
+    "Password Generator",
+    "Text Cleaner",
+    "Text Comparison",
+     "Currency Converter",
+ ], 
+  
   "PDF Tools": [
     "Merge PDFs",
     "Split PDFs",
+    "Compress PDFs",
     "PDF to Images",
     "Images to PDF",
     "PDF Reorder",
-    "Compress PDFs",
   ],
-
-  Text: ["Word Counter", "Case Converter", "Text Cleaner", "Text Comparison"],
 
   "Advanced Mathematics": [
     "Scientific Calculator",
     "Matrix Calculator",
     "Graph Plotter",
+    "Complex Number Calculator",
+    "Statistics & Probability Tool"
   ],
-  "Bases & Bitwise Operators": [
-    "Base Converter",
-    "Bitwise Operators",
-    "Complement",
-    "Binary, Gray, BCD Converter",
-  ],
-  "Unit Converters": [
-    "Length Converter",
-    "Mass Converter",
-    "Temperature Converter",
-    "Time Converter",
-    "Frequency Converter",
-    "Area Converter",
-    "Volume Converter",
-    "Density Converter",
-    "Energy Converter",
-    "Power Converter",
-    "Speed Converter",
-  ],
-  "General Utilities": ["Qr Generator", "Url Shortener", "Currency Converter"],
+
 
   Design: [
     "Animations Library",
     "Layout Builder",
     "Gradients Studio",
     "Typography Library",
+    // "SVG Maker",
   ],
+
+  "Dev Tools":[
+    "JSON Formatter",
+    "Markdown & Html Converter",
+    "Json Csv Converters",
+    "Regex Tester"
+  ]
 };
 
-// Define route mappings for each utility
 export const utilityRoutes = {
-  "HTML Formatter": "/formatters/html",
-  "CSS Formatter": "/formatters/css",
-  "JS Formatter": "/formatters/js",
-  // "TS Formatter": "/formatters/ts",
-  "JSON Formatter": "/formatters/json",
+  "Merge PDFs": "/utilities/merge",
+  "Split PDFs": "/utilities/split",
+  "Compress PDFs": "/utilities/compress",
+  "Word to PDF": "/utilities/word-converter",
+  "PDF to Images": "/utilities/pdf-to-images",
+  "Images to PDF": "/utilities/images-to-pdf",
+  "PDF Reorder": "/utilities/pdf-reorder",
 
-  "Merge PDFs": "/pdf-tools/merge",
-  "Split PDFs": "/pdf-tools/split",
-  "Compress PDFs": "/pdf-tools/compress",
-  "Word to PDF": "/pdf-tools/word-converter",
-  "PDF to Images": "/pdf-tools/pdf-to-images",
-  "Images to PDF": "pdf-tools/images-to-pdf",
-  "PDF Reorder": "pdf-tools/pdf-reorder",
+  "Text Cleaner": "/utilities/text-cleaner",
+  "Text Comparison": "/utilities/text-compare",
+  "Qr Generator": "/utilities/qr-generator",
+  "Url Shortener": "/utilities/url-shortner",
+  "Currency Converter": "/utilities/currency-converter",
+  "Password Generator": "/utilities/password-generator",
 
-  "Word Counter": "/text/word-counter",
-  "Case Converter": "/text/case-converter",
-  "Text Cleaner": "/text/text-cleaning",
-  "Text Comparison": "/text/text-comparison",
+  
+  "Matrix Calculator": "/utilities/matrix-calculator",
+  "Graph Plotter": "/utilities/graph-plotter",
+  "Scientific Calculator": "/utilities/scientific-calculator",
+  "Complex Number Calculator" : "/utilities/complex-numbers-calculator",
+  "Statistics & Probability Tool" : "/utilities/stats-probability",
+  
+  "Animations Library": "/utilities/animations",
+  "Layout Builder": "/utilities/grids",
+  "Gradients Studio": "/utilities/gradients",
+  "Typography Library": "/utilities/typography",
+  // "SVG Maker" : "/utilities/svg-maker",
+  
+  "JSON Formatter": "/utilities/json-formatter",
+  "Markdown & Html Converter": "/utilities/markdown-html-converter",
+  "Json Csv Converters":"/utilities/json-csv-converter",
+  "Regex Tester" : "/utilities/regex-tester",
 
-  "Matrix Calculator": "/math/matrix-calculator",
-  "Graph Plotter": "/math/graph-plotter",
-  "Scientific Calculator": "/math/scientific-calculator",
+};
 
-  "Base Converter": "/bases-and-bitwise/base-converter",
-  "Bitwise Operators": "/bases-and-bitwise/bitwise-operators",
-  "Binary, Gray, BCD Converter": "/bases-and-bitwise/binary-gray-bcd",
-  Complement: "/bases-and-bitwise/complement",
+export const utilityDescriptions = {
+  "Merge PDFs": "Combine multiple PDF files into one",
+  "Split PDFs": "Separate pages from a PDF into multiple files",
+  "PDF to Images": "Convert PDF pages into image files",
+  "Images to PDF": "Create a PDF from image files",
+  "PDF Reorder": "Rearrange the pages in a PDF document",
+  "Compress PDFs": "Reduce the file size of a PDF",
 
-  "Length Converter": "/converters/length-converter",
-  "Mass Converter": "/converters/mass-converter",
-  "Temperature Converter": "/converters/temperature-converter",
-  "Area Converter": "/converters/area-converter",
-  "Volume Converter": "/converters/volume-converter",
-  "Density Converter": "/converters/density-converter",
-  "Time Converter": "/converters/time-converter",
-  "Energy Converter": "/converters/energy-converter",
-  "Speed Converter": "/converters/speed-converter",
-  "Power Converter": "/converters/power-converter",
-  "Frequency Converter": "/converters/frequency-converter",
+  "Scientific Calculator": "Perform scientific and advanced calculations",
+  "Matrix Calculator": "Compute operations on matrices",
+  "Graph Plotter": "Plot mathematical graphs and functions",
 
-  "Qr Generator": "/general/qr-generator",
-  "Url Shortener": "/general/url-shortner",
-  "Currency Converter": "/general/currency-converter",
+  "Qr Generator": "Generate QR codes from text or URLs",
+  "Url Shortener": "Shorten long URLs for easy sharing",
+  "Currency Converter": "Convert between different currencies",
+  "Text Cleaner": "Clean and sanitize text from unwanted characters",
+  "Text Comparison": "Compare two text inputs for differences",
+  "Password Generator":"Generate random passwords",
 
-  "Animations Library": "/design/animations",
-  "Layout Builder": "/design/grids",
-  "Gradients Studio": "/design/gradients",
-  "Typography Library": "/design/typography",
+  
+  "Animations Library": "Browse and use CSS animations",
+  "Layout Builder": "Design layouts using responsive grids",
+  "Gradients Studio": "Create and preview gradient designs",
+  "Typography Library": "Explore font styles and text combinations",
+  // "SVG Maker" : "Create the SVGs with customisations",
+  
+  "JSON Formatter": "Beautify and format JSON data",
+  "Markdown & Html Converter": "Convert Markdown to Html and vice versa with preview",
+  "Json Csv Converters":"Convert among JSON, CSV, XML & more",
+  "Regex Tester"  : "Test the strings and regex"
 };

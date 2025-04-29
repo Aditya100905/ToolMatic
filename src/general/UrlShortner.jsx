@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 const FullURLShortener = ({ theme = 'light' }) => {
+  // Define localStorage key for consistency
+  const STORAGE_KEY = 'shortenedUrls';
+  
   // State management
   const [url, setUrl] = useState('');
   const [customAlias, setCustomAlias] = useState('');
@@ -17,9 +20,62 @@ const FullURLShortener = ({ theme = 'light' }) => {
   const [urlStats, setUrlStats] = useState(null);
   const [viewMode, setViewMode] = useState('create'); // 'create' or 'history'
   
-  // Define localStorage key for consistency
-  const STORAGE_KEY = 'shortenedUrls';
-  
+  // Load saved URLs from localStorage on component mount - improved implementation
+  useEffect(() => {
+    const loadHistory = () => {
+      try {
+        const savedUrls = localStorage.getItem(STORAGE_KEY);
+        console.log("Loading from localStorage:", savedUrls);
+        
+        if (savedUrls) {
+          const parsedUrls = JSON.parse(savedUrls);
+          // Validate the structure of the data
+          if (Array.isArray(parsedUrls)) {
+            setUrlHistory(parsedUrls);
+            console.log('Successfully loaded URL history:', parsedUrls.length, 'items');
+          } else {
+            console.error('Stored URL history is not an array, resetting');
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+            setUrlHistory([]);
+          }
+        } else {
+          // Initialize with empty array if no data found
+          console.log('No URL history found, initializing empty array');
+          localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+          setUrlHistory([]);
+        }
+      } catch (err) {
+        console.error('Error loading URL history from localStorage:', err);
+        // Reset localStorage if data is corrupted
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+        setUrlHistory([]);
+      }
+    };
+    
+    loadHistory();
+  }, []); // Only run on component mount
+
+  // Save URLs to localStorage when history changes - improved implementation
+  useEffect(() => {
+    const saveHistory = () => {
+      if (urlHistory && Array.isArray(urlHistory)) {
+        try {
+          const jsonString = JSON.stringify(urlHistory);
+          localStorage.setItem(STORAGE_KEY, jsonString);
+          console.log('Saved URL history to localStorage:', urlHistory.length, 'items');
+        } catch (err) {
+          console.error('Error saving URL history to localStorage:', err);
+          setError('Failed to save history. Storage might be full.');
+        }
+      }
+    };
+    
+    // Skip initial empty array save (wait for actual data)
+    if (urlHistory.length > 0) {
+      saveHistory();
+    }
+  }, [urlHistory]); // This will now properly track all changes to urlHistory
+
   // Define theme-based colors
   const themeColors = {
     background: theme === 'light' ? 'bg-gray-50' : 'bg-black',
@@ -40,41 +96,6 @@ const FullURLShortener = ({ theme = 'light' }) => {
     statsProgress: theme === 'light' ? 'bg-blue-500' : 'bg-blue-600',
     shadow: theme === 'light' ? 'shadow-md' : 'shadow-lg shadow-gray-900/30',
   };
-
-  // Load saved URLs from localStorage on component mount
-  useEffect(() => {
-    try {
-      const savedUrls = localStorage.getItem(STORAGE_KEY);
-      if (savedUrls) {
-        const parsedUrls = JSON.parse(savedUrls);
-        // Validate the structure of the data
-        if (Array.isArray(parsedUrls)) {
-          setUrlHistory(parsedUrls);
-          console.log('Loaded URL history from localStorage:', parsedUrls.length, 'items');
-        } else {
-          console.error('Stored URL history is not an array, resetting');
-          localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-          setUrlHistory([]);
-        }
-      }
-    } catch (err) {
-      console.error('Error loading URL history from localStorage:', err);
-      // Reset localStorage if data is corrupted
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-      setUrlHistory([]);
-    }
-  }, []);
-
-  // Save URLs to localStorage when history changes
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(urlHistory));
-      console.log('Saved URL history to localStorage:', urlHistory.length, 'items');
-    } catch (err) {
-      console.error('Error saving URL history to localStorage:', err);
-      setError('Failed to save history. Storage might be full.');
-    }
-  }, [urlHistory]);
 
   // Generate a QR code using a public QR code API
   const generateQRCode = (url) => {
@@ -142,13 +163,14 @@ const FullURLShortener = ({ theme = 'light' }) => {
         };
         
         setShortUrl(tinyUrl);
+        
+        // Update history with the new URL and save to localStorage
         setUrlHistory(prevHistory => {
           const updatedHistory = [newUrlEntry, ...prevHistory];
           return updatedHistory;
         });
         
         setIsLoading(false);
-        setSuccess('URL shortened successfully!');
         
         // Reset form
         setCustomAlias('');
@@ -199,15 +221,13 @@ const FullURLShortener = ({ theme = 'light' }) => {
       const updatedHistory = prevHistory.filter(item => item.id !== id);
       return updatedHistory;
     });
-    setSuccess('URL deleted from history');
   };
   
   // Clear all URLs from history
   const clearAllHistory = () => {
-    if (window.confirm('Are you sure you want to clear your entire URL history?')) {
+    if(urlHistory > 0){
       setUrlHistory([]);
-      localStorage.removeItem(STORAGE_KEY);
-      setSuccess('URL history cleared');
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
     }
   };
   
@@ -295,13 +315,14 @@ const FullURLShortener = ({ theme = 'light' }) => {
     window.open(urlItem.originalUrl, '_blank');
     
     // Update clicks count and save to localStorage
-    setUrlHistory(prevHistory => 
-      prevHistory.map(item => 
+    setUrlHistory(prevHistory => {
+      const updatedHistory = prevHistory.map(item => 
         item.id === urlItem.id 
           ? { ...item, clicks: item.clicks + 1 } 
           : item
-      )
-    );
+      );
+      return updatedHistory;
+    });
   };
 
   // Check if URL is expired
@@ -506,7 +527,7 @@ const FullURLShortener = ({ theme = 'light' }) => {
                       Copy
                     </button>
                     <button
-                      onClick={() => generateQRCode(item.originalUrl)}  // Generate QR for original URL
+                      onClick={() => generateQRCode(item.shortUrl)}
                       className={`${themeColors.buttonSecondary} px-2 py-1 rounded text-xs`}
                       title="Generate QR Code"
                     >
@@ -574,8 +595,8 @@ const FullURLShortener = ({ theme = 'light' }) => {
     </div>
   );
 
-return (
-    <div className={`${themeColors.background} ${themeColors.text} mt-18 min-h-screen p-4 transition-colors duration-300`}>
+  return (
+    <div className={`${themeColors.background} ${themeColors.text} min-h-screen p-4 transition-colors duration-300 mt-20`}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-6 text-center">
@@ -601,133 +622,128 @@ return (
         
         {/* Success and Error Messages */}
         {success && (
-          <div className={`${themeColors.success} p-3 rounded-md mb-4`}>
+          <div className={`${themeColors.success} p-3 mb-4 rounded-md text-sm`}>
             {success}
           </div>
         )}
         
         {error && (
-          <div className={`${themeColors.error} p-3 rounded-md mb-4`}>
+          <div className={`${themeColors.error} p-3 mb-4 rounded-md text-sm`}>
             {error}
           </div>
         )}
         
         {/* Create URL Form */}
         {viewMode === 'create' && (
-          <div className={`${themeColors.card} ${themeColors.shadow} rounded-lg p-6`}>
+          <div className={`${themeColors.card} ${themeColors.shadow} rounded-lg p-6 mb-6`}>
             <div className="mb-4">
-              <label htmlFor="url" className="block mb-2 text-sm font-medium">
-                Enter a long URL
-              </label>
+              <label htmlFor="url" className="block text-sm font-medium mb-1">URL to shorten</label>
               <input
-                type="text"
+                type="url"
                 id="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://example.com/very/long/url/to/shorten"
-                className={`w-full px-4 py-2 rounded-md border ${themeColors.inputBg} ${themeColors.inputBorder} ${themeColors.inputText} focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                placeholder="https://example.com/my-long-url"
+                className={`w-full px-3 py-2 rounded-md border ${themeColors.inputBorder} ${themeColors.inputBg} ${themeColors.inputText} focus:outline-none focus:ring-2 focus:ring-blue-500`}
               />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label htmlFor="customAlias" className="block mb-2 text-sm font-medium">
-                  Custom alias (optional)
-                </label>
-                <input
-                  type="text"
-                  id="customAlias"
-                  value={customAlias}
-                  onChange={(e) => setCustomAlias(e.target.value)}
-                  placeholder="my-custom-url"
-                  className={`w-full px-4 py-2 rounded-md border ${themeColors.inputBg} ${themeColors.inputBorder} ${themeColors.inputText} focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="expiryDays" className="block mb-2 text-sm font-medium">
-                  Link expiry (optional)
-                </label>
-                <select
-                  id="expiryDays"
-                  value={expiryDays}
-                  onChange={(e) => setExpiryDays(parseInt(e.target.value))}
-                  className={`w-full px-4 py-2 rounded-md border ${themeColors.inputBg} ${themeColors.inputBorder} ${themeColors.inputText} focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                >
-                  <option value="0">Never expires</option>
-                  <option value="1">1 day</option>
-                  <option value="7">7 days</option>
-                  <option value="30">30 days</option>
-                  <option value="90">90 days</option>
-                  <option value="365">1 year</option>
-                </select>
-              </div>
+            <div className="mb-4">
+              <label htmlFor="alias" className="block text-sm font-medium mb-1">Custom alias (optional)</label>
+              <input
+                type="text"
+                id="alias"
+                value={customAlias}
+                onChange={(e) => setCustomAlias(e.target.value)}
+                placeholder="my-custom-name"
+                className={`w-full px-3 py-2 rounded-md border ${themeColors.inputBorder} ${themeColors.inputBg} ${themeColors.inputText} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              />
+            </div>
+            
+            <div className="mb-4">
+              <label htmlFor="expiry" className="block text-sm font-medium mb-1">Link expiry (days)</label>
+              <input
+                type="number"
+                id="expiry"
+                value={expiryDays}
+                onChange={(e) => setExpiryDays(parseInt(e.target.value) || 0)}
+                min="0"
+                placeholder="0 = never expires"
+                className={`w-full px-3 py-2 rounded-md border ${themeColors.inputBorder} ${themeColors.inputBg} ${themeColors.inputText} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              />
             </div>
             
             <button
               onClick={shortenUrl}
               disabled={isLoading}
-              className={`${themeColors.buttonPrimary} text-white py-2 px-4 rounded-md w-full mb-4 flex justify-center items-center`}
+              className={`${themeColors.buttonPrimary} w-full text-white px-4 py-2 rounded-md font-medium ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
-              {isLoading ? (
-                <span>Shortening...</span>
-              ) : (
-                <span>Shorten URL</span>
-              )}
+              {isLoading ? 'Processing...' : 'Shorten URL'}
             </button>
             
+            {/* Display shortened URL */}
             {shortUrl && (
-              <div className="mt-6">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium">Your shortened URL:</span>
-                  {copied && (
-                    <span className={`text-xs ${themeColors.success.split(' ')[0]}`}>
-                      Copied!
-                    </span>
-                  )}
-                </div>
-                <div className={`flex rounded-md overflow-hidden border ${themeColors.inputBorder}`}>
-                  <div className={`flex-1 p-2 ${themeColors.inputBg} truncate`}>
-                    {shortUrl}
-                  </div>
+              <div className={`mt-6 p-4 border ${themeColors.divider} rounded-md`}>
+                <label className="block text-sm font-medium mb-2">Your shortened URL</label>
+                <div className="flex items-center">
+                  <input
+                    type="text"
+                    value={shortUrl}
+                    readOnly
+                    className={`flex-1 px-3 py-2 rounded-l-md border-r-0 border ${themeColors.inputBorder} ${themeColors.inputBg} ${themeColors.inputText} focus:outline-none`}
+                  />
                   <button
                     onClick={() => copyToClipboard()}
-                    className={`${themeColors.buttonSecondary} px-3 py-2`}
+                    className={`${themeColors.buttonPrimary} text-white px-4 py-2 rounded-r-md`}
                   >
-                    Copy
+                    {copied ? 'Copied!' : 'Copy'}
                   </button>
+                </div>
+                
+                <div className="flex justify-between mt-4">
                   <button
-                    onClick={() => generateQRCode(url)}
-                    className={`${themeColors.buttonSecondary} px-3 py-2`}
+                    onClick={() => generateQRCode(shortUrl)}
+                    className={`${themeColors.buttonSecondary} flex-1 mr-2 px-4 py-2 rounded-md`}
                   >
-                    QR Code
+                    Generate QR Code
                   </button>
+                  <a
+                    href={shortUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`${themeColors.buttonSecondary} flex-1 ml-2 px-4 py-2 rounded-md text-center`}
+                  >
+                    Visit URL
+                  </a>
                 </div>
               </div>
             )}
           </div>
         )}
         
-        {/* URL History */}
+        {/* URL History View */}
         {viewMode === 'history' && (
           <>
-            <div className={`${themeColors.card} ${themeColors.shadow} rounded-lg p-6`}>
-              <h2 className="text-xl font-semibold mb-4">Your URL History</h2>
-              <URLHistoryTable />
-            </div>
             <HistoryManagementTools />
+            <URLHistoryTable />
           </>
         )}
         
-        {/* URL Stats View */}
-        {showStats && (
-          <URLStats stats={urlStats} />
-        )}
+        {/* URL Stats Section */}
+        {showStats && <URLStats stats={urlStats} />}
         
         {/* QR Code Modal */}
         <QRCodeModal />
+        
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <p className={`text-sm ${themeColors.secondaryText}`}>
+            Created with React • {new Date().getFullYear()}
+          </p>
+        </div>
       </div>
     </div>
   );
-}
-  export default FullURLShortener;
+};
+
+export default FullURLShortener;
