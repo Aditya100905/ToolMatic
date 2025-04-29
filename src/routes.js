@@ -39,7 +39,8 @@ export const utilities = {
     "JSON Formatter",
     "Markdown & Html Converter",
     "Json Csv Converters",
-    "Regex Tester"
+    "Regex Tester",
+    "HTTP Header"
   ]
 };
 
@@ -76,6 +77,7 @@ export const utilityRoutes = {
   "Markdown & Html Converter": "/utilities/markdown-html-converter",
   "Json Csv Converters":"/utilities/json-csv-converter",
   "Regex Tester" : "/utilities/regex-tester",
+  "HTTP Header":"/utilities/http-header",
 
 };
 
@@ -111,5 +113,6 @@ export const utilityDescriptions = {
   "JSON Formatter": "Format and beautify raw JSON data to improve readability and structure.",
   "Markdown & Html Converter": "Convert between Markdown and HTML formats with real-time preview functionality.",
   "Json Csv Converters": "Transform data among JSON, CSV, XML, and other formats for seamless data interchange.",
-  "Regex Tester": "Test and validate regular expressions against sample strings with real-time match highlighting."
+  "Regex Tester": "Test and validate regular expressions against sample strings with real-time match highlighting.",
+  "HTTP Header": "Inspect, analyze, and debug HTTP headers from requests and responses to understand server-client communication."
 };
