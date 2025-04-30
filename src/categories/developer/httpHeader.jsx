@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { AlertCircle, CheckCircle, Copy, ExternalLink, Eye, EyeOff, Filter, Info, Search, Send, Shield, ShieldAlert, ShieldCheck } from 'lucide-react';
+import {
+  AlertCircle, CheckCircle, Copy, ExternalLink, Eye, EyeOff, Filter,
+  Info, Search, Send, Shield, ShieldAlert, ShieldCheck
+} from 'lucide-react';
 
-// Main component that accepts a theme prop
 export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,26 +15,24 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
   const [activeTab, setActiveTab] = useState('all');
   const [copiedHeader, setCopiedHeader] = useState('');
 
-  // Theme-based colors
   const colors = {
-    background: theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50',
+    background: theme === 'dark' ? 'bg-[#0e0e0e]' : 'bg-gray-50',
     foreground: theme === 'dark' ? 'text-gray-100' : 'text-gray-900',
-    card: theme === 'dark' ? 'bg-gray-800' : 'bg-white',
+    card: theme === 'dark' ? 'bg-[#121212]' : 'bg-white',
     border: theme === 'dark' ? 'border-gray-700' : 'border-gray-200',
-    input: theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-gray-900',
+    input: theme === 'dark' ? 'bg-[#1b1b1b] text-white' : 'bg-white text-gray-900',
     inputBorder: theme === 'dark' ? 'border-gray-600' : 'border-gray-300',
     button: theme === 'dark' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600',
     secondaryButton: theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300',
     tabs: theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100',
     activeTab: theme === 'dark' ? 'bg-gray-700' : 'bg-white',
     scrollbar: theme === 'dark' ? 'scrollbar-dark' : 'scrollbar-light',
-    danger: theme === 'dark' ? 'text-red-400' : 'text-red-600',
+    danger: theme === 'dark' ? 'text-red-200' : 'text-red-600',
     success: theme === 'dark' ? 'text-green-400' : 'text-green-600',
     warning: theme === 'dark' ? 'text-amber-400' : 'text-amber-600',
     info: theme === 'dark' ? 'text-blue-400' : 'text-blue-600',
   };
 
-  // Security header definitions
   const securityHeaders = {
     'Content-Security-Policy': {
       description: 'Helps prevent XSS and data injection attacks',
@@ -86,7 +86,6 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
     },
   };
 
-  // Function to analyze headers and calculate security score
   const analyzeHeaders = (headers) => {
     let score = 0;
     let maxScore = 0;
@@ -97,9 +96,7 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
       const importanceValue = securityHeaders[header].importance === 'high' ? 10 : 5;
       maxScore += importanceValue;
 
-      const headerExists = Object.keys(headers).some(h => 
-        h.toLowerCase() === header.toLowerCase()
-      );
+      const headerExists = Object.keys(headers).some(h => h.toLowerCase() === header.toLowerCase());
 
       if (headerExists) {
         score += importanceValue;
@@ -110,7 +107,7 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
     });
 
     const percentage = Math.round((score / maxScore) * 100);
-    
+
     return {
       score: percentage,
       present: presentSecurityHeaders,
@@ -123,25 +120,22 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
       setError('Please enter a URL');
       return;
     }
-    
-    // Validate URL format
+
     let processedUrl = url;
     if (!/^https?:\/\//i.test(url)) {
       processedUrl = 'https://' + url;
     }
-    
+
     try {
       setLoading(true);
       setError(null);
-      
-      // In a real application, you'd use a proxy server to avoid CORS issues
-      // For demo purposes, we'll simulate a response
+
       const mockResponse = await simulateFetchHeaders(processedUrl);
-      
+
       setHeaders(mockResponse.headers);
       const securityAnalysis = analyzeHeaders(mockResponse.headers);
       setSecurityScore(securityAnalysis);
-      
+
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -149,12 +143,9 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
     }
   };
 
-  // This simulates fetching headers (in a real app, this would be an actual API call)
   const simulateFetchHeaders = async (url) => {
-    // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // For demo, return realistic headers based on the URL
+
     let headers = {
       'Content-Type': 'text/html; charset=UTF-8',
       'Server': 'nginx/1.18.0',
@@ -165,8 +156,7 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
       'Content-Length': '1270',
       'Accept-Ranges': 'bytes',
     };
-    
-    // Add some security headers for known domains to make it realistic
+
     if (url.includes('github.com')) {
       headers = {
         ...headers,
@@ -178,8 +168,7 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
         'Referrer-Policy': 'origin-when-cross-origin, strict-origin-when-cross-origin',
         'Permissions-Policy': 'interest-cohort=()'
       };
-    } 
-    else if (url.includes('google.com')) {
+    } else if (url.includes('google.com')) {
       headers = {
         ...headers,
         'Strict-Transport-Security': 'max-age=31536000',
@@ -189,7 +178,7 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
         'Content-Security-Policy': "object-src 'none'; frame-ancestors 'self'"
       };
     }
-    
+
     return { headers };
   };
 
@@ -201,7 +190,6 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
 
   const formatRawHeaders = () => {
     if (!headers) return '';
-    
     return Object.entries(headers)
       .map(([key, value]) => `${key}: ${value}`)
       .join('\n');
@@ -209,32 +197,26 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
 
   const filteredHeaders = () => {
     if (!headers) return [];
-    
     let filtered = Object.entries(headers);
-    
-    // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter(([key, value]) => 
-        key.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      filtered = filtered.filter(([key, value]) =>
+        key.toLowerCase().includes(searchTerm.toLowerCase()) ||
         value.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    
-    // Apply tab filter
     if (activeTab === 'security') {
-      filtered = filtered.filter(([key]) => 
+      filtered = filtered.filter(([key]) =>
         Object.keys(securityHeaders).some(h => h.toLowerCase() === key.toLowerCase())
       );
     } else if (activeTab === 'caching') {
-      filtered = filtered.filter(([key]) => 
+      filtered = filtered.filter(([key]) =>
         ['cache-control', 'expires', 'etag', 'last-modified'].includes(key.toLowerCase())
       );
     } else if (activeTab === 'cors') {
-      filtered = filtered.filter(([key]) => 
+      filtered = filtered.filter(([key]) =>
         key.toLowerCase().includes('cors') || key.toLowerCase().includes('origin')
       );
     }
-    
     return filtered;
   };
 
@@ -246,7 +228,7 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
     }
     return 'normal';
   };
-  
+
   const getHeaderIcon = (key) => {
     for (const secHeader in securityHeaders) {
       if (key.toLowerCase() === secHeader.toLowerCase()) {
@@ -274,7 +256,7 @@ export default function HTTPHeadersAnalyzer({ theme = 'light' }) {
   };
 
   return (
-    <div className={`${colors.background} ${colors.foreground} min-h-screen p-4 md:p-6 lg:p-8`}>
+    <div className={`${colors.background} ${colors.foreground} min-h-screen mt-16 p-4 md:p-6 lg:p-8`}>
       <div className={`max-w-6xl mx-auto ${colors.card} rounded-lg shadow-lg p-4 md:p-6 border ${colors.border}`}>
         <h1 className="text-2xl md:text-3xl font-bold mb-6 flex items-center">
           <Shield className="inline-block mr-2" /> 

@@ -48,7 +48,7 @@ import MarkdownHtmlConverter from "./categories/developer/MarkdownHtmlConverter.
 import JSONFormatter from "./categories/developer/JSONFormatter.jsx";
 import JsonCsvXml from "./categories/developer/JsonCsvXml.jsx";
 import RegexTester from "./categories/developer/Regex.jsx";
-import httpHeader from "./categories/developer/httpHeader.jsx"
+import HttpHeader from "./categories/developer/HttpHeader.jsx"
 
 import UtilityPage from "./UtilityPage";
 import { utilities, utilityRoutes } from "./routes.js";
@@ -264,7 +264,7 @@ const App = () => {
                 />
                 <Route
                   path="/utilities/http-header"
-                  element={<httpHeader theme={theme} />}
+                  element={<HttpHeader theme={theme} />}
                 />
               </Route>
 
