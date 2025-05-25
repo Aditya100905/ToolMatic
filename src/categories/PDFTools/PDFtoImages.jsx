@@ -17,7 +17,8 @@ import {
 } from "@heroicons/react/24/solid";
 import { useTheme } from "../../ThemeProvider";
 
-// Set worker source once
+// Set worker source with matching version
+// FIXED: Ensure API version matches Worker version (using 3.4.120)
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
 
@@ -220,9 +221,16 @@ export default function PDFToImage() {
           fileReader.readAsArrayBuffer(file);
         });
 
-        const typedArray = new Uint8Array(fileData);
-        const pdf = await pdfjsLib.getDocument(typedArray).promise;
-        totalPages += pdf.numPages;
+        try {
+          // FIXED: Added error handling for the getDocument operation
+          const typedArray = new Uint8Array(fileData);
+          const pdf = await pdfjsLib.getDocument(typedArray).promise;
+          totalPages += pdf.numPages;
+        } catch (err) {
+          console.error(`Error counting pages in ${file.name}:`, err);
+          setError(`Error processing PDF ${file.name}: ${err.message}`);
+          // Continue with other files despite this error
+        }
       }
 
       setConversionProgress({ current: 0, total: totalPages });
@@ -289,7 +297,9 @@ export default function PDFToImage() {
             }
           }
         } catch (err) {
+          console.error(`Error processing ${file.name}:`, err);
           setError(`Error processing PDF ${file.name}: ${err.message}`);
+          // Continue processing other files despite this error
         }
       }
 
@@ -305,6 +315,7 @@ export default function PDFToImage() {
         return [...existingImages, ...newImages];
       });
     } catch (err) {
+      console.error("Error in PDF conversion:", err);
       setError(`Error converting PDFs: ${err.message}`);
     } finally {
       setLoading(false);
@@ -313,33 +324,60 @@ export default function PDFToImage() {
   };
 
   const downloadAllImages = () => {
-    const selectedImagesArray = images.filter((img) =>
-      isImageSelected(img.fileId, img.page)
-    );
+    setLoading(true);
+    setProcessingAction("downloading");
+    
+    try {
+      const selectedImagesArray = images.filter((img) =>
+        isImageSelected(img.fileId, img.page)
+      );
 
-    selectedImagesArray.forEach((img) =>
-      saveAs(img.src, `${img.fileName} pg ${img.page}.png`)
-    );
+      if (selectedImagesArray.length === 0) {
+        setError("No images selected for download.");
+        return;
+      }
 
-    showSuccessMessage("All selected images downloaded!");
+      // Use setTimeout to allow UI to update before starting downloads
+      setTimeout(() => {
+        selectedImagesArray.forEach((img) =>
+          saveAs(img.src, `${img.fileName} pg ${img.page}.png`)
+        );
+        showSuccessMessage("All selected images downloaded!");
+        setLoading(false);
+        setProcessingAction("");
+      }, 100);
+    } catch (err) {
+      setError(`Error downloading images: ${err.message}`);
+      setLoading(false);
+      setProcessingAction("");
+    }
   };
 
   const downloadAsZip = async () => {
     setLoading(true);
     setProcessingAction("zipping");
     try {
+      const selectedImagesArray = images.filter((img) =>
+        isImageSelected(img.fileId, img.page)
+      );
+      
+      if (selectedImagesArray.length === 0) {
+        setError("No images selected for ZIP download.");
+        setLoading(false);
+        setProcessingAction("");
+        return;
+      }
+      
       const zip = new JSZip();
       const folder = zip.folder("PDF Images");
 
       // Group images by file
       const fileGroups = {};
-      images.forEach((img) => {
-        if (isImageSelected(img.fileId, img.page)) {
-          if (!fileGroups[img.fileName]) {
-            fileGroups[img.fileName] = [];
-          }
-          fileGroups[img.fileName].push(img);
+      selectedImagesArray.forEach((img) => {
+        if (!fileGroups[img.fileName]) {
+          fileGroups[img.fileName] = [];
         }
+        fileGroups[img.fileName].push(img);
       });
 
       // Create subdirectories for each file
@@ -379,6 +417,8 @@ export default function PDFToImage() {
 
       if (selectedPages.length === 0) {
         setError("No pages selected for this PDF");
+        setLoading(false);
+        setProcessingAction("");
         return;
       }
 
@@ -613,6 +653,7 @@ export default function PDFToImage() {
                   {processingAction === "zipping" && "Creating ZIP archive..."}
                   {processingAction === "customizing" &&
                     "Creating custom PDF with selected pages..."}
+                  {processingAction === "downloading" && "Preparing download..."}
                   {!processingAction && "Processing..."}
                 </p>
 
@@ -725,9 +766,6 @@ export default function PDFToImage() {
                               toggleAllImagesInFile(fileId, !areAllSelected)
                             }
                             className={`text-xs px-2 py-1 rounded flex items-center gap-1 ${
-                              // areAllSelected
-                              //   ? "bg-red-300 text-red-900 hover:scale-110 dark:bg-red-700 dark:text-red-500"
-                              //   : "bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/40 dark:text-green-300"
                               areAllSelected
                                 ? "bg-red-200 text-red-800 hover:bg-red-300 hover:scale-105 transition-transform dark:bg-red-800 dark:text-red-200 dark:hover:bg-red-700"
                                 : "bg-green-200 text-green-800 hover:bg-green-300 hover:scale-105 transition-transform dark:bg-green-800 dark:text-green-200 dark:hover:bg-green-700"
@@ -751,91 +789,71 @@ export default function PDFToImage() {
                               <button
                                 onClick={() => downloadCustomPDF(file)}
                                 disabled={loading}
-                                // className={`text-xs px-2 py-1 ${
-                                //   loading
-                                //     ? "bg-indigo-400 cursor-not-allowed opacity-70"
-                                //     : "bg-indigo-500 hover:bg-indigo-400"
-                                // } text-white rounded flex items-center gap-1`}
                                 className={`text-xs px-3 py-1 rounded flex items-center gap-1 transition 
                                 ${
-                                  loading
-                                    ? "bg-indigo-400 text-white opacity-70 cursor-not-allowed dark:bg-indigo-600"
-                                    : "bg-indigo-500 text-white hover:bg-indigo-400 dark:bg-indigo-700 dark:hover:bg-indigo-600 hover:scale-105"
-                                }`}
-                                title="Create & download a new PDF with only selected pages"
+loading
+                                    ? "bg-indigo-400 dark:bg-indigo-600 cursor-not-allowed opacity-70"
+                                    : "bg-indigo-500 hover:bg-indigo-400 shadow-sm hover:shadow"
+                                } text-white`}
                               >
                                 <ScissorsIcon className="h-3 w-3" />
-                                Custom PDF
+                                Create Custom PDF
                               </button>
                             )}
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {fileImages.map((img, imgIndex) => {
-                          const isSelected = isImageSelected(
-                            img.fileId,
-                            img.page
-                          );
-
-                          return (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        {fileImages.map((image, imgIndex) => (
+                          <div
+                            key={`${fileId}-${image.page}`}
+                            className={`relative group overflow-hidden rounded-lg border-2 transition-all ${
+                              isImageSelected(fileId, image.page)
+                                ? "border-blue-500 shadow-md"
+                                : isDarkMode
+                                ? "border-gray-700"
+                                : "border-gray-200"
+                            }`}
+                          >
                             <div
-                              key={imgIndex}
-                              className={`relative rounded-lg overflow-hidden border-2 transition-all ${
-                                isSelected
-                                  ? isDarkMode
-                                    ? "border-blue-500 shadow-md shadow-blue-500/20"
-                                    : "border-blue-500 shadow-md shadow-blue-500/20"
-                                  : isDarkMode
-                                    ? "border-gray-700 opacity-50"
-                                    : "border-gray-200 opacity-50"
-                              }`}
-                              onClick={() =>
-                                toggleImageSelection(img.fileId, img.page)
-                              }
+                              className={`absolute inset-0 flex items-center justify-center transition-opacity ${
+                                isImageSelected(fileId, image.page)
+                                  ? "opacity-0"
+                                  : "bg-gray-900 bg-opacity-40 opacity-100"
+                              } group-hover:opacity-100 z-10`}
                             >
-                              <img
-                                src={img.src}
-                                alt={`${img.fileName} - Page ${img.page}`}
-                                className="w-full h-auto object-contain bg-white"
-                              />
-
-                              <div
-                                className={`absolute top-2 left-2 p-1 text-xs rounded-md font-medium ${
-                                  isDarkMode ? "bg-gray-800/80" : "bg-white/80"
-                                }`}
+                              <button
+                                onClick={() =>
+                                  toggleImageSelection(fileId, image.page)
+                                }
+                                className={`p-2 rounded-full transition ${
+                                  isImageSelected(fileId, image.page)
+                                    ? "bg-red-500 hover:bg-red-600"
+                                    : "bg-green-500 hover:bg-green-600"
+                                } shadow-md`}
                               >
-                                Page {img.page}
-                              </div>
-
-                              <div className="absolute top-0 right-0 m-2">
-                                <div
-                                  className={`h-5 w-5 rounded-full flex items-center justify-center ${
-                                    isSelected
-                                      ? "bg-blue-500"
-                                      : isDarkMode
-                                        ? "bg-gray-700 border border-gray-500"
-                                        : "bg-white border border-gray-300"
-                                  }`}
-                                >
-                                  {isSelected && (
-                                    <CheckCircleIcon className="h-5 w-5 text-white" />
-                                  )}
-                                </div>
-                              </div>
-
-                              <div
-                                className={`absolute bottom-0 left-0 right-0 p-2 text-xs ${
-                                  isDarkMode
-                                    ? "bg-gray-800/80 text-white"
-                                    : "bg-white/80 text-gray-700"
-                                }`}
-                              >
-                                <div className="truncate">{img.fileName}</div>
-                              </div>
+                                {isImageSelected(fileId, image.page) ? (
+                                  <XMarkIcon className="h-6 w-6 text-white" />
+                                ) : (
+                                  <CheckCircleIcon className="h-6 w-6 text-white" />
+                                )}
+                              </button>
                             </div>
-                          );
-                        })}
+
+                            <img
+                              src={image.src}
+                              alt={`Page ${image.page} of ${file.name}`}
+                              className={`w-full object-contain transition-all ${
+                                !isImageSelected(fileId, image.page) &&
+                                "opacity-50"
+                              }`}
+                            />
+
+                            <div className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-70 text-white text-center text-xs py-1">
+                              Page {image.page} of {image.totalPages}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   );
@@ -845,10 +863,13 @@ export default function PDFToImage() {
           </>
         )}
       </div>
-            {/* Footer */}
-            <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        Your files are processed locally in your browser. No uploads to any server.
-      </div> 
+      
+      <footer className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+        <p>All processing is done locally in your browser. Your files are not uploaded to any server.</p>
+        <p className="mt-1">
+          &copy; {new Date().getFullYear()} PDF to Image Converter
+        </p>
+      </footer>
     </div>
   );
 }

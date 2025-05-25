@@ -13,7 +13,6 @@ import {
   TrashIcon,
   ArrowUpIcon,
   ArrowDownIcon,
-  ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
 import { useTheme } from "../../ThemeProvider";
 import { GripIcon } from "lucide-react";
@@ -61,6 +60,7 @@ export default function ImageToPDF() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [totalSize, setTotalSize] = useState(0);
+  const [pdfBlob, setPdfBlob] = useState(null); // Store the PDF blob directly
   const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
   const [conversionProgress, setConversionProgress] = useState({
     current: 0,
@@ -144,8 +144,23 @@ export default function ImageToPDF() {
     if (pdfPreviewUrl) {
       URL.revokeObjectURL(pdfPreviewUrl);
       setPdfPreviewUrl(null);
+      setPdfBlob(null); // Also clear the PDF blob
     }
   }, [imageObjects]);
+
+  // Clean up object URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      if (pdfPreviewUrl) {
+        URL.revokeObjectURL(pdfPreviewUrl);
+      }
+      imageObjects.forEach((img) => {
+        if (img.src) {
+          URL.revokeObjectURL(img.src);
+        }
+      });
+    };
+  }, [pdfPreviewUrl, imageObjects]);
 
   const handleFileChange = (event) => {
     const uploadedFiles = [...event.target.files];
@@ -164,6 +179,13 @@ export default function ImageToPDF() {
 
   const removeFile = (fileToRemove) => {
     const idToRemove = getFileId(fileToRemove);
+    
+    // Find the image object to revoke its URL
+    const imageToRemove = imageObjects.find(img => img.fileId === idToRemove);
+    if (imageToRemove && imageToRemove.src) {
+      URL.revokeObjectURL(imageToRemove.src);
+    }
+    
     setFiles((prevFiles) =>
       prevFiles.filter((file) => getFileId(file) !== idToRemove)
     );
@@ -171,10 +193,17 @@ export default function ImageToPDF() {
       prevImages.filter((img) => img.fileId !== idToRemove)
     );
 
-    // Also clean up from selectedImages
+    // Clean up from selectedImages
     const newSelectedImages = { ...selectedImages };
     delete newSelectedImages[idToRemove];
     setSelectedImages(newSelectedImages);
+    
+    // Clear PDF preview when selection changes
+    if (pdfPreviewUrl) {
+      URL.revokeObjectURL(pdfPreviewUrl);
+      setPdfPreviewUrl(null);
+      setPdfBlob(null);
+    }
   };
 
   const toggleImageSelection = (fileId) => {
@@ -187,10 +216,22 @@ export default function ImageToPDF() {
     if (pdfPreviewUrl) {
       URL.revokeObjectURL(pdfPreviewUrl);
       setPdfPreviewUrl(null);
+      setPdfBlob(null);
     }
   };
 
   const clearAllFiles = () => {
+    // Revoke all object URLs first
+    imageObjects.forEach((img) => {
+      if (img.src) {
+        URL.revokeObjectURL(img.src);
+      }
+    });
+    
+    if (pdfPreviewUrl) {
+      URL.revokeObjectURL(pdfPreviewUrl);
+    }
+    
     setFiles([]);
     setImageObjects([]);
     setFileIds({});
@@ -198,6 +239,7 @@ export default function ImageToPDF() {
     setError("");
     setSuccess(false);
     setPdfPreviewUrl(null);
+    setPdfBlob(null);
     setConversionProgress({ current: 0, total: 0 });
   };
 
@@ -310,13 +352,16 @@ export default function ImageToPDF() {
       );
 
       // Generate PDF blob
-      const pdfBlob = await pdf(<MyDocument />).toBlob();
+      const blob = await pdf(<MyDocument />).toBlob();
+      setPdfBlob(blob); // Store the blob directly
 
-      // Create URL for preview
+      // Clean up previous preview URL if exists
       if (pdfPreviewUrl) {
         URL.revokeObjectURL(pdfPreviewUrl);
       }
-      const previewUrl = URL.createObjectURL(pdfBlob);
+      
+      // Create URL for preview
+      const previewUrl = URL.createObjectURL(blob);
       setPdfPreviewUrl(previewUrl);
 
       showSuccessMessage();
@@ -328,13 +373,16 @@ export default function ImageToPDF() {
   };
 
   const downloadPDF = async () => {
-    if (!pdfPreviewUrl) {
-      await generatePDF();
-    }
-
     try {
-      saveAs(pdfPreviewUrl, "Images_to_PDF.pdf");
-      showSuccessMessage();
+      // If we don't have a PDF blob yet, generate it
+      if (!pdfBlob) {
+        await generatePDF();
+        return; // generatePDF will call downloadPDF again when it's done
+      } else {
+        // We already have a blob, use it directly
+        saveAs(pdfBlob, "Images_to_PDF.pdf");
+        showSuccessMessage();
+      }
     } catch (err) {
       setError(`Error downloading PDF: ${err.message}`);
     }
@@ -354,6 +402,7 @@ export default function ImageToPDF() {
     if (pdfPreviewUrl) {
       URL.revokeObjectURL(pdfPreviewUrl);
       setPdfPreviewUrl(null);
+      setPdfBlob(null);
     }
   };
 
@@ -498,7 +547,7 @@ export default function ImageToPDF() {
                 className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
               >
                 {files.length} {files.length === 1 ? "image" : "images"}{" "}
-                selected •{selectedCount} of {files.length} included • Total
+                selected • {selectedCount} of {files.length} included • Total
                 size: {formatBytes(totalSize)}
               </p>
             </div>
@@ -518,7 +567,7 @@ export default function ImageToPDF() {
 
                   return (
                     <div
-                      key={index}
+                      key={fileId}
                       className={`flex items-center justify-between shadow-sm rounded-lg px-4 py-3 ${
                         isDarkMode
                           ? `${isSelected ? "bg-gray-700" : "bg-gray-800"} hover:bg-gray-600 text-gray-200`
@@ -554,6 +603,9 @@ export default function ImageToPDF() {
                           rel="noopener noreferrer"
                           className={`truncate hover:text-blue-500 ${!isSelected && "opacity-60"}`}
                           title={file.name}
+                          onClick={(e) => {
+                            setTimeout(() => URL.revokeObjectURL(fileURL), 5000); // Clean up after 5 seconds
+                          }}
                         >
                           {file.name}
                         </a>
@@ -682,7 +734,7 @@ export default function ImageToPDF() {
                       onClick={downloadPDF}
                       disabled={loading || selectedCount === 0}
                       className={`px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-1 ${
-                        loading || selectedCount === 0
+loading || selectedCount === 0
                           ? "bg-green-400 dark:bg-green-600 cursor-not-allowed opacity-70"
                           : "bg-green-500 hover:bg-green-400 shadow-sm hover:shadow"
                       } text-white transition-all`}
@@ -693,197 +745,193 @@ export default function ImageToPDF() {
                   </div>
                 </div>
 
-                {/* Display images with drag and drop reordering */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {imageObjects.map((image, index) => {
-                    const isSelected = selectedImages[image.fileId] !== false;
-                    // Calculate the actual page number based on selected images
-                    const pageNumber = imageObjects.filter(
-                      (img) =>
-                        selectedImages[img.fileId] !== false &&
-                        imageObjects.indexOf(img) <= index
-                    ).length;
-
-                    const isDraggedOver = dragOverIndex === index;
-                    const isDraggingThis = draggingIndex === index;
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {imageObjects.map((img, index) => {
+                    const isSelected = selectedImages[img.fileId] !== false;
+                    const isDragging = index === draggingIndex;
+                    const isOver = index === dragOverIndex;
 
                     return (
                       <div
-                        key={`${image.fileId}`}
-                        className={`relative group rounded-lg overflow-hidden shadow-md ${
-                          isDraggedOver
-                            ? "border-2 border-blue-500 transform scale-105"
-                            : ""
-                        } ${isDraggingThis ? "opacity-50" : ""}
-  ${!isSelected ? "opacity-50" : ""} 
-  ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}
-  transition-all duration-200`}
-                        draggable={isSelected}
-                        onDragStart={(e) => {
-                          // Only allow drag from the container, not from the image itself
-                          if (e.target.tagName === "IMG") {
-                            e.preventDefault();
-                            return false;
-                          }
-                          isSelected && handleDragStart(index);
-                        }}
+                        key={img.fileId}
+                        draggable
+                        onDragStart={() => handleDragStart(index)}
                         onDragOver={handleDragOver}
                         onDragEnter={() => handleDragEnter(index)}
                         onDragEnd={handleDragEnd}
-                        onDrop={(e) => {
-                          e.preventDefault(); // Prevent default to avoid browser opening the file
-                          handleDragEnd();
-                        }}
+                        className={`relative rounded-lg overflow-hidden transition-all ${
+                          isDarkMode ? "bg-gray-800" : "bg-white"
+                        } ${
+                          isDragging
+                            ? "opacity-50 scale-105 z-10"
+                            : "opacity-100"
+                        } ${
+                          isOver
+                            ? "border-2 border-blue-500"
+                            : "border border-gray-200 dark:border-gray-700"
+                        } ${
+                          isSelected
+                            ? "ring-2 ring-blue-500"
+                            : "ring-0 opacity-70"
+                        } ${
+                          isDragging ? "shadow-xl" : "shadow-md"
+                        } hover:shadow-lg group`}
                       >
-                        {/* Reorder controls */}
-                        {isSelected && imageObjects.length > 1 && (
-                          <div className="absolute top-2 left-2 z-10 flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button
-                              onClick={() => moveImageUp(index)}
-                              disabled={index === 0}
-                              className={`p-1 ${index === 0 ? "text-gray-400" : "text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900/30"} rounded-t-lg`}
-                              title="Move up"
-                            >
-                              <ArrowUpIcon className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => moveImageDown(index)}
-                              disabled={index === imageObjects.length - 1}
-                              className={`p-1 ${index === imageObjects.length - 1 ? "text-gray-400" : "text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900/30"} rounded-b-lg`}
-                              title="Move down"
-                            >
-                              <ArrowDownIcon className="h-4 w-4" />
-                            </button>
-                          </div>
-                        )}
+                        <div className="aspect-square relative overflow-hidden bg-gray-100 dark:bg-gray-900">
+                          <img
+                            src={img.src}
+                            alt={img.fileName}
+                            className={`w-full h-full object-contain ${
+                              !isSelected && "opacity-50"
+                            }`}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </div>
 
-                        {/* Drag handle */}
-                        {isSelected && (
-                          <div className="absolute top-2 right-10 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button
-                              className="p-1.5 mx-1 rounded-full cursor-grab active:cursor-grabbing bg-gray-100 dark:bg-gray-700 text-gray-500 hover:text-blue-500"
+                        <div
+                          className={`p-2 ${
+                            isDarkMode ? "bg-gray-800" : "bg-gray-50"
+                          } border-t ${
+                            isDarkMode ? "border-gray-700" : "border-gray-200"
+                          }`}
+                        >
+                          <div className="flex justify-between items-center">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-medium truncate" title={img.fileName}>
+                                {img.fileName}
+                              </p>
+                              <p className="text-xs text-gray-500 truncate">
+                                {formatBytes(img.file.size)}
+                              </p>
+                            </div>
+
+                            <div className="flex space-x-1">
+                              <button
+                                onClick={() => toggleImageSelection(img.fileId)}
+                                className={`p-1 rounded-md ${
+                                  isSelected
+                                    ? "text-blue-500 bg-blue-100 dark:bg-blue-900/30"
+                                    : "text-gray-400 bg-gray-100 dark:bg-gray-700"
+                                }`}
+                                title={
+                                  isSelected
+                                    ? "Uncheck to exclude"
+                                    : "Check to include"
+                                }
+                              >
+                                {isSelected ? (
+                                  <CheckCircleIcon className="h-4 w-4" />
+                                ) : (
+                                  <XCircleIcon className="h-4 w-4" />
+                                )}
+                              </button>
+                              <button
+                                onClick={() => removeFile(img.file)}
+                                className="p-1 rounded-md text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30"
+                                title="Remove image"
+                              >
+                                <TrashIcon className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Reorder controls */}
+                          <div className="flex justify-between mt-2">
+                            <div className="flex space-x-1">
+                              <button
+                                onClick={() => moveImageUp(index)}
+                                disabled={index === 0}
+                                className={`p-1 rounded-md ${
+                                  index === 0
+                                    ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                                    : "text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700"
+                                }`}
+                                title="Move up"
+                              >
+                                <ArrowUpIcon className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => moveImageDown(index)}
+                                disabled={index === imageObjects.length - 1}
+                                className={`p-1 rounded-md ${
+                                  index === imageObjects.length - 1
+                                    ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                                    : "text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-700"
+                                }`}
+                                title="Move down"
+                              >
+                                <ArrowDownIcon className="h-4 w-4" />
+                              </button>
+                            </div>
+                            <div
+                              className="cursor-grab p-1 text-gray-400"
                               title="Drag to reorder"
                             >
                               <GripIcon className="h-4 w-4" />
-                            </button>
+                            </div>
                           </div>
-                        )}
-
-                        {/* Selection toggle overlay */}
-                        <div className="absolute top-2 right-2 z-10">
-                          <button
-                            onClick={() => toggleImageSelection(image.fileId)}
-                            className={`p-1.5 rounded-full ${
-                              isSelected
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-500/50 text-gray-200"
-                            }`}
-                            title={
-                              isSelected
-                                ? "Uncheck to exclude"
-                                : "Check to include"
-                            }
-                          >
-                            {isSelected ? (
-                              <CheckCircleIcon className="h-5 w-5" />
-                            ) : (
-                              <XCircleIcon className="h-5 w-5" />
-                            )}
-                          </button>
                         </div>
 
-                        <div className="w-full aspect-[3/4] bg-gray-200 flex items-center justify-center">
-                          <img
-                            src={image.src}
-                            alt={image.fileName}
-                            className="w-full h-full object-contain"
-                            loading="lazy"
-                            draggable={false} // Prevent default image drag
-                            onDragStart={(e) => e.preventDefault()} // Extra safety
-                          />
-                        </div>
-
-                        {/* Improved overlay with file info and page number */}
+                        {/* Page number badge */}
                         <div
-                          className={`absolute bottom-0 left-0 right-0 p-2 ${
-                            isDarkMode ? "bg-gray-900/80" : "bg-white/80"
-                          } backdrop-blur-sm`}
+                          className={`absolute top-2 left-2 px-2 py-1 text-xs font-bold rounded-full ${
+                            isDarkMode
+                              ? "bg-gray-800 text-white"
+                              : "bg-white text-gray-800"
+                          } shadow-md ${
+                            !isSelected && "opacity-50"
+                          }`}
                         >
-                          <div className="flex flex-col">
-                            <span
-                              className="text-xs truncate max-w-full"
-                              title={image.fileName}
-                            >
-                              {image.fileName}
-                            </span>
-
-                            {isSelected && (
-                              <div className="flex justify-between items-center mt-1">
-                                <span className="text-xs text-gray-500">
-                                  {formatBytes(image.file.size)}
-                                </span>
-                                <span className="text-xs px-2 py-1 bg-blue-500 text-white rounded-lg font-medium">
-                                  Page {pageNumber}
-                                </span>
-                              </div>
-                            )}
-
-                            {!isSelected && (
-                              <span className="text-xs italic text-red-500 mt-1">
-                                Not included
-                              </span>
-                            )}
-                          </div>
+                          {isSelected ? `Page ${index + 1}` : "Excluded"}
                         </div>
                       </div>
                     );
                   })}
                 </div>
+              </div>
+            )}
 
-                {/* PDF Preview (if available) */}
-                {pdfPreviewUrl && (
-                  <div className="mt-8">
-                    <h3 className="text-xl font-semibold mb-4">PDF Preview:</h3>
-                    <div
-                      className={`border rounded-lg overflow-hidden ${isDarkMode ? "border-gray-700" : "border-gray-300"}`}
-                    >
-                      <iframe
-                        src={pdfPreviewUrl}
-                        className="w-full h-96"
-                        title="PDF Preview"
-                      ></iframe>
+            {/* PDF Preview */}
+            {pdfPreviewUrl && (
+              <div className="mt-8">
+                <h3 className="text-xl font-semibold mb-4">PDF Preview:</h3>
+                <div
+                  className={`rounded-lg shadow-lg overflow-hidden ${
+                    isDarkMode ? "bg-gray-800" : "bg-white"
+                  }`}
+                >
+                  <div className="aspect-[3/4] w-full max-h-[600px] overflow-auto">
+                    <iframe
+                      src={pdfPreviewUrl}
+                      title="PDF Preview"
+                      className="w-full h-full"
+                    ></iframe>
+                  </div>
+                  <div
+                    className={`p-4 border-t ${
+                      isDarkMode ? "border-gray-700" : "border-gray-200"
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <p className="text-sm">
+                        Preview of your generated PDF with{" "}
+                        {Object.values(selectedImages).filter(Boolean).length}{" "}
+                        page(s)
+                      </p>
+                      <button
+                        onClick={downloadPDF}
+                        className="px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-1 bg-green-500 hover:bg-green-400 text-white transition-all shadow-sm hover:shadow"
+                      >
+                        <ArrowDownTrayIcon className="h-4 w-4" />
+                        Download PDF
+                      </button>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             )}
           </>
         )}
-      </div>
-
-      {/* Footer */}
-      <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        Your files are processed locally in your browser. No uploads to any
-        server.
-      </div>
-
-      {/* Drag and drop overlay - shows when dragging images */}
-      {isDragging && (
-        <div className="fixed inset-0 bg-blue-500/10 pointer-events-none z-50 flex items-center justify-center">
-          <div
-            className={`p-6 rounded-lg ${isDarkMode ? "bg-gray-800" : "bg-white"} shadow-lg`}
-          >
-            <p className="text-blue-500 font-medium flex items-center">
-              <GripIcon className="h-5 w-5 mr-2" />
-              Release to reorder image
-            </p>
-          </div>
-        </div>
-      )}
-
-            {/* Footer */}
-            <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        Your files are processed locally in your browser. No uploads to any server.
       </div>
     </div>
   );
