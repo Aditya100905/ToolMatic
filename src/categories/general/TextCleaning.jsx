@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -91,7 +90,7 @@ const TextCleaning = ({ theme }) => {
   return (
     <div className={`${themeClass} min-h-screen p-4 mt-16`}>
       <ToastContainer />
-      <motion.div
+      <div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -152,7 +151,7 @@ const TextCleaning = ({ theme }) => {
             />
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 };

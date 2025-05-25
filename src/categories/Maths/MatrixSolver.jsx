@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "../../ThemeProvider";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -910,7 +909,7 @@ const MatrixSolver = () => {
   ) => {
     const matrixId = title === "Matrix A" ? "A" : "B";
     return (
-      <motion.div
+      <div
         ref={matrixRef}
         className={`p-6 rounded-2xl shadow-lg transition-all w-full max-w-xl 
               ${theme === "dark" ? "bg-[#1c1c1c] text-white" : "bg-white text-black"}`}
@@ -1032,7 +1031,7 @@ const MatrixSolver = () => {
             ))
           )}
         </div>
-      </motion.div>
+      </div>
     );
   };
 
@@ -1177,7 +1176,7 @@ const MatrixSolver = () => {
     );
 
     return (
-      <motion.div
+      <div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className={`mt-8 mx-auto p-6 rounded-2xl shadow-lg w-full max-w-4xl
@@ -1273,7 +1272,7 @@ const MatrixSolver = () => {
             Export
           </button>
         </div>
-      </motion.div>
+      </div>
     );
   };
 
@@ -1364,16 +1363,16 @@ const MatrixSolver = () => {
 
   // Help modal dialog
   const renderHelpDialog = () => (
-    <AnimatePresence>
+    <>
       {showHelp && (
-        <motion.div
+        <div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
           onClick={() => setShowHelp(false)}
         >
-          <motion.div
+          <div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -1481,10 +1480,10 @@ const MatrixSolver = () => {
                 Close
               </button>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 
   return (
@@ -1579,7 +1578,7 @@ const MatrixSolver = () => {
             {showHistory ? "Hide History" : "Show History"}
           </button>
 
-          <AnimatePresence>
+          <>
             {showHistory && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
@@ -1590,7 +1589,7 @@ const MatrixSolver = () => {
                 {renderHistory()}
               </motion.div>
             )}
-          </AnimatePresence>
+          </>
         </div>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import { useTheme } from "../ThemeProvider";
-import { motion } from "framer-motion";
 
 const About = () => {
   const { theme } = useTheme();
@@ -14,16 +13,16 @@ const About = () => {
       }`}
     >
       <div className="max-w-4xl mx-auto">
-        <motion.h1
+        <h1
           className="text-4xl md:text-5xl font-extrabold mb-8 tracking-tight text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           About <span className="text-primary">ToolMatic</span>
-        </motion.h1>
+        </h1>
 
-        <motion.p
+        <p
           className="text-lg md:text-xl leading-relaxed text-center max-w-3xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -32,9 +31,9 @@ const About = () => {
           ToolMatic combines the concepts of "tool" and "automatic" to provide a
           comprehensive suite of utilities designed to address technical
           challenges with precision and efficiency.
-        </motion.p>
+        </p>
 
-        <motion.p
+        <p
           className="mt-6 text-base md:text-lg max-w-2xl mx-auto text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -47,9 +46,9 @@ const About = () => {
           <strong>PDF Document Processing</strong>, and{" "}
           <strong>Unit Conversion Systems</strong>, all accessible through a
           sophisticated, streamlined interface.
-        </motion.p>
+        </p>
 
-        <motion.div
+        <div
           className="mt-16 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -97,7 +96,7 @@ const About = () => {
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
