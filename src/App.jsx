@@ -47,10 +47,7 @@ import TypeWriter from "./categories/Design/TypeWriter.jsx";
 import MarkdownHtmlConverter from "./categories/developer/MarkdownHtmlConverter.jsx";
 import JSONFormatter from "./categories/developer/JSONFormatter.jsx";
 import JsonCsvXml from "./categories/developer/JsonCsvXml.jsx";
-import RegexTester from "./categories/developer/Regex.jsx";
-import HttpHeader from "./categories/developer/HttpHeader.jsx"
-
-import UtilityPage from "./UtilityPage";
+import UtilityPage from "./pages/UtilityPage.jsx";
 import { utilities, utilityRoutes } from "./routes.js";
 
 // Contexts
@@ -64,15 +61,15 @@ window.appRoutes = { utilities, utilityRoutes };
 // Enhanced ScrollToTop component with page-specific behavior
 function ScrollToTop() {
   const { pathname } = useLocation();
-  
+
   useEffect(() => {
     // Reset scroll position on route change
     window.scrollTo(0, 0);
-    
+
     // Store current path in sessionStorage
-    sessionStorage.setItem('lastPath', pathname);
+    sessionStorage.setItem("lastPath", pathname);
   }, [pathname]);
-  
+
   return null;
 }
 
@@ -124,8 +121,8 @@ const App = () => {
       }, 0);
     };
 
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   return (
@@ -133,7 +130,9 @@ const App = () => {
       value={{ searchTerm, setSearchTerm, searchFocused, setSearchFocused }}
     >
       <ThemeHistoryContext.Provider value={{ previousTheme }}>
-        <ScrollContext.Provider value={{ isReturningFromUtility, setIsReturningFromUtility }}>
+        <ScrollContext.Provider
+          value={{ isReturningFromUtility, setIsReturningFromUtility }}
+        >
           <Router>
             <Routes>
               {/* All valid routes use MainLayout */}
@@ -257,14 +256,6 @@ const App = () => {
                 <Route
                   path="/utilities/markdown-html-converter"
                   element={<MarkdownHtmlConverter theme={theme} />}
-                />
-                <Route
-                  path="/utilities/regex-tester"
-                  element={<RegexTester theme={theme} />}
-                />
-                <Route
-                  path="/utilities/http-header"
-                  element={<HttpHeader theme={theme} />}
                 />
               </Route>
 

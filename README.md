@@ -15,8 +15,6 @@ A comprehensive React-based utility web application that consolidates a wide ran
 - URL Shortener
 - Currency Converter
 - Password Generator
-- JSON Formatter
-- JSON/CSV/XML Converter
 
 ### 📄 PDF Tools
 - Merge PDF
@@ -41,8 +39,8 @@ A comprehensive React-based utility web application that consolidates a wide ran
 
 ### 💻 Developer Tools
 - Markdown to HTML Converter
-- Regex Tester
-- HTTP Header Viewer
+- JSON Formatter
+- JSON/CSV/XML Converter
 
 ### 📋 Other Pages
 - Home

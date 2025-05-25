@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { SearchContext } from "./App"; // Import the SearchContext
-import Navbar from "./components/Navbar"; // Import the Navbar component
-import { utilities, utilityRoutes, utilityDescriptions } from "./routes.js"; // Corrected import
+import { SearchContext } from "../App.jsx"; // Import the SearchContext
+import Navbar from "../components/Navbar.jsx"; // Import the Navbar component
+import { utilities, utilityRoutes, utilityDescriptions } from "../routes.js"; // Corrected import
 
 // Enhanced SVG Icons with animation properties
 const MenuIcon = () => (
