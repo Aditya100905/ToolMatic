@@ -338,21 +338,21 @@ export default function JSONFormatter() {
               className={`rounded-lg border p-4 overflow-auto 
               ${theme === "dark" ? "border-gray-700 bg-[#1e1e1e]" : "border-gray-300 bg-gray-50"}`}
             >
-              <SyntaxHighlighter
-                language="json"
-                style={theme === "dark" ? materialOceanic : prism}
-                customStyle={{
-                  background: "transparent",
-                  margin: 0,
-                  padding: 0,
-                }}
-                codeTagProps={{
-                  style: { background: "transparent" },
-                }}
-                wrapLongLines={true}
-              >
-                {outputJSON}
-              </SyntaxHighlighter>
+<SyntaxHighlighter
+  language="json"
+  style={theme === "dark" ? materialOceanic : prism}
+  customStyle={{
+    background: "transparent",
+    margin: 0,
+    padding: 0,
+  }}
+  codeTagProps={{
+    style: { background: "transparent" }
+  }}
+  wrapLongLines={true}
+>
+  {outputJSON}
+</SyntaxHighlighter>
             </div>
           </div>
         )}
