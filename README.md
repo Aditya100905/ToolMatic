@@ -59,6 +59,7 @@ A comprehensive React-based utility web application that consolidates a wide ran
 - **Modular Component Architecture**
 
 ## 🧩 Folder Structure
+```
 src/
 ├── App.jsx
 ├── routes.js
@@ -76,7 +77,7 @@ src/
 │   ├── Design/
 │   └── developer/
 └── ThemeProvider.jsx
-
+```
 
 ## 🧠 Contexts Used
 
