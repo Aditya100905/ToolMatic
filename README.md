@@ -1,115 +1,98 @@
-<!-- # React + Vite
+# ToolMatic - All-in-One Utility Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A comprehensive React-based utility web application that consolidates a wide range of tools—from PDF utilities and text tools to mathematical solvers and web developer tools—all in one place. Built with `react-router-dom` for routing and includes light/dark theming, toast notifications, and a responsive layout.
 
-Currently, two official plugins are available:
+## 🌐 Live Preview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh -->
+> www.demo.toolmatic.com
 
+## 🛠️ Features
 
-# 🛠️ ToolMatic: Your Ultimate Utility Platform
-
-## 🌟 Project Overview
-
-**ToolMatic** is a cutting-edge web-based utility platform designed to empower developers, engineers, and students with a comprehensive suite of powerful tools. From text manipulation to PDF processing, mathematical calculations to code formatting, ToolMatic provides an intuitive, efficient, and visually stunning solution for everyday technical tasks.
-
-## 📌 Key Features
-
-### 🚀 Modern & Responsive Design
-- Fully Responsive UI that adapts seamlessly to all device sizes
-- Dark and Light Theme with persistent theme selection
-- Smooth Framer Motion Animations for delightful user interactions
-
-### 🔧 Comprehensive Utilities
-- **Text Utilities**: Case conversion, word counting, text cleaning
-- **Code Formatters**: HTML, CSS, JavaScript, TypeScript, JSON
-- **PDF Tools**: Merge, convert, password protection
-- **Number Utilities**: Base conversion, bitwise operations
-- **Math Tools**: Matrix multiplication, graph plotting, equation solving
-- **Unit Converters**: Length, mass, temperature, and more
-
-## 🛠️ Tech Stack
-- **Frontend**: React.js
-- **Styling**: Tailwind CSS
-- **Animations**: Framer Motion
-- **Routing**: React Router
-- **Notifications**: React Toastify
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js (v14.0.0 or later)
-- npm (v6.0.0 or later)
-
-### Installation
-
-1. Clone the repository
-```bash
-git clone https://github.com/username/toolmatic.git
-cd toolmatic
-```
-
-2. Install dependencies
-```bash
-npm install
-```
-
-3. Start the development server
-```bash
-npm start
-```
-
-4. Open `http://localhost:3000` in your browser
-
-## 📦 Available Utilities
-
-### 📝 Text Tools
-- Text Case Converter
-- Word Counter
-- Text Cleaning
-
-### 💻 Code Formatters
-- HTML Formatter
-- CSS Formatter
-- JavaScript & TypeScript Formatter
+### 📁 General Utilities
+- Text Cleaner
+- Text Comparison
+- QR Code Generator
+- URL Shortener
+- Currency Converter
+- Password Generator
 - JSON Formatter
+- JSON/CSV/XML Converter
 
-### 📄 PDF Utilities
-- PDF Merger
-- PDF to Image Converter
-- PDF Password Protection
+### 📄 PDF Tools
+- Merge PDF
+- Split PDF
+- Compress PDF
+- Convert PDF to Images
+- Convert Images to PDF
+- Reorder PDF Pages
 
-### 🔢 Number & Math Tools
-- Base Converter
-- Bitwise Operators
-- Matrix Multiplier
+### 📊 Maths Tools
+- Matrix Solver
+- Complex Number Calculator
 - Graph Plotter
-- Equation Solver
+- Scientific Calculator
+- Statistics & Probability Tool
 
-### 📏 Unit Converters
-- Length Converter
-- Mass Converter
-- Temperature Converter
+### 🎨 Design Tools
+- CSS Animations Viewer
+- CSS Grid Templates
+- CSS Gradient Generator
+- Typewriter Effect Generator
 
-## 🤝 Contributing
+### 💻 Developer Tools
+- Markdown to HTML Converter
+- Regex Tester
+- HTTP Header Viewer
 
-Contributions are welcome! Please follow these steps:
+### 📋 Other Pages
+- Home
+- About
+- Contact
+- 404 Not Found Page
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## 🚀 Tech Stack
 
-## 📜 License
+- **React** (with hooks and context API)
+- **React Router DOM** for routing
+- **React Toastify** for toast notifications
+- **Tailwind CSS / CSS utility classes** for theming
+- **Modular Component Architecture**
 
-Distributed under the MIT License. See `LICENSE` for more information.
+## 🧩 Folder Structure
+src/
+├── App.jsx
+├── routes.js
+├── components/
+│   └── Navbar.jsx
+├── pages/
+│   ├── HomePage.jsx
+│   ├── About.jsx
+│   ├── Contact.jsx
+│   └── NotFound.jsx
+├── categories/
+│   ├── general/
+│   ├── PDFTools/
+│   ├── Maths/
+│   ├── Design/
+│   └── developer/
+└── ThemeProvider.jsx
 
-## 🎉 Support
 
-If you encounter any issues or have suggestions, please file an issue on our GitHub repository.
+## 🧠 Contexts Used
 
----
+- `SearchContext` – For managing global search functionality
+- `ThemeHistoryContext` – For tracking theme transitions
+- `ScrollContext` – To manage scroll behavior on navigation
 
-**Happy Coding!** 👨‍💻👩‍💻
+## ✅ Setup Instructions
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Aditya100905/ToolMatic.git
+   cd toolmatic
+2. **Install dependencies:**
+    ```bash
+    npm install
+3. **Start the development server:**
+    ```bash
+    npm start
