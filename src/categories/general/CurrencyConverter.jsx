@@ -107,21 +107,31 @@ const CurrencyConverter = ({ theme = "dark" }) => {
   };
 
   return (
-    <div className={`min-h-screen mt-16 md:mt-0 ${styles.bg} flex items-center justify-center p-4`}>
-      <div className={`w-full max-w-md ${styles.card} ${styles.border} rounded-2xl ${styles.shadow} overflow-hidden`}>
+    <div
+      className={`min-h-screen mt-16 md:mt-0 ${styles.bg} flex items-center justify-center p-4`}
+    >
+      <div
+        className={`w-full max-w-md ${styles.card} ${styles.border} rounded-2xl ${styles.shadow} overflow-hidden`}
+      >
         <div className={`${styles.header} p-5`}>
           <div className="flex justify-between items-center">
-            <h2 className={`text-2xl font-bold ${theme === 'light' ? styles.lightText : styles.text}`}>Currency Converter</h2>
+            <h2
+              className={`text-2xl font-bold ${theme === "light" ? styles.lightText : styles.text}`}
+            >
+              Currency Converter
+            </h2>
             <button
               onClick={fetchRates}
-              className={`flex items-center justify-center w-8 h-8 rounded-full ${theme === 'light' ? 'bg-white text-indigo-600 hover:bg-indigo-50' : 'bg-indigo-600 hover:bg-indigo-700 text-white'} transition`}
+              className={`flex items-center justify-center w-8 h-8 rounded-full ${theme === "light" ? "bg-white text-indigo-600 hover:bg-indigo-50" : "bg-indigo-600 hover:bg-indigo-700 text-white"} transition`}
               title="Refresh rates"
             >
               <FaSync className={loading ? "animate-spin" : ""} />
             </button>
           </div>
           {lastUpdated && (
-            <p className={`text-xs ${theme === 'light' ? styles.lightSubtext : styles.subtext} mt-1`}>
+            <p
+              className={`text-xs ${theme === "light" ? styles.lightSubtext : styles.subtext} mt-1`}
+            >
               Updated: {lastUpdated}
             </p>
           )}
@@ -129,7 +139,9 @@ const CurrencyConverter = ({ theme = "dark" }) => {
 
         <div className="p-6 space-y-6">
           <div className="space-y-2">
-            <label className={`text-sm font-medium ${styles.subtext}`}>Amount</label>
+            <label className={`text-sm font-medium ${styles.subtext}`}>
+              Amount
+            </label>
             <input
               type="number"
               value={amount}
@@ -141,7 +153,9 @@ const CurrencyConverter = ({ theme = "dark" }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
             <div className="md:col-span-2 space-y-2">
-              <label className={`text-sm font-medium ${styles.subtext}`}>From</label>
+              <label className={`text-sm font-medium ${styles.subtext}`}>
+                From
+              </label>
               <select
                 value={fromCurrency}
                 onChange={(e) => setFromCurrency(e.target.value)}
@@ -158,7 +172,7 @@ const CurrencyConverter = ({ theme = "dark" }) => {
             <div className="flex justify-center md:col-span-1">
               <button
                 onClick={handleSwap}
-                className={`p-3 rounded-full ${theme === 'light' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-indigo-600 hover:bg-indigo-700'} text-white transition transform hover:scale-110`}
+                className={`p-3 rounded-full ${theme === "light" ? "bg-indigo-600 hover:bg-indigo-700" : "bg-indigo-600 hover:bg-indigo-700"} text-white transition transform hover:scale-110`}
                 title="Swap currencies"
               >
                 <FaExchangeAlt />
@@ -166,7 +180,9 @@ const CurrencyConverter = ({ theme = "dark" }) => {
             </div>
 
             <div className="md:col-span-2 space-y-2">
-              <label className={`text-sm font-medium ${styles.subtext}`}>To</label>
+              <label className={`text-sm font-medium ${styles.subtext}`}>
+                To
+              </label>
               <select
                 value={toCurrency}
                 onChange={(e) => setToCurrency(e.target.value)}
@@ -181,14 +197,16 @@ const CurrencyConverter = ({ theme = "dark" }) => {
             </div>
           </div>
 
-          <div className={`${styles.resultBg} p-5 rounded-xl ${theme === 'light' ? 'border border-indigo-100' : ''}`}>
+          <div
+            className={`${styles.resultBg} p-5 rounded-xl ${theme === "light" ? "border border-indigo-100" : ""}`}
+          >
             <p className={`text-sm ${styles.subtext}`}>Converted Amount</p>
             <p className={`text-3xl font-bold ${styles.text} mt-1`}>
               {convertedAmount
                 ? `${currencySymbols[toCurrency] || ""}${convertedAmount}`
                 : loading
-                ? "Loading..."
-                : "—"}
+                  ? "Loading..."
+                  : "—"}
             </p>
             <p className={`text-sm ${styles.subtext} mt-2`}>
               {amount} {fromCurrency} = {convertedAmount} {toCurrency}
@@ -196,7 +214,9 @@ const CurrencyConverter = ({ theme = "dark" }) => {
           </div>
         </div>
 
-        <div className={`px-6 py-4 ${styles.footer} text-center text-xs ${theme === 'light' ? 'border-t border-gray-200' : ''}`}>
+        <div
+          className={`px-6 py-4 ${styles.footer} text-center text-xs ${theme === "light" ? "border-t border-gray-200" : ""}`}
+        >
           Exchange rates provided by CurrencyLayer API
         </div>
       </div>

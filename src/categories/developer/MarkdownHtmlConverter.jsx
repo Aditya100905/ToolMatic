@@ -298,7 +298,6 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
     reader.readAsText(file);
   };
 
-
   // Get theme colors
   const c = getColors()[theme];
 
@@ -821,7 +820,6 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
           </div>
         )}
       </main>
-
     </div>
   );
 }

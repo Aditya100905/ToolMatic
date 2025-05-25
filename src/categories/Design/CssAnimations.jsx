@@ -1196,9 +1196,11 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
                     </div>
                   </div>
 
-                  <h3 className={`text-2xl md:text-3xl font-semibold ${theme === "dark"
-                      ? " text-gray-200"
-                      : " text-gray-700"} mb-1`}>
+                  <h3
+                    className={`text-2xl md:text-3xl font-semibold ${
+                      theme === "dark" ? " text-gray-200" : " text-gray-700"
+                    } mb-1`}
+                  >
                     No Animations Found
                   </h3>
                 </div>

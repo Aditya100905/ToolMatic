@@ -25,7 +25,10 @@ const Navbar = ({ onSearch }) => {
 
   // Check if we should show search on current route - ONLY for utilities page
   const shouldShowSearch = () => {
-    return location.pathname.startsWith("/utilities") && location.pathname.endsWith("/utilities");
+    return (
+      location.pathname.startsWith("/utilities") &&
+      location.pathname.endsWith("/utilities")
+    );
   };
 
   // Add scroll event listener to create a scrolled effect

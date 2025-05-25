@@ -24,7 +24,11 @@ const Home = ({ theme }) => {
   // Simulate fetching popular tools
   useEffect(() => {
     const popular = [
-      { name: "PDF to Images", path: "/utilities/pdf-to-images", category: "PDF Tools" },
+      {
+        name: "PDF to Images",
+        path: "/utilities/pdf-to-images",
+        category: "PDF Tools",
+      },
       {
         name: "Graph Plotter",
         path: "/utilities/graph-plotter",
@@ -35,8 +39,16 @@ const Home = ({ theme }) => {
         path: "/utilities/matrix-calculator",
         category: "Math",
       },
-      { name: "Animation Library", path: "/utilities/animations", category: "Design" },
-      { name: "CSS Gradients", path: "/utilities/gradients", category: "Design" },
+      {
+        name: "Animation Library",
+        path: "/utilities/animations",
+        category: "Design",
+      },
+      {
+        name: "CSS Gradients",
+        path: "/utilities/gradients",
+        category: "Design",
+      },
       {
         name: "QR Generator",
         path: "/utilities/qr-generator",
@@ -133,32 +145,28 @@ const Home = ({ theme }) => {
 
                 {/* Tool Categories Showcase */}
                 <div className="sm:flex sm:flex-row sm:justify-around flex flex-col gap-2 w-full  mb-10">
-                  {[
-                    "PDF Tools",
-                    "Math",
-                    "General",
-                    "Design",
-                    "Dev Tools"
-                  ].map((category) => (
-                    <div
-                      key={category}
-                      className={`p-4 w-4/5 rounded-xl transition-transform hover:-translate-y-1 ${
-                        theme === "dark"
-                          ? "bg-gray-700/60 hover:bg-gray-700/80"
-                          : "bg-white/70 hover:bg-white shadow-md"
-                      }`}
-                    >
+                  {["PDF Tools", "Math", "General", "Design", "Dev Tools"].map(
+                    (category) => (
                       <div
-                        className={`mx-auto w-12 h-12 flex items-center justify-center rounded-full mb-2 ${getIconColor(
-                          category,
-                          theme
-                        )}`}
+                        key={category}
+                        className={`p-4 w-4/5 rounded-xl transition-transform hover:-translate-y-1 ${
+                          theme === "dark"
+                            ? "bg-gray-700/60 hover:bg-gray-700/80"
+                            : "bg-white/70 hover:bg-white shadow-md"
+                        }`}
                       >
-                        {getIcon(category)}
+                        <div
+                          className={`mx-auto w-12 h-12 flex items-center justify-center rounded-full mb-2 ${getIconColor(
+                            category,
+                            theme
+                          )}`}
+                        >
+                          {getIcon(category)}
+                        </div>
+                        <p className="text-sm font-medium">{category}</p>
                       </div>
-                      <p className="text-sm font-medium">{category}</p>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-4 mt-2">

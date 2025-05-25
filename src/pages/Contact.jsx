@@ -3,7 +3,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Contact = ({ theme }) => {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
   const [result, setResult] = useState("");
 
   const handleChange = (e) => {
@@ -70,7 +74,9 @@ const Contact = ({ theme }) => {
               onChange={handleChange}
               required
               className={`w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-400 ${
-                theme === "dark" ? "bg-[#222] text-white" : "bg-white text-black"
+                theme === "dark"
+                  ? "bg-[#222] text-white"
+                  : "bg-white text-black"
               }`}
             />
           </div>
@@ -85,13 +91,17 @@ const Contact = ({ theme }) => {
               onChange={handleChange}
               required
               className={`w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-400 ${
-                theme === "dark" ? "bg-[#222] text-white" : "bg-white text-black"
+                theme === "dark"
+                  ? "bg-[#222] text-white"
+                  : "bg-white text-black"
               }`}
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-left font-semibold mb-2">Message</label>
+            <label className="block text-left font-semibold mb-2">
+              Message
+            </label>
             <textarea
               name="message"
               value={formData.message}
@@ -99,7 +109,9 @@ const Contact = ({ theme }) => {
               required
               placeholder="Enter your Message"
               className={`w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-400 ${
-                theme === "dark" ? "bg-[#222] text-white" : "bg-white text-black"
+                theme === "dark"
+                  ? "bg-[#222] text-white"
+                  : "bg-white text-black"
               }`}
               rows="5"
             ></textarea>

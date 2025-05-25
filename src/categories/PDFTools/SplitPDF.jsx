@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { PDFDocument } from "pdf-lib";
 import { saveAs } from "file-saver";
 import FileUploader from "./FileUploader";
-import { XCircleIcon, DocumentTextIcon, DocumentPlusIcon } from "@heroicons/react/24/solid";
+import {
+  XCircleIcon,
+  DocumentTextIcon,
+  DocumentPlusIcon,
+} from "@heroicons/react/24/solid";
 import { useTheme } from "../../ThemeProvider";
 
 export default function SplitPDF() {
@@ -18,7 +22,7 @@ export default function SplitPDF() {
   useEffect(() => {
     const fetchPageCount = async () => {
       if (!file) return;
-      
+
       try {
         const fileBytes = await file.arrayBuffer();
         const pdf = await PDFDocument.load(fileBytes);
@@ -27,7 +31,7 @@ export default function SplitPDF() {
         setError("Error reading PDF file");
       }
     };
-    
+
     fetchPageCount();
   }, [file]);
 
@@ -76,7 +80,7 @@ export default function SplitPDF() {
 
     setLoading(true);
     setError("");
-    
+
     try {
       const fileBytes = await file.arrayBuffer();
       const pdf = await PDFDocument.load(fileBytes);
@@ -85,11 +89,19 @@ export default function SplitPDF() {
       const pagesToExtract = new Set();
       const pageRangeParts = pageRange.split(",");
       let invalidRange = false;
-      
+
       for (const part of pageRangeParts) {
         if (part.includes("-")) {
-          const [start, end] = part.split("-").map(num => parseInt(num.trim()));
-          if (isNaN(start) || isNaN(end) || start > end || start < 1 || end > pdf.getPageCount()) {
+          const [start, end] = part
+            .split("-")
+            .map((num) => parseInt(num.trim()));
+          if (
+            isNaN(start) ||
+            isNaN(end) ||
+            start > end ||
+            start < 1 ||
+            end > pdf.getPageCount()
+          ) {
             invalidRange = true;
             break;
           }
@@ -107,7 +119,9 @@ export default function SplitPDF() {
       }
 
       if (invalidRange) {
-        setError(`Invalid page range. Document has ${pdf.getPageCount()} pages.`);
+        setError(
+          `Invalid page range. Document has ${pdf.getPageCount()} pages.`
+        );
         setLoading(false);
         return;
       }
@@ -145,15 +159,15 @@ export default function SplitPDF() {
   };
 
   const formatBytes = (bytes, decimals = 2) => {
-    if (bytes === 0) return '0 Bytes';
-    
+    if (bytes === 0) return "0 Bytes";
+
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   };
 
   return (
@@ -170,7 +184,9 @@ export default function SplitPDF() {
         }`}
       >
         <h2 className="text-3xl font-bold mb-2 text-center">Split PDF</h2>
-        <p className={`text-center mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
+        <p
+          className={`text-center mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+        >
           Extract specific pages from your PDF document
         </p>
 
@@ -187,7 +203,7 @@ export default function SplitPDF() {
         )}
 
         {!file ? (
-          <div 
+          <div
             className={`border-2 border-dashed rounded-lg p-8 ${
               theme === "dark" ? "border-gray-700" : "border-gray-300"
             }`}
@@ -195,25 +211,31 @@ export default function SplitPDF() {
             onDrop={handleDrop}
           >
             <div className="flex flex-col items-center text-center">
-              <DocumentPlusIcon 
+              <DocumentPlusIcon
                 className={`w-16 h-16 mb-4 ${
                   theme === "dark" ? "text-blue-400" : "text-blue-500"
-                }`} 
+                }`}
               />
-              
+
               <h3 className="text-xl font-medium mb-2">Upload your PDF file</h3>
-              
-              <p className={`mb-6 max-w-md ${
-                theme === "dark" ? "text-gray-400" : "text-gray-600"
-              }`}>
+
+              <p
+                className={`mb-6 max-w-md ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
                 Select or drag & drop a PDF file here to extract specific pages
               </p>
-              
+
               <FileUploader onChange={handleFileChange} hasFiles={false} />
-              
-              <div className={`w-full max-w-sm mt-8 pt-6 border-t ${
-                theme === "dark" ? "border-gray-700 text-gray-400" : "border-gray-200 text-gray-600"
-              }`}>
+
+              <div
+                className={`w-full max-w-sm mt-8 pt-6 border-t ${
+                  theme === "dark"
+                    ? "border-gray-700 text-gray-400"
+                    : "border-gray-200 text-gray-600"
+                }`}
+              >
                 <div className="flex items-center justify-between text-sm">
                   <span>• Process files locally</span>
                   <span>• Extract specific pages</span>
@@ -228,8 +250,11 @@ export default function SplitPDF() {
 
             {/* File Stats */}
             <div className="mt-4 text-center">
-              <p className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>
-                File selected • Size: {formatBytes(file.size)} • Pages: {totalPages}
+              <p
+                className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}
+              >
+                File selected • Size: {formatBytes(file.size)} • Pages:{" "}
+                {totalPages}
               </p>
             </div>
 
@@ -242,8 +267,8 @@ export default function SplitPDF() {
               <h3 className="text-lg font-semibold mb-3">Selected PDF:</h3>
               <div
                 className={`flex items-center justify-between shadow-sm rounded-lg px-4 py-3 ${
-                  theme === "dark" 
-                    ? "bg-gray-700 hover:bg-gray-600 text-gray-200" 
+                  theme === "dark"
+                    ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
                     : "bg-white hover:bg-gray-100 text-gray-800"
                 } transition-colors border border-transparent`}
               >
@@ -262,9 +287,9 @@ export default function SplitPDF() {
                     {formatBytes(file.size)}
                   </span>
                 </div>
-                
-                <button 
-                  onClick={clearSelection} 
+
+                <button
+                  onClick={clearSelection}
                   className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/50 text-red-500"
                   title="Remove file"
                 >
@@ -277,7 +302,9 @@ export default function SplitPDF() {
             <div className="mt-6">
               <label className="block font-medium mb-2">
                 Pages to Extract (e.g., 1, 3-5, 7):
-                <span className={`ml-2 text-sm font-normal ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>
+                <span
+                  className={`ml-2 text-sm font-normal ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}
+                >
                   Document has {totalPages} pages
                 </span>
               </label>
@@ -323,7 +350,7 @@ export default function SplitPDF() {
               >
                 {loading ? "Processing..." : "Split PDF"}
               </button>
-              
+
               <button
                 onClick={clearSelection}
                 className="px-6 py-3 rounded-lg font-medium bg-red-500 hover:bg-red-400 transition text-white shadow-md hover:shadow-lg"
@@ -334,11 +361,12 @@ export default function SplitPDF() {
           </>
         )}
       </div>
-      
+
       {/* Footer */}
       <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        Your files are processed locally in your browser. No uploads to any server.
-      </div> 
+        Your files are processed locally in your browser. No uploads to any
+        server.
+      </div>
     </div>
   );
 }

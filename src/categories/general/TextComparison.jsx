@@ -67,7 +67,7 @@ const TextComparison = ({ theme = "dark" }) => {
       tableHeader: "bg-[#0a0a0a]",
       inputFocus: "focus:ring-blue-700 focus:border-blue-600",
       buttonHover: "hover:bg-[#2a2a2a]",
-      stats: "bg-[#1a1a1a]"
+      stats: "bg-[#1a1a1a]",
     },
   };
 
@@ -153,7 +153,7 @@ const TextComparison = ({ theme = "dark" }) => {
       if (compareOptions.wordByWord) {
         const diffs = computeLineByLineDiff(lines1, lines2);
         const stats = calculateDiffStats(diffs);
-        
+
         setDifferences(diffs);
         setDiffStats(stats);
         setShowComparison(true);
@@ -202,9 +202,13 @@ const TextComparison = ({ theme = "dark" }) => {
             text1: line1,
             text2: line2,
             // Generate inline differences
-            inlineDiff: compareOptions.highlightInline 
-              ? computeInlineDifferences(line1, line2, compareOptions.ignoreCase)
-              : null
+            inlineDiff: compareOptions.highlightInline
+              ? computeInlineDifferences(
+                  line1,
+                  line2,
+                  compareOptions.ignoreCase
+                )
+              : null,
           });
         } else {
           if (i < lines1.length) {
@@ -224,7 +228,7 @@ const TextComparison = ({ theme = "dark" }) => {
 
       // Scroll to results
       if (resultsRef.current) {
-        resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+        resultsRef.current.scrollIntoView({ behavior: "smooth" });
       }
     }, 10);
   };
@@ -233,31 +237,43 @@ const TextComparison = ({ theme = "dark" }) => {
   const computeLineByLineDiff = (lines1, lines2) => {
     // Implementation of a line-based diff with word-level granularity
     const result = [];
-    
+
     // Use Longest Common Subsequence approach for matching
     const lcsMatrix = buildLCSMatrix(lines1, lines2);
-    const matches = extractLCSMatches(lcsMatrix, lines1, lines2, lines1.length, lines2.length);
-    
-    let i1 = 0, i2 = 0, matchIdx = 0;
-    
+    const matches = extractLCSMatches(
+      lcsMatrix,
+      lines1,
+      lines2,
+      lines1.length,
+      lines2.length
+    );
+
+    let i1 = 0,
+      i2 = 0,
+      matchIdx = 0;
+
     while (i1 < lines1.length || i2 < lines2.length) {
       // If we're at a match point
-      if (matchIdx < matches.length && i1 === matches[matchIdx][0] && i2 === matches[matchIdx][1]) {
+      if (
+        matchIdx < matches.length &&
+        i1 === matches[matchIdx][0] &&
+        i2 === matches[matchIdx][1]
+      ) {
         result.push({
           type: "unchanged",
           text: lines1[i1],
-          lineNumber: i1 + 1
+          lineNumber: i1 + 1,
         });
         i1++;
         i2++;
         matchIdx++;
-      } 
+      }
       // Handle deleted lines
       else if (matchIdx < matches.length && i1 < matches[matchIdx][0]) {
         result.push({
           type: "removed",
           text: lines1[i1],
-          lineNumber: i1 + 1
+          lineNumber: i1 + 1,
         });
         i1++;
       }
@@ -266,15 +282,19 @@ const TextComparison = ({ theme = "dark" }) => {
         result.push({
           type: "added",
           text: lines2[i2],
-          lineNumber: i2 + 1
+          lineNumber: i2 + 1,
         });
         i2++;
       }
       // Both lines exist but are different - show as modified with word diff
       else if (i1 < lines1.length && i2 < lines2.length) {
         // Calculate detailed word differences for display
-        const wordDiff = computeWordDifferences(lines1[i1], lines2[i2], compareOptions.ignoreCase);
-        
+        const wordDiff = computeWordDifferences(
+          lines1[i1],
+          lines2[i2],
+          compareOptions.ignoreCase
+        );
+
         result.push({
           type: "modified",
           lineNumber: i1 + 1,
@@ -282,9 +302,13 @@ const TextComparison = ({ theme = "dark" }) => {
           text2: lines2[i2],
           wordDiff1: wordDiff.first,
           wordDiff2: wordDiff.second,
-          inlineDiff: compareOptions.highlightInline 
-            ? computeInlineDifferences(lines1[i1], lines2[i2], compareOptions.ignoreCase)
-            : null
+          inlineDiff: compareOptions.highlightInline
+            ? computeInlineDifferences(
+                lines1[i1],
+                lines2[i2],
+                compareOptions.ignoreCase
+              )
+            : null,
         });
         i1++;
         i2++;
@@ -294,115 +318,130 @@ const TextComparison = ({ theme = "dark" }) => {
         result.push({
           type: "removed",
           text: lines1[i1],
-          lineNumber: i1 + 1
+          lineNumber: i1 + 1,
         });
         i1++;
-      }
-      else if (i2 < lines2.length) {
+      } else if (i2 < lines2.length) {
         result.push({
           type: "added",
           text: lines2[i2],
-          lineNumber: i2 + 1
+          lineNumber: i2 + 1,
         });
         i2++;
       }
     }
-    
+
     return result;
   };
 
   // Build Longest Common Subsequence matrix for diff algorithm
   const buildLCSMatrix = (a, b) => {
-    const matrix = Array(a.length + 1).fill().map(() => Array(b.length + 1).fill(0));
-    
+    const matrix = Array(a.length + 1)
+      .fill()
+      .map(() => Array(b.length + 1).fill(0));
+
     for (let i = 1; i <= a.length; i++) {
       for (let j = 1; j <= b.length; j++) {
-        if (a[i-1] === b[j-1]) {
-          matrix[i][j] = matrix[i-1][j-1] + 1;
+        if (a[i - 1] === b[j - 1]) {
+          matrix[i][j] = matrix[i - 1][j - 1] + 1;
         } else {
-          matrix[i][j] = Math.max(matrix[i-1][j], matrix[i][j-1]);
+          matrix[i][j] = Math.max(matrix[i - 1][j], matrix[i][j - 1]);
         }
       }
     }
-    
+
     return matrix;
   };
-  
+
   // Extract matched indices from LCS matrix
   const extractLCSMatches = (matrix, a, b, i, j) => {
     const matches = [];
-    
+
     while (i > 0 && j > 0) {
-      if (a[i-1] === b[j-1]) {
-        matches.unshift([i-1, j-1]);
+      if (a[i - 1] === b[j - 1]) {
+        matches.unshift([i - 1, j - 1]);
         i--;
         j--;
-      } else if (matrix[i-1][j] > matrix[i][j-1]) {
+      } else if (matrix[i - 1][j] > matrix[i][j - 1]) {
         i--;
       } else {
         j--;
       }
     }
-    
+
     return matches;
   };
 
   // Compute word-level differences for a pair of lines
   const computeWordDifferences = (line1, line2, ignoreCase) => {
     // Split into words while preserving whitespace
-    const words1 = line1.split(/(\s+|[.,!?;:()[\]{}'"<>])/g).filter(w => w !== '');
-    const words2 = line2.split(/(\s+|[.,!?;:()[\]{}'"<>])/g).filter(w => w !== '');
-    
+    const words1 = line1
+      .split(/(\s+|[.,!?;:()[\]{}'"<>])/g)
+      .filter((w) => w !== "");
+    const words2 = line2
+      .split(/(\s+|[.,!?;:()[\]{}'"<>])/g)
+      .filter((w) => w !== "");
+
     const result = {
-      first: words1.map(word => ({ text: word, changed: true })),
-      second: words2.map(word => ({ text: word, changed: true }))
+      first: words1.map((word) => ({ text: word, changed: true })),
+      second: words2.map((word) => ({ text: word, changed: true })),
     };
-    
+
     // Simple greedy matching algorithm
     for (let i = 0; i < words1.length; i++) {
       const word1 = ignoreCase ? words1[i].toLowerCase() : words1[i];
-      
+
       for (let j = 0; j < words2.length; j++) {
         const word2 = ignoreCase ? words2[j].toLowerCase() : words2[j];
-        
-        if (word1 === word2 && result.first[i].changed && result.second[j].changed) {
+
+        if (
+          word1 === word2 &&
+          result.first[i].changed &&
+          result.second[j].changed
+        ) {
           result.first[i].changed = false;
           result.second[j].changed = false;
           break;
         }
       }
     }
-    
+
     return result;
   };
 
   // Compute character-level differences for inline highlighting
   const computeInlineDifferences = (text1, text2, ignoreCase) => {
     if (!text1 || !text2) return null;
-    
+
     // Tokenize by character for fine-grained comparison
-    const chars1 = text1.split('');
-    const chars2 = text2.split('');
-    
+    const chars1 = text1.split("");
+    const chars2 = text2.split("");
+
     // Use a simple LCS approach for character differences
     const lcsMatrix = buildLCSMatrix(chars1, chars2);
-    const matches = extractLCSMatches(lcsMatrix, chars1, chars2, chars1.length, chars2.length);
-    
+    const matches = extractLCSMatches(
+      lcsMatrix,
+      chars1,
+      chars2,
+      chars1.length,
+      chars2.length
+    );
+
     // Build highlighted sequences
     const sequence1 = chars1.map((char, idx) => {
       return {
         char,
-        highlighted: !matches.some(([i]) => i === idx)
+        highlighted: !matches.some(([i]) => i === idx),
       };
     });
-    
+
     const sequence2 = chars2.map((char, idx) => {
       return {
         char,
-        highlighted: !matches.some(([, j]) => j === idx)
+        highlighted: !matches.some(([, j]) => j === idx),
       };
     });
-    
+
     return { sequence1, sequence2 };
   };
 
@@ -535,7 +574,9 @@ const TextComparison = ({ theme = "dark" }) => {
     if (item.type === "modified") {
       return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <div className={`${colors.removed} px-2 py-1 rounded overflow-x-auto`}>
+          <div
+            className={`${colors.removed} px-2 py-1 rounded overflow-x-auto`}
+          >
             {item.wordDiff1 ? (
               item.wordDiff1.map((word, i) => (
                 <span
@@ -586,15 +627,14 @@ const TextComparison = ({ theme = "dark" }) => {
     }
 
     if (
-      item.text && (
-        item.text.trim().startsWith("//") ||
+      item.text &&
+      (item.text.trim().startsWith("//") ||
         item.text.includes("{") ||
         item.text.includes("function") ||
         item.text.includes("=") ||
         item.text.includes("(") ||
         item.text.includes("<") ||
-        item.text.includes(">")
-      )
+        item.text.includes(">"))
     ) {
       // Likely code - apply syntax highlighting
       // Escape HTML characters first
@@ -639,7 +679,9 @@ const TextComparison = ({ theme = "dark" }) => {
   };
 
   return (
-    <div className={`${colors.background} ${colors.text} min-h-screen mt-12 sm:mt-10 md:mt-8`}>
+    <div
+      className={`${colors.background} ${colors.text} min-h-screen mt-12 sm:mt-10 md:mt-8`}
+    >
       <div className="px-4 py-8 md:py-12 max-w-6xl mx-auto">
         <div
           className={`${colors.card} rounded-lg shadow-lg border ${colors.border} overflow-hidden`}
@@ -664,7 +706,7 @@ const TextComparison = ({ theme = "dark" }) => {
                 </svg>
                 Text Comparison
               </h1>
-              
+
               <div className="flex flex-wrap justify-end gap-1 space-x-2">
                 <button
                   onClick={loadExample}
@@ -802,7 +844,9 @@ const TextComparison = ({ theme = "dark" }) => {
             {/* Input Areas */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               {/* Left Text Area */}
-              <div className={`${colors.textareaBg} rounded-lg border ${colors.border} p-2`}>
+              <div
+                className={`${colors.textareaBg} rounded-lg border ${colors.border} p-2`}
+              >
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="font-medium text-blue-400">Original Text</h3>
                   <div className="flex space-x-2">
@@ -1149,28 +1193,40 @@ const TextComparison = ({ theme = "dark" }) => {
 
                 {/* Stats section */}
                 {statsVisible && (
-                  <div className={`${colors.stats} p-4 mb-6 rounded-lg grid grid-cols-2 md:grid-cols-4 gap-4`}>
+                  <div
+                    className={`${colors.stats} p-4 mb-6 rounded-lg grid grid-cols-2 md:grid-cols-4 gap-4`}
+                  >
                     <div className="bg-[#143a25] rounded-lg p-3 flex flex-col items-center justify-center">
-                      <span className="text-green-300 text-2xl font-bold">{diffStats.added}</span>
+                      <span className="text-green-300 text-2xl font-bold">
+                        {diffStats.added}
+                      </span>
                       <span className="text-sm text-green-400">Added</span>
                     </div>
                     <div className="bg-[#4a1c1c] rounded-lg p-3 flex flex-col items-center justify-center">
-                      <span className="text-red-300 text-2xl font-bold">{diffStats.removed}</span>
+                      <span className="text-red-300 text-2xl font-bold">
+                        {diffStats.removed}
+                      </span>
                       <span className="text-sm text-red-400">Removed</span>
                     </div>
                     <div className="bg-[#2d2a12] rounded-lg p-3 flex flex-col items-center justify-center">
-                      <span className="text-yellow-300 text-2xl font-bold">{diffStats.modified}</span>
+                      <span className="text-yellow-300 text-2xl font-bold">
+                        {diffStats.modified}
+                      </span>
                       <span className="text-sm text-yellow-400">Modified</span>
                     </div>
                     <div className="bg-[#1e293b] rounded-lg p-3 flex flex-col items-center justify-center">
-                      <span className="text-blue-300 text-2xl font-bold">{diffStats.unchanged}</span>
+                      <span className="text-blue-300 text-2xl font-bold">
+                        {diffStats.unchanged}
+                      </span>
                       <span className="text-sm text-blue-400">Unchanged</span>
                     </div>
                   </div>
                 )}
 
                 {/* Results display with improved styling */}
-                <div className={`${colors.resultsBg} rounded-lg border ${colors.border} p-4`}>
+                <div
+                  className={`${colors.resultsBg} rounded-lg border ${colors.border} p-4`}
+                >
                   {differences.length === 0 ? (
                     <div className="text-center py-8">
                       <svg
@@ -1203,10 +1259,10 @@ const TextComparison = ({ theme = "dark" }) => {
                             item.type === "unchanged"
                               ? colors.unchanged
                               : item.type === "added"
-                              ? colors.added
-                              : item.type === "removed"
-                              ? colors.removed
-                              : "bg-transparent"
+                                ? colors.added
+                                : item.type === "removed"
+                                  ? colors.removed
+                                  : "bg-transparent"
                           } ${
                             item.type !== "modified" ? "rounded px-2 py-1" : ""
                           }`}

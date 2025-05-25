@@ -326,7 +326,7 @@ export default function PDFToImage() {
   const downloadAllImages = () => {
     setLoading(true);
     setProcessingAction("downloading");
-    
+
     try {
       const selectedImagesArray = images.filter((img) =>
         isImageSelected(img.fileId, img.page)
@@ -360,14 +360,14 @@ export default function PDFToImage() {
       const selectedImagesArray = images.filter((img) =>
         isImageSelected(img.fileId, img.page)
       );
-      
+
       if (selectedImagesArray.length === 0) {
         setError("No images selected for ZIP download.");
         setLoading(false);
         setProcessingAction("");
         return;
       }
-      
+
       const zip = new JSZip();
       const folder = zip.folder("PDF Images");
 
@@ -653,7 +653,8 @@ export default function PDFToImage() {
                   {processingAction === "zipping" && "Creating ZIP archive..."}
                   {processingAction === "customizing" &&
                     "Creating custom PDF with selected pages..."}
-                  {processingAction === "downloading" && "Preparing download..."}
+                  {processingAction === "downloading" &&
+                    "Preparing download..."}
                   {!processingAction && "Processing..."}
                 </p>
 
@@ -791,7 +792,7 @@ export default function PDFToImage() {
                                 disabled={loading}
                                 className={`text-xs px-3 py-1 rounded flex items-center gap-1 transition 
                                 ${
-loading
+                                  loading
                                     ? "bg-indigo-400 dark:bg-indigo-600 cursor-not-allowed opacity-70"
                                     : "bg-indigo-500 hover:bg-indigo-400 shadow-sm hover:shadow"
                                 } text-white`}
@@ -811,8 +812,8 @@ loading
                               isImageSelected(fileId, image.page)
                                 ? "border-blue-500 shadow-md"
                                 : isDarkMode
-                                ? "border-gray-700"
-                                : "border-gray-200"
+                                  ? "border-gray-700"
+                                  : "border-gray-200"
                             }`}
                           >
                             <div
@@ -863,9 +864,12 @@ loading
           </>
         )}
       </div>
-      
+
       <footer className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-        <p>All processing is done locally in your browser. Your files are not uploaded to any server.</p>
+        <p>
+          All processing is done locally in your browser. Your files are not
+          uploaded to any server.
+        </p>
         <p className="mt-1">
           &copy; {new Date().getFullYear()} PDF to Image Converter
         </p>

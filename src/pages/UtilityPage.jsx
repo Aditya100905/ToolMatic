@@ -248,28 +248,31 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
   };
 
   // Filter utilities based on search term
-const getFilteredUtilities = () => {
-  if (!localSearchTerm) {
-    return availableUtilities; // Return all categories and utilities
-  }
+  const getFilteredUtilities = () => {
+    if (!localSearchTerm) {
+      return availableUtilities; // Return all categories and utilities
+    }
 
-  const filtered = {};
-  const searchTerm = localSearchTerm.toLowerCase();
+    const filtered = {};
+    const searchTerm = localSearchTerm.toLowerCase();
 
-  Object.keys(availableUtilities).forEach((category) => {
-    const matchingUtilities = availableUtilities[category].filter((utility) => {
-      const words = utility.split(/\s+/); // Split utility into words
-      return words.some(word => word.toLowerCase().startsWith(searchTerm));
+    Object.keys(availableUtilities).forEach((category) => {
+      const matchingUtilities = availableUtilities[category].filter(
+        (utility) => {
+          const words = utility.split(/\s+/); // Split utility into words
+          return words.some((word) =>
+            word.toLowerCase().startsWith(searchTerm)
+          );
+        }
+      );
+
+      if (matchingUtilities.length > 0) {
+        filtered[category] = matchingUtilities;
+      }
     });
 
-    if (matchingUtilities.length > 0) {
-      filtered[category] = matchingUtilities;
-    }
-  });
-
-  return filtered;
-};
-
+    return filtered;
+  };
 
   const filteredUtilities = getFilteredUtilities();
 
@@ -332,8 +335,8 @@ const getFilteredUtilities = () => {
             <button
               onClick={toggleSidebar}
               className={`p-2 rounded-full transition-all duration-200 ${
-                theme === "dark" 
-                  ? "hover:bg-gray-800 text-gray-300 hover:text-white" 
+                theme === "dark"
+                  ? "hover:bg-gray-800 text-gray-300 hover:text-white"
                   : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
               }`}
             >
@@ -507,12 +510,12 @@ const getFilteredUtilities = () => {
                         <div
                           className={`h-1.5 w-full 
                             ${
-                              theme === "dark" 
-                                ? "bg-gradient-to-r from-blue-600 to-indigo-500" 
+                              theme === "dark"
+                                ? "bg-gradient-to-r from-blue-600 to-indigo-500"
                                 : "bg-gradient-to-r from-blue-400 to-indigo-400"
                             }`}
                         ></div>
-                        
+
                         {/* Card Content with better spacing */}
                         <div className="p-6 md:p-7 h-full flex flex-col justify-between relative">
                           <div>
@@ -527,7 +530,7 @@ const getFilteredUtilities = () => {
                             >
                               {utility}
                             </h3>
-                            
+
                             {/* Description with better styling */}
                             <p
                               className={`text-sm line-clamp-2 
@@ -537,7 +540,8 @@ const getFilteredUtilities = () => {
                                     : "text-gray-600"
                                 }`}
                             >
-                              {utilityDescriptions[utility] || "No description available."}
+                              {utilityDescriptions[utility] ||
+                                "No description available."}
                             </p>
                           </div>
 
@@ -554,7 +558,7 @@ const getFilteredUtilities = () => {
                             >
                               {category}
                             </span>
-                            
+
                             {/* Arrow icon with better styling */}
                             <div
                               className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300
@@ -576,7 +580,7 @@ const getFilteredUtilities = () => {
                         </div>
 
                         {/* Decorative corner accent */}
-                        <div 
+                        <div
                           className={`absolute -bottom-12 -right-12 w-24 h-24 rotate-45 opacity-0 group-hover:opacity-20 transition-opacity duration-300
                             ${theme === "dark" ? "bg-blue-500" : "bg-blue-400"}`}
                         ></div>

@@ -55,7 +55,7 @@ export default function CompressPDF() {
     removeMetadata,
     removeAnnotations,
     optimizeFonts,
-    accuracyAdjustment
+    accuracyAdjustment,
   ]);
 
   // Update accuracy adjustment based on last compression results
@@ -64,11 +64,12 @@ export default function CompressPDF() {
       // Calculate the ratio between actual and estimated compression
       const estimatedSize = previewStats.totalEstimated;
       const actualSize = lastCompressionResults.newSize;
-      
+
       if (estimatedSize > 0 && actualSize > 0) {
         // New adjustment factor (with smoothing to prevent wild fluctuations)
-        const newAdjustment = 0.7 * (actualSize / estimatedSize) + 0.3 * accuracyAdjustment;
-        
+        const newAdjustment =
+          0.7 * (actualSize / estimatedSize) + 0.3 * accuracyAdjustment;
+
         // Only update if the adjustment is reasonable (prevent extreme adjustments)
         if (newAdjustment > 0.5 && newAdjustment < 2.0) {
           setAccuracyAdjustment(newAdjustment);
@@ -81,31 +82,34 @@ export default function CompressPDF() {
     if (files.length === 0) return;
     setAnalyzing(true);
     try {
-      const compressionSettings = getCompressionSettings(); 
+      const compressionSettings = getCompressionSettings();
       const previewData = files.map((file) => {
         const originalSize = file.size;
-        
+
         // More accurate estimation based on file type detection and content analysis
         const estimatedReduction = getEstimatedReduction(file);
-        
+
         // Apply the accuracy adjustment factor from previous compressions
         let estimatedSize = Math.max(
           originalSize * (1 - estimatedReduction / 100) * accuracyAdjustment,
           originalSize * 0.05
         );
-        
+
         // Additional adjustments for specific compression modes
         if (compressionMode === "metadata") {
           // Metadata-only compression has much less effect on image-heavy PDFs
           estimatedSize = Math.max(estimatedSize, originalSize * 0.85);
-        } else if (compressionMode === "maximum" && file.size > 5 * 1024 * 1024) {
+        } else if (
+          compressionMode === "maximum" &&
+          file.size > 5 * 1024 * 1024
+        ) {
           // Very large files often compress more effectively in maximum mode
           estimatedSize = estimatedSize * 0.9;
         }
-        
+
         const savedSize = originalSize - estimatedSize;
         const savingPercentage = ((savedSize / originalSize) * 100).toFixed(1);
-        
+
         return {
           name: file.name,
           originalSize,
@@ -117,10 +121,19 @@ export default function CompressPDF() {
 
       setFilePreviewData(previewData);
 
-      const totalOriginal = previewData.reduce((sum, file) => sum + file.originalSize, 0);
-      const totalEstimated = previewData.reduce((sum, file) => sum + file.estimatedSize, 0);
+      const totalOriginal = previewData.reduce(
+        (sum, file) => sum + file.originalSize,
+        0
+      );
+      const totalEstimated = previewData.reduce(
+        (sum, file) => sum + file.estimatedSize,
+        0
+      );
       const totalSaved = totalOriginal - totalEstimated;
-      const overallSavingPercentage = ((totalSaved / totalOriginal) * 100).toFixed(1);
+      const overallSavingPercentage = (
+        (totalSaved / totalOriginal) *
+        100
+      ).toFixed(1);
 
       setPreviewStats({
         totalOriginal,
@@ -153,7 +166,9 @@ export default function CompressPDF() {
   const handleDrop = (event) => {
     event.preventDefault();
     const droppedFiles = [...event.dataTransfer.files];
-    const pdfFiles = droppedFiles.filter((file) => file.type === "application/pdf");
+    const pdfFiles = droppedFiles.filter(
+      (file) => file.type === "application/pdf"
+    );
     if (pdfFiles.length !== droppedFiles.length) {
       setError("Only PDF files are allowed!");
     } else {
@@ -197,7 +212,7 @@ export default function CompressPDF() {
   // More accurate compression settings based on file analysis
   const getCompressionSettings = () => {
     const normalizedLevel = compressionLevel / 100;
-    
+
     // Base settings that work well for most PDFs
     const settings = {
       imageQuality: Math.max(0.1, 0.9 - normalizedLevel * 0.8),
@@ -211,31 +226,49 @@ export default function CompressPDF() {
       flattenTransparency: normalizedLevel > 0.6,
       compressMetadata: removeMetadata,
       compressAnnotations: removeAnnotations,
-      optimizeFonts: optimizeFonts
+      optimizeFonts: optimizeFonts,
     };
 
     // Adjust settings based on compression mode
     switch (compressionMode) {
       case "maximum":
         settings.imageQuality = Math.max(0.1, settings.imageQuality - 0.3);
-        settings.resolutionFactor = Math.max(0.2, settings.resolutionFactor - 0.3);
-        settings.objectsPerStream = Math.min(300, settings.objectsPerStream + 100);
-        settings.fontSubsetThreshold = Math.max(0, settings.fontSubsetThreshold - 30);
+        settings.resolutionFactor = Math.max(
+          0.2,
+          settings.resolutionFactor - 0.3
+        );
+        settings.objectsPerStream = Math.min(
+          300,
+          settings.objectsPerStream + 100
+        );
+        settings.fontSubsetThreshold = Math.max(
+          0,
+          settings.fontSubsetThreshold - 30
+        );
         settings.removeUnused = true;
         settings.useObjectStreams = true;
         settings.downsampleImages = true;
         settings.flattenTransparency = true;
         break;
-        
+
       case "minimum":
         settings.imageQuality = Math.min(0.95, settings.imageQuality + 0.2);
-        settings.resolutionFactor = Math.min(1.0, settings.resolutionFactor + 0.2);
-        settings.objectsPerStream = Math.max(10, settings.objectsPerStream - 50);
-        settings.fontSubsetThreshold = Math.min(100, settings.fontSubsetThreshold + 40);
+        settings.resolutionFactor = Math.min(
+          1.0,
+          settings.resolutionFactor + 0.2
+        );
+        settings.objectsPerStream = Math.max(
+          10,
+          settings.objectsPerStream - 50
+        );
+        settings.fontSubsetThreshold = Math.min(
+          100,
+          settings.fontSubsetThreshold + 40
+        );
         settings.downsampleImages = false;
         settings.flattenTransparency = false;
         break;
-        
+
       case "metadata":
         settings.imageQuality = 1.0;
         settings.resolutionFactor = 1.0;
@@ -245,14 +278,14 @@ export default function CompressPDF() {
         settings.flattenTransparency = false;
         break;
     }
-    
+
     return settings;
   };
 
   // Improved compression function that more closely matches preview
   const compressPDF = async (pdfBytes, settings) => {
     const pdfDoc = await PDFDocument.load(pdfBytes);
-    
+
     // Apply real compression techniques matching our estimation logic
     if (settings.compressMetadata) {
       pdfDoc.setTitle("");
@@ -263,29 +296,29 @@ export default function CompressPDF() {
       pdfDoc.setProducer("PDF Size Compressor");
       pdfDoc.setModificationDate(new Date());
     }
-    
+
     // Create a new document with copied pages for maximum compression
     const newPdfDoc = await PDFDocument.create();
     const pages = await newPdfDoc.copyPages(pdfDoc, pdfDoc.getPageIndices());
     pages.forEach((page) => newPdfDoc.addPage(page));
-    
+
     // Handle annotations if needed
     if (settings.compressAnnotations) {
       // PDF-lib doesn't directly support annotation removal, but would be implemented here
     }
-    
+
     // Configure save options
     const pdfSaveOptions = {
       useObjectStreams: settings.useObjectStreams,
       addXRefTable: true,
       objectsPerStream: settings.objectsPerStream,
     };
-    
+
     // Handle font optimization if needed
     if (settings.optimizeFonts) {
       // PDF-lib doesn't directly support font optimization, but would be implemented here
     }
-    
+
     // Save with all our compression settings
     return await newPdfDoc.save(pdfSaveOptions);
   };
@@ -293,7 +326,7 @@ export default function CompressPDF() {
   // Improved estimate calculation that accounts for file characteristics
   const getEstimatedReduction = (file = null) => {
     let baseReduction = compressionLevel * 0.6;
-    
+
     // Adjust based on compression mode
     switch (compressionMode) {
       case "maximum":
@@ -306,12 +339,12 @@ export default function CompressPDF() {
         baseReduction = Math.min(15, compressionLevel / 6);
         break;
     }
-    
+
     // Add effects from options
     if (removeMetadata) baseReduction += 2;
     if (removeAnnotations) baseReduction += 3;
     if (optimizeFonts) baseReduction += 5;
-    
+
     // File-specific adjustments if we have a file
     if (file) {
       // Large files often have more room for compression
@@ -322,7 +355,7 @@ export default function CompressPDF() {
         baseReduction -= 10;
       }
     }
-    
+
     return Math.min(95, Math.round(baseReduction));
   };
 
@@ -331,40 +364,40 @@ export default function CompressPDF() {
       setError("Select at least one PDF to compress!");
       return;
     }
-    
+
     setLoading(true);
     setError("");
     setCompressedSize(0);
     setSuccess(false);
-    
+
     try {
       const settings = getCompressionSettings();
       let totalCompressedSize = 0;
       const compressedFiles = [];
-      
+
       for (const file of files) {
         const fileBytes = await file.arrayBuffer();
         const compressedPdfBytes = await compressPDF(fileBytes, settings);
         totalCompressedSize += compressedPdfBytes.byteLength;
-        
+
         compressedFiles.push({
           name: file.name.replace(/\.pdf$/, "") + "_compressed.pdf",
           data: compressedPdfBytes,
         });
       }
-      
+
       setCompressedSize(totalCompressedSize);
-      
+
       // Store the actual compression results for future estimates
       const savedBytes = totalSize - totalCompressedSize;
       const compressionRatio = ((savedBytes / totalSize) * 100).toFixed(1);
-      
+
       setLastCompressionResults({
         savedBytes,
         compressionRatio,
         newSize: totalCompressedSize,
       });
-      
+
       // Handle downloads based on selected option
       if (downloadOption === "separate" || files.length === 1) {
         compressedFiles.forEach((file) => {
@@ -373,13 +406,13 @@ export default function CompressPDF() {
         });
       } else if (downloadOption === "single" && files.length > 1) {
         const mergedPdf = await PDFDocument.create();
-        
+
         for (const file of compressedFiles) {
           const pdf = await PDFDocument.load(file.data);
           const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
           pages.forEach((page) => mergedPdf.addPage(page));
         }
-        
+
         const mergedPdfBytes = await mergedPdf.save();
         const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
         const finalFilename = filename.trim()
@@ -387,19 +420,19 @@ export default function CompressPDF() {
             ? filename
             : `${filename}.pdf`
           : "compressed_merged.pdf";
-        
+
         saveAs(blob, finalFilename);
       } else if (downloadOption === "zip" && files.length > 1) {
         const zip = new JSZip();
-        
+
         compressedFiles.forEach((file) => {
           zip.file(file.name, file.data);
         });
-        
+
         const zipContent = await zip.generateAsync({ type: "blob" });
         saveAs(zipContent, `${filename || "compressed_pdfs"}.zip`);
       }
-      
+
       setSuccess(true);
       setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
@@ -412,10 +445,10 @@ export default function CompressPDF() {
 
   const compressionStats = () => {
     if (compressedSize === 0 || totalSize === 0) return null;
-    
+
     const savedBytes = totalSize - compressedSize;
     const compressionRatio = ((savedBytes / totalSize) * 100).toFixed(1);
-    
+
     return {
       savedBytes,
       compressionRatio,
@@ -434,7 +467,7 @@ export default function CompressPDF() {
 
   const renderSavingsBadge = (percentage) => {
     let bgColor, textColor;
-    
+
     if (theme === "dark") {
       if (percentage >= 50) {
         bgColor = "bg-green-900/30";
@@ -464,9 +497,11 @@ export default function CompressPDF() {
         textColor = "text-gray-800";
       }
     }
-    
+
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${bgColor} ${textColor}`}>
+      <span
+        className={`px-2 py-1 rounded-full text-xs font-medium ${bgColor} ${textColor}`}
+      >
         {percentage}% reduction
       </span>
     );
@@ -485,28 +520,35 @@ export default function CompressPDF() {
           theme === "dark" ? "bg-[#1a1a1a]" : "bg-white"
         }`}
       >
-        <h2 className="text-3xl font-bold mb-2 text-center">PDF Size Compressor</h2>
-        <p className={`text-center mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
-          Reduce PDF file size with intelligent compression - process locally in your browser
+        <h2 className="text-3xl font-bold mb-2 text-center">
+          PDF Size Compressor
+        </h2>
+        <p
+          className={`text-center mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+        >
+          Reduce PDF file size with intelligent compression - process locally in
+          your browser
         </p>
-        
+
         {error && (
           <div className="text-red-500 text-center mb-4 p-3 bg-red-100 dark:bg-red-900/30 rounded-lg">
             {error}
           </div>
         )}
-        
+
         {success && (
           <div className="text-green-500 text-center mb-4 p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
             <p>PDF successfully compressed and downloaded!</p>
             {stats && (
               <p className="mt-2 text-sm">
-                Reduced from {formatBytes(totalSize)} to {formatBytes(stats.newSize)} ({stats.compressionRatio}% reduction)
+                Reduced from {formatBytes(totalSize)} to{" "}
+                {formatBytes(stats.newSize)} ({stats.compressionRatio}%
+                reduction)
               </p>
             )}
           </div>
         )}
-        
+
         {files.length === 0 ? (
           <div
             className={`border-2 border-dashed rounded-lg p-8 ${
@@ -521,7 +563,9 @@ export default function CompressPDF() {
                   theme === "dark" ? "text-blue-400" : "text-blue-500"
                 }`}
               />
-              <h3 className="text-xl font-medium mb-2">Upload your PDF files</h3>
+              <h3 className="text-xl font-medium mb-2">
+                Upload your PDF files
+              </h3>
               <p
                 className={`mb-6 max-w-md ${
                   theme === "dark" ? "text-gray-400" : "text-gray-600"
@@ -529,9 +573,9 @@ export default function CompressPDF() {
               >
                 Select or drag & drop PDF files here to compress their file size
               </p>
-              
+
               <FileUploader onChange={handleFileChange} hasFiles={false} />
-              
+
               <div
                 className={`w-full max-w-sm mt-8 pt-6 border-t ${
                   theme === "dark"
@@ -568,7 +612,7 @@ export default function CompressPDF() {
                 Clear All Files
               </button>
             </div>
-            
+
             <div className="mt-4 text-center">
               <div
                 className={`inline-flex items-center px-4 py-2 rounded-full ${
@@ -576,12 +620,17 @@ export default function CompressPDF() {
                 }`}
               >
                 <span className="font-medium mr-2">{files.length}</span>
-                <span className={theme === "dark" ? "text-gray-300" : "text-gray-700"}>
-                  {files.length === 1 ? "PDF file" : "PDF files"} • Total size: {formatBytes(totalSize)}
+                <span
+                  className={
+                    theme === "dark" ? "text-gray-300" : "text-gray-700"
+                  }
+                >
+                  {files.length === 1 ? "PDF file" : "PDF files"} • Total size:{" "}
+                  {formatBytes(totalSize)}
                 </span>
               </div>
             </div>
-            
+
             {previewStats && (
               <div
                 className={`mt-6 p-4 rounded-lg border ${
@@ -604,16 +653,24 @@ export default function CompressPDF() {
                       theme === "dark" ? "bg-gray-800" : "bg-white"
                     }`}
                   >
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Original Size</div>
-                    <div className="text-lg font-semibold">{formatBytes(previewStats.totalOriginal)}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      Original Size
+                    </div>
+                    <div className="text-lg font-semibold">
+                      {formatBytes(previewStats.totalOriginal)}
+                    </div>
                   </div>
                   <div
                     className={`p-3 rounded ${
                       theme === "dark" ? "bg-gray-800" : "bg-white"
                     }`}
                   >
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Estimated Size</div>
-                    <div className="text-lg font-semibold">{formatBytes(previewStats.totalEstimated)}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      Estimated Size
+                    </div>
+                    <div className="text-lg font-semibold">
+                      {formatBytes(previewStats.totalEstimated)}
+                    </div>
                   </div>
                 </div>
                 <div
@@ -623,33 +680,45 @@ export default function CompressPDF() {
                 >
                   <div className="flex justify-between items-center">
                     <div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">Estimated Savings</div>
-                      <div className="text-lg font-semibold">{formatBytes(previewStats.totalSaved)}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        Estimated Savings
+                      </div>
+                      <div className="text-lg font-semibold">
+                        {formatBytes(previewStats.totalSaved)}
+                      </div>
                     </div>
-                    {renderSavingsBadge(parseFloat(previewStats.overallSavingPercentage))}
+                    {renderSavingsBadge(
+                      parseFloat(previewStats.overallSavingPercentage)
+                    )}
                   </div>
                   <div className="mt-2">
                     <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
                       <div
                         className="bg-blue-500 h-full rounded-full"
-                        style={{ width: `${previewStats.overallSavingPercentage}%` }}
+                        style={{
+                          width: `${previewStats.overallSavingPercentage}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
                 </div>
                 <div className="text-xs text-center text-gray-500 dark:text-gray-400">
-                  Estimates based on current compression settings and previous results. 
-                  Actual compression may vary based on PDF content.
+                  Estimates based on current compression settings and previous
+                  results. Actual compression may vary based on PDF content.
                 </div>
               </div>
             )}
-            
+
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-medium mb-4">Compression Settings</h3>
-                
+                <h3 className="text-lg font-medium mb-4">
+                  Compression Settings
+                </h3>
+
                 <div className="mb-4">
-                  <label className="block font-medium mb-2">Compression Method:</label>
+                  <label className="block font-medium mb-2">
+                    Compression Method:
+                  </label>
                   <select
                     value={compressionMode}
                     onChange={(e) => setCompressionMode(e.target.value)}
@@ -662,13 +731,17 @@ export default function CompressPDF() {
                     <option value="minimum">Minimum (Better Quality)</option>
                     <option value="standard">Standard (Balanced)</option>
                     <option value="maximum">Maximum (Smallest Size)</option>
-                    <option value="metadata">Metadata Only (No Visual Change)</option>
+                    <option value="metadata">
+                      Metadata Only (No Visual Change)
+                    </option>
                   </select>
                 </div>
-                
+
                 <div className="mb-6">
                   <div className="flex justify-between items-center mb-2">
-                    <label className="font-medium">Compression Intensity:</label>
+                    <label className="font-medium">
+                      Compression Intensity:
+                    </label>
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-medium ${
                         compressionLevel < 25
@@ -689,18 +762,22 @@ export default function CompressPDF() {
                     max="95"
                     step="5"
                     value={compressionLevel}
-                    onChange={(e) => setCompressionLevel(Number(e.target.value))}
+                    onChange={(e) =>
+                      setCompressionLevel(Number(e.target.value))
+                    }
                     className={`w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer ${
                       theme === "dark" ? "bg-gray-700" : ""
                     }`}
-                    disabled={compressionMode === "metadata" && compressionLevel > 50}
+                    disabled={
+                      compressionMode === "metadata" && compressionLevel > 50
+                    }
                   />
                   <div className="flex justify-between text-xs mt-1">
                     <span>Better Quality</span>
                     <span>Smaller Size</span>
                   </div>
                 </div>
-                
+
                 <button
                   onClick={() => setShowAdvanced(!showAdvanced)}
                   className={`w-full px-4 py-2 rounded-lg text-sm font-medium mb-4 ${
@@ -709,16 +786,18 @@ export default function CompressPDF() {
                       : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                   }`}
                 >
-                  {showAdvanced ? "Hide Advanced Options" : "Show Advanced Options"}
+                  {showAdvanced
+                    ? "Hide Advanced Options"
+                    : "Show Advanced Options"}
                 </button>
-                
+
                 {showAdvanced && (
                   <div
                     className={`p-4 rounded-lg mb-4 ${
                       theme === "dark" ? "bg-gray-800" : "bg-gray-50"
                     }`}
                   >
-<h3 className="font-medium mb-3">Advanced Options</h3>
+                    <h3 className="font-medium mb-3">Advanced Options</h3>
                     <div className="mb-3">
                       <label className="flex items-center cursor-pointer">
                         <input
@@ -735,7 +814,9 @@ export default function CompressPDF() {
                         <input
                           type="checkbox"
                           checked={removeAnnotations}
-                          onChange={(e) => setRemoveAnnotations(e.target.checked)}
+                          onChange={(e) =>
+                            setRemoveAnnotations(e.target.checked)
+                          }
                           className="mr-2 h-4 w-4"
                         />
                         <span>Remove annotations (comments, etc.)</span>
@@ -755,13 +836,15 @@ export default function CompressPDF() {
                   </div>
                 )}
               </div>
-              
+
               <div>
                 <h3 className="text-lg font-medium mb-4">Download Options</h3>
                 <div className="mb-4">
                   {files.length > 1 && (
                     <div className="mb-4">
-                      <label className="block font-medium mb-2">Download Format:</label>
+                      <label className="block font-medium mb-2">
+                        Download Format:
+                      </label>
                       <div className="grid grid-cols-3 gap-2">
                         <label
                           className={`flex flex-col items-center justify-center p-3 rounded-lg cursor-pointer border ${
@@ -782,7 +865,9 @@ export default function CompressPDF() {
                             onChange={() => setDownloadOption("separate")}
                             className="sr-only"
                           />
-                          <span className="text-sm font-medium">Separate PDFs</span>
+                          <span className="text-sm font-medium">
+                            Separate PDFs
+                          </span>
                         </label>
                         <label
                           className={`flex flex-col items-center justify-center p-3 rounded-lg cursor-pointer border ${
@@ -803,7 +888,9 @@ export default function CompressPDF() {
                             onChange={() => setDownloadOption("single")}
                             className="sr-only"
                           />
-                          <span className="text-sm font-medium">Merged PDF</span>
+                          <span className="text-sm font-medium">
+                            Merged PDF
+                          </span>
                         </label>
                         <label
                           className={`flex flex-col items-center justify-center p-3 rounded-lg cursor-pointer border ${
@@ -824,29 +911,34 @@ export default function CompressPDF() {
                             onChange={() => setDownloadOption("zip")}
                             className="sr-only"
                           />
-                          <span className="text-sm font-medium">ZIP Archive</span>
+                          <span className="text-sm font-medium">
+                            ZIP Archive
+                          </span>
                         </label>
                       </div>
                     </div>
                   )}
-                  
-                  {(downloadOption === "single" || downloadOption === "zip") && files.length > 1 && (
-                    <div className="mb-4">
-                      <label className="block font-medium mb-2">Output Filename:</label>
-                      <input
-                        type="text"
-                        value={filename}
-                        onChange={(e) => setFilename(e.target.value)}
-                        placeholder="compressed_pdfs"
-                        className={`w-full px-4 py-3 rounded-lg border ${
-                          theme === "dark"
-                            ? "border-gray-600 bg-gray-800 text-white"
-                            : "border-gray-300 bg-white text-black"
-                        } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                      />
-                    </div>
-                  )}
-                  
+
+                  {(downloadOption === "single" || downloadOption === "zip") &&
+                    files.length > 1 && (
+                      <div className="mb-4">
+                        <label className="block font-medium mb-2">
+                          Output Filename:
+                        </label>
+                        <input
+                          type="text"
+                          value={filename}
+                          onChange={(e) => setFilename(e.target.value)}
+                          placeholder="compressed_pdfs"
+                          className={`w-full px-4 py-3 rounded-lg border ${
+                            theme === "dark"
+                              ? "border-gray-600 bg-gray-800 text-white"
+                              : "border-gray-300 bg-white text-black"
+                          } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                        />
+                      </div>
+                    )}
+
                   <button
                     onClick={compressPDFs}
                     disabled={loading || files.length === 0}
@@ -887,7 +979,7 @@ export default function CompressPDF() {
                       </>
                     )}
                   </button>
-                  
+
                   {analyzing && (
                     <div className="text-center mt-3 text-sm">
                       <span className="inline-block animate-pulse">
@@ -898,7 +990,7 @@ export default function CompressPDF() {
                 </div>
               </div>
             </div>
-            
+
             <div className="mt-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-medium">Your PDF Files</h3>
@@ -906,7 +998,7 @@ export default function CompressPDF() {
                   {files.length} {files.length === 1 ? "file" : "files"}
                 </span>
               </div>
-              
+
               <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
                 {files.map((file, index) => (
                   <div
@@ -939,14 +1031,20 @@ export default function CompressPDF() {
                               <div className="flex items-center">
                                 <span
                                   className={`text-sm ${
-                                    theme === "dark" ? "text-green-400" : "text-green-600"
+                                    theme === "dark"
+                                      ? "text-green-400"
+                                      : "text-green-600"
                                   }`}
                                 >
-                                  {formatBytes(filePreviewData[index].estimatedSize)}
+                                  {formatBytes(
+                                    filePreviewData[index].estimatedSize
+                                  )}
                                 </span>
                                 <span className="text-xs ml-2">
                                   {renderSavingsBadge(
-                                    parseFloat(filePreviewData[index].savingPercentage)
+                                    parseFloat(
+                                      filePreviewData[index].savingPercentage
+                                    )
                                   )}
                                 </span>
                               </div>
@@ -971,9 +1069,10 @@ export default function CompressPDF() {
         )}
       </div>
 
-            {/* Footer */}
-            <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        Your files are processed locally in your browser. No uploads to any server.
+      {/* Footer */}
+      <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        Your files are processed locally in your browser. No uploads to any
+        server.
       </div>
     </div>
   );

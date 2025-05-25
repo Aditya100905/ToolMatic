@@ -18,8 +18,8 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import * as YAML from 'yaml';
-import _ from 'lodash';
+import * as YAML from "yaml";
+import _ from "lodash";
 
 export default function DataFormatConverter({ theme = "dark" }) {
   // State management
@@ -158,7 +158,9 @@ export default function DataFormatConverter({ theme = "dark" }) {
           throw new Error(`Unsupported input format: ${format}`);
       }
     } catch (error) {
-      throw new Error(`Error parsing ${format.toUpperCase()}: ${error.message}`);
+      throw new Error(
+        `Error parsing ${format.toUpperCase()}: ${error.message}`
+      );
     }
   };
 
@@ -192,42 +194,42 @@ export default function DataFormatConverter({ theme = "dark" }) {
     const delimiter = advancedOptions.csvDelimiter;
     const lines = input.trim().split("\n");
     const result = [];
-    
+
     if (lines.length === 0) return result;
-    
+
     // Parse headers from first line
     const headers = parseCSVLine(lines[0], delimiter);
-    
+
     // Parse data rows
     for (let i = 1; i < lines.length; i++) {
       const line = lines[i].trim();
       if (!line) continue;
-      
+
       const values = parseCSVLine(line, delimiter);
       const obj = {};
-      
+
       headers.forEach((header, index) => {
-        let value = values[index] || '';
-        
+        let value = values[index] || "";
+
         // Try to convert to appropriate types
-        if (value.toLowerCase() === 'true') {
+        if (value.toLowerCase() === "true") {
           value = true;
-        } else if (value.toLowerCase() === 'false') {
+        } else if (value.toLowerCase() === "false") {
           value = false;
-        } else if (!isNaN(value) && value.trim() !== '') {
+        } else if (!isNaN(value) && value.trim() !== "") {
           // Only convert to number if it's a pure number
           const num = Number(value);
           if (String(num) === value.trim()) {
             value = num;
           }
         }
-        
+
         obj[header] = value;
       });
-      
+
       result.push(obj);
     }
-    
+
     return result;
   };
 
@@ -236,11 +238,11 @@ export default function DataFormatConverter({ theme = "dark" }) {
     const results = [];
     let field = "";
     let inQuotes = false;
-    
+
     for (let i = 0; i < line.length; i++) {
       const char = line[i];
       const nextChar = line[i + 1];
-      
+
       if (char === '"' && !inQuotes) {
         // Start of quoted field
         inQuotes = true;
@@ -261,10 +263,10 @@ export default function DataFormatConverter({ theme = "dark" }) {
         field += char;
       }
     }
-    
+
     // Add the last field
     results.push(field);
-    
+
     return results;
   };
 
@@ -272,23 +274,23 @@ export default function DataFormatConverter({ theme = "dark" }) {
   const parseXML = (input) => {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(input, "text/xml");
-    const parserError = xmlDoc.querySelector('parsererror');
-    
+    const parserError = xmlDoc.querySelector("parsererror");
+
     if (parserError) {
       throw new Error("Invalid XML: " + parserError.textContent);
     }
-    
+
     function xmlToObj(node) {
       // Handle text node
       if (node.nodeType === Node.TEXT_NODE) {
         const text = node.nodeValue.trim();
         return text || undefined;
       }
-      
+
       // Handle element node
       if (node.nodeType === Node.ELEMENT_NODE) {
         const obj = {};
-        
+
         // Process attributes
         if (node.attributes.length > 0) {
           obj["@attributes"] = {};
@@ -297,38 +299,48 @@ export default function DataFormatConverter({ theme = "dark" }) {
             obj["@attributes"][attr.nodeName] = attr.nodeValue;
           }
         }
-        
+
         // Process child nodes
-        const childNodes = Array.from(node.childNodes).filter(n => 
-          n.nodeType === Node.ELEMENT_NODE || 
-          (n.nodeType === Node.TEXT_NODE && n.nodeValue.trim())
+        const childNodes = Array.from(node.childNodes).filter(
+          (n) =>
+            n.nodeType === Node.ELEMENT_NODE ||
+            (n.nodeType === Node.TEXT_NODE && n.nodeValue.trim())
         );
-        
+
         // Check if we only have text content
-        if (childNodes.length === 1 && childNodes[0].nodeType === Node.TEXT_NODE) {
+        if (
+          childNodes.length === 1 &&
+          childNodes[0].nodeType === Node.TEXT_NODE
+        ) {
           const textValue = childNodes[0].nodeValue.trim();
-          
+
           // Try to convert text to appropriate types
           if (textValue === "true") {
-            return Object.keys(obj).length > 0 ? { ...obj, "#text": true } : true;
+            return Object.keys(obj).length > 0
+              ? { ...obj, "#text": true }
+              : true;
           } else if (textValue === "false") {
-            return Object.keys(obj).length > 0 ? { ...obj, "#text": false } : false;
+            return Object.keys(obj).length > 0
+              ? { ...obj, "#text": false }
+              : false;
           } else if (!isNaN(textValue) && textValue !== "") {
             const num = Number(textValue);
             return Object.keys(obj).length > 0 ? { ...obj, "#text": num } : num;
           } else {
-            return Object.keys(obj).length > 0 ? { ...obj, "#text": textValue } : textValue;
+            return Object.keys(obj).length > 0
+              ? { ...obj, "#text": textValue }
+              : textValue;
           }
         }
-        
+
         // Process child elements
         for (let i = 0; i < node.childNodes.length; i++) {
           const child = node.childNodes[i];
-          
+
           if (child.nodeType === Node.ELEMENT_NODE) {
             const childName = child.nodeName;
             const childData = xmlToObj(child);
-            
+
             if (obj[childName]) {
               if (!Array.isArray(obj[childName])) {
                 obj[childName] = [obj[childName]];
@@ -346,13 +358,13 @@ export default function DataFormatConverter({ theme = "dark" }) {
             }
           }
         }
-        
+
         return obj;
       }
-      
+
       return null;
     }
-    
+
     const rootElement = xmlDoc.documentElement;
     const result = {};
     result[rootElement.nodeName] = xmlToObj(rootElement);
@@ -361,137 +373,147 @@ export default function DataFormatConverter({ theme = "dark" }) {
 
   // Comprehensive TOML parser with better type support
   const parseTOML = (input) => {
-    const lines = input.split('\n');
+    const lines = input.split("\n");
     const result = {};
     let currentSection = result;
     let currentSectionPath = [];
-    
+
     const parseValue = (valueStr) => {
       valueStr = valueStr.trim();
-      
+
       // Handle arrays
-      if (valueStr.startsWith('[') && valueStr.endsWith(']')) {
+      if (valueStr.startsWith("[") && valueStr.endsWith("]")) {
         try {
           // Replace single quotes with double quotes for JSON compatibility
           const jsonArrayStr = valueStr.replace(/'/g, '"');
           return JSON.parse(jsonArrayStr);
         } catch (e) {
           // Handle multi-line arrays manually
-          if (valueStr.includes('\n')) {
+          if (valueStr.includes("\n")) {
             const items = [];
             const arrayContent = valueStr.slice(1, -1).trim();
-            let item = '';
+            let item = "";
             let inString = false;
-            let stringDelimiter = '';
-            
+            let stringDelimiter = "";
+
             for (let i = 0; i < arrayContent.length; i++) {
               const char = arrayContent[i];
-              
-              if ((char === '"' || char === "'") && (i === 0 || arrayContent[i-1] !== '\\')) {
+
+              if (
+                (char === '"' || char === "'") &&
+                (i === 0 || arrayContent[i - 1] !== "\\")
+              ) {
                 if (!inString) {
                   inString = true;
                   stringDelimiter = char;
                 } else if (stringDelimiter === char) {
                   inString = false;
                 }
-              } else if (char === ',' && !inString) {
+              } else if (char === "," && !inString) {
                 items.push(parseValue(item));
-                item = '';
+                item = "";
               } else {
                 item += char;
               }
             }
-            
+
             if (item.trim()) {
               items.push(parseValue(item));
             }
-            
+
             return items;
           }
           return valueStr; // Return as string if parsing fails
         }
       }
-      
+
       // Handle strings
-      if ((valueStr.startsWith('"') && valueStr.endsWith('"')) || 
-          (valueStr.startsWith("'") && valueStr.endsWith("'"))) {
+      if (
+        (valueStr.startsWith('"') && valueStr.endsWith('"')) ||
+        (valueStr.startsWith("'") && valueStr.endsWith("'"))
+      ) {
         return valueStr.slice(1, -1);
       }
-      
+
       // Handle booleans
-      if (valueStr === 'true') return true;
-      if (valueStr === 'false') return false;
-      
+      if (valueStr === "true") return true;
+      if (valueStr === "false") return false;
+
       // Handle dates
       if (/^\d{4}-\d{2}-\d{2}([T ]\d{2}:\d{2}:\d{2})?/.test(valueStr)) {
         return new Date(valueStr);
       }
-      
+
       // Handle numbers
-      if (!isNaN(valueStr) && valueStr.trim() !== '') {
-        if (valueStr.includes('.')) {
+      if (!isNaN(valueStr) && valueStr.trim() !== "") {
+        if (valueStr.includes(".")) {
           return parseFloat(valueStr);
         }
         return parseInt(valueStr, 10);
       }
-      
+
       // Return as string for anything else
       return valueStr;
     };
-    
+
     for (let i = 0; i < lines.length; i++) {
       let line = lines[i].trim();
-      
+
       // Skip empty lines and comments
-      if (!line || line.startsWith('#')) continue;
-      
+      if (!line || line.startsWith("#")) continue;
+
       // Handle multiline strings
-      if ((line.includes('"""') || line.includes("'''")) && 
-          !line.endsWith('"""') && !line.endsWith("'''")) {
+      if (
+        (line.includes('"""') || line.includes("'''")) &&
+        !line.endsWith('"""') &&
+        !line.endsWith("'''")
+      ) {
         const delimiter = line.includes('"""') ? '"""' : "'''";
         let valueStart = line.indexOf(delimiter) + delimiter.length;
         let value = line.substring(valueStart);
         let j = i + 1;
-        
+
         while (j < lines.length && !lines[j].includes(delimiter)) {
-          value += '\n' + lines[j];
+          value += "\n" + lines[j];
           j++;
         }
-        
+
         if (j < lines.length) {
-          value += '\n' + lines[j].substring(0, lines[j].indexOf(delimiter));
-          line = line.substring(0, line.indexOf(delimiter) + delimiter.length) + 
-                value + delimiter;
+          value += "\n" + lines[j].substring(0, lines[j].indexOf(delimiter));
+          line =
+            line.substring(0, line.indexOf(delimiter) + delimiter.length) +
+            value +
+            delimiter;
           i = j;
         }
       }
-      
+
       // Handle section headers
-      if (line.startsWith('[') && line.endsWith(']')) {
+      if (line.startsWith("[") && line.endsWith("]")) {
         const sectionName = line.slice(1, -1).trim();
-        currentSectionPath = sectionName.split('.');
-        
+        currentSectionPath = sectionName.split(".");
+
         let tmpObj = result;
         for (let i = 0; i < currentSectionPath.length; i++) {
           const pathPart = currentSectionPath[i];
           if (!tmpObj[pathPart]) tmpObj[pathPart] = {};
           tmpObj = tmpObj[pathPart];
         }
-        
+
         currentSection = tmpObj;
         continue;
       }
-      
+
       // Handle key-value pairs
-      const equalPos = line.indexOf('=');
+      const equalPos = line.indexOf("=");
       if (equalPos !== -1) {
         const key = line.slice(0, equalPos).trim();
         let value = line.slice(equalPos + 1).trim();
-        
+
         currentSection[key] = parseValue(value);
       }
     }
-    
+
     return result;
   };
 
@@ -515,7 +537,9 @@ export default function DataFormatConverter({ theme = "dark" }) {
           throw new Error(`Unsupported output format: ${format}`);
       }
     } catch (error) {
-      throw new Error(`Error generating ${format.toUpperCase()}: ${error.message}`);
+      throw new Error(
+        `Error generating ${format.toUpperCase()}: ${error.message}`
+      );
     }
   };
 
@@ -523,8 +547,8 @@ export default function DataFormatConverter({ theme = "dark" }) {
   const formatJSON = (data) => {
     try {
       return JSON.stringify(
-        data, 
-        null, 
+        data,
+        null,
         advancedOptions.prettyPrint ? advancedOptions.jsonIndent : 0
       );
     } catch (error) {
@@ -546,22 +570,22 @@ export default function DataFormatConverter({ theme = "dark" }) {
   // Enhanced CSV formatter with improved handling of arrays and objects
   const formatCSV = (data) => {
     if (!data) return "";
-    
+
     // Normalize data to an array of objects
     const dataArray = Array.isArray(data) ? data : [data];
     if (dataArray.length === 0) return "";
-    
+
     const delimiter = advancedOptions.csvDelimiter;
     const quoteStrings = advancedOptions.csvQuoteStrings;
     const includeHeaders = advancedOptions.csvIncludeHeaders;
-    
+
     // Function to flatten nested objects into dot notation
-    const flattenObject = (obj, prefix = '') => {
+    const flattenObject = (obj, prefix = "") => {
       return Object.keys(obj).reduce((acc, key) => {
-        const pre = prefix.length ? `${prefix}.` : '';
+        const pre = prefix.length ? `${prefix}.` : "";
         if (
-          typeof obj[key] === 'object' && 
-          obj[key] !== null && 
+          typeof obj[key] === "object" &&
+          obj[key] !== null &&
           !Array.isArray(obj[key]) &&
           !(obj[key] instanceof Date)
         ) {
@@ -572,150 +596,157 @@ export default function DataFormatConverter({ theme = "dark" }) {
         return acc;
       }, {});
     };
-    
+
     // Flatten all objects and collect unique headers
-    const flattenedData = dataArray.map(item => flattenObject(item));
+    const flattenedData = dataArray.map((item) => flattenObject(item));
     const headers = [];
-    flattenedData.forEach(item => {
-      Object.keys(item).forEach(key => {
+    flattenedData.forEach((item) => {
+      Object.keys(item).forEach((key) => {
         if (!headers.includes(key)) {
           headers.push(key);
         }
       });
     });
-    
+
     // Format a value for CSV output
     const formatValue = (value) => {
       if (value === null || value === undefined) {
-        return '';
+        return "";
       }
-      
+
       if (Array.isArray(value)) {
         // Join arrays with ; to avoid confusion with the CSV delimiter
-        value = value.join(';');
+        value = value.join(";");
       }
-      
+
       if (value instanceof Date) {
         value = value.toISOString();
       }
-      
+
       const stringValue = String(value);
-      
+
       // Quote strings if option is enabled or if they contain special characters
-      if (quoteStrings && typeof value === 'string' || 
-          stringValue.includes(delimiter) || 
-          stringValue.includes('\n') || 
-          stringValue.includes('"')) {
+      if (
+        (quoteStrings && typeof value === "string") ||
+        stringValue.includes(delimiter) ||
+        stringValue.includes("\n") ||
+        stringValue.includes('"')
+      ) {
         return `"${stringValue.replace(/"/g, '""')}"`;
       }
-      
+
       return stringValue;
     };
-    
-    let csv = '';
-    
+
+    let csv = "";
+
     // Add headers
     if (includeHeaders && headers.length > 0) {
-      csv += headers.map(header => 
-        quoteStrings ? `"${header.replace(/"/g, '""')}"` : header
-      ).join(delimiter) + '\n';
+      csv +=
+        headers
+          .map((header) =>
+            quoteStrings ? `"${header.replace(/"/g, '""')}"` : header
+          )
+          .join(delimiter) + "\n";
     }
-    
+
     // Add data rows
-    flattenedData.forEach(item => {
-      const row = headers.map(header => formatValue(item[header]));
-      csv += row.join(delimiter) + '\n';
+    flattenedData.forEach((item) => {
+      const row = headers.map((header) => formatValue(item[header]));
+      csv += row.join(delimiter) + "\n";
     });
-    
+
     return csv;
   };
 
   // Improved XML formatter with proper nesting and attribute support
   const formatXML = (data) => {
-    const indent = advancedOptions.prettyPrint ? ' '.repeat(advancedOptions.xmlIndent) : '';
-    
+    const indent = advancedOptions.prettyPrint
+      ? " ".repeat(advancedOptions.xmlIndent)
+      : "";
+
     function objectToXml(obj, nodeName, level = 0) {
       if (obj === null || obj === undefined) {
-        return `${indent.repeat(level)}<${nodeName}/>${advancedOptions.prettyPrint ? '\n' : ''}`;
+        return `${indent.repeat(level)}<${nodeName}/>${advancedOptions.prettyPrint ? "\n" : ""}`;
       }
-      
+
       const currentIndent = indent.repeat(level);
-      const nl = advancedOptions.prettyPrint ? '\n' : '';
-      
+      const nl = advancedOptions.prettyPrint ? "\n" : "";
+
       // Special handling for primitive values
-      if (typeof obj !== 'object' || obj instanceof Date) {
+      if (typeof obj !== "object" || obj instanceof Date) {
         let value = obj instanceof Date ? obj.toISOString() : String(obj);
         // Escape XML special characters
         value = value
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&apos;');
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&apos;");
         return `${currentIndent}<${nodeName}>${value}</${nodeName}>${nl}`;
       }
-      
+
       let xml = `${currentIndent}<${nodeName}`;
-      
+
       // Handle attributes (properties that start with @)
       const attributes = {};
       const children = {};
       let textContent = null;
-      
+
       for (const key in obj) {
-        if (key === '@attributes' && typeof obj[key] === 'object') {
+        if (key === "@attributes" && typeof obj[key] === "object") {
           Object.assign(attributes, obj[key]);
-        } else if (key === '#text') {
+        } else if (key === "#text") {
           textContent = obj[key];
         } else {
           children[key] = obj[key];
         }
       }
-      
+
       // Add attributes
       for (const attr in attributes) {
         let attrValue = attributes[attr];
         if (attrValue !== null && attrValue !== undefined) {
           // Escape attribute values
           attrValue = String(attrValue)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
           xml += ` ${attr}="${attrValue}"`;
         }
       }
-      
+
       const hasChildren = Object.keys(children).length > 0;
       const hasTextContent = textContent !== null && textContent !== undefined;
-      
+
       // Handle empty elements
       if (!hasChildren && !hasTextContent) {
         return `${xml}/>${nl}`;
       }
-      
-      xml += '>';
-      
+
+      xml += ">";
+
       // Add text content if present
       if (hasTextContent) {
         let value = String(textContent)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&apos;');
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&apos;");
         xml += value;
       } else if (hasChildren) {
         xml += nl;
       }
-      
+
       // Add child elements
       for (const childName in children) {
         const child = children[childName];
-        
+
         if (Array.isArray(child)) {
           // Handle array of items
-          child.forEach(item => {
+          child.forEach((item) => {
             xml += objectToXml(item, childName, level + 1);
           });
         } else {
@@ -723,22 +754,22 @@ export default function DataFormatConverter({ theme = "dark" }) {
           xml += objectToXml(child, childName, level + 1);
         }
       }
-      
+
       // Close the element
       if (hasChildren) {
         xml += currentIndent;
       }
       xml += `</${nodeName}>${nl}`;
-      
+
       return xml;
     }
-    
+
     // Handle the root element(s)
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>${advancedOptions.prettyPrint ? '\n' : ''}`;
-    
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>${advancedOptions.prettyPrint ? "\n" : ""}`;
+
     if (Array.isArray(data)) {
       // Wrap arrays in a root element
-      xml += `<root>${advancedOptions.prettyPrint ? '\n' : ''}`;
+      xml += `<root>${advancedOptions.prettyPrint ? "\n" : ""}`;
       data.forEach((item, index) => {
         xml += objectToXml(item, "item", 1);
       });
@@ -747,47 +778,47 @@ export default function DataFormatConverter({ theme = "dark" }) {
       // Use the first key as root element name
       const rootKeys = Object.keys(data);
       if (rootKeys.length === 0) {
-        xml += '<root/>';
+        xml += "<root/>";
       } else {
         const rootName = rootKeys[0];
         xml += objectToXml(data[rootName], rootName);
       }
     }
-    
+
     return xml;
   };
 
   // Enhanced TOML formatter with better handling of complex types
   const formatTOML = (data) => {
     if (!data) return "";
-    
+
     let toml = "";
     const lineBreak = "\n";
-    
+
     function formatValue(value) {
       if (value === null || value === undefined) {
         return "";
       }
-      
+
       if (typeof value === "string") {
         // Check if the string needs basic or multi-line formatting
-        if (value.includes("\n") || value.includes("\"")) {
+        if (value.includes("\n") || value.includes('"')) {
           return `'''${value}'''`;
         }
         return `"${value}"`;
       }
-      
+
       if (typeof value === "number" || typeof value === "boolean") {
         return String(value);
       }
-      
+
       if (value instanceof Date) {
         return value.toISOString();
       }
-      
+
       if (Array.isArray(value)) {
         // Handle arrays of primitives
-        const arrayValues = value.map(item => {
+        const arrayValues = value.map((item) => {
           if (typeof item === "string") {
             return `"${item.replace(/"/g, '\\"')}"`;
           }
@@ -795,26 +826,35 @@ export default function DataFormatConverter({ theme = "dark" }) {
         });
         return `[${arrayValues.join(", ")}]`;
       }
-      
+
       // Object values will be handled separately
       return null;
     }
-    
+
     function writeSection(data, path = []) {
       const simpleProps = {};
       const tableSections = {};
       const arrayOfTables = {};
-      
+
       // First pass: separate simple values from tables
       for (const [key, value] of Object.entries(data)) {
         if (value === null || value === undefined) {
           continue;
         }
-        
-        if (Array.isArray(value) && value.length > 0 && typeof value[0] === "object" && !(value[0] instanceof Date)) {
+
+        if (
+          Array.isArray(value) &&
+          value.length > 0 &&
+          typeof value[0] === "object" &&
+          !(value[0] instanceof Date)
+        ) {
           // This is an array of tables
           arrayOfTables[key] = value;
-        } else if (typeof value === "object" && !(value instanceof Date) && !Array.isArray(value)) {
+        } else if (
+          typeof value === "object" &&
+          !(value instanceof Date) &&
+          !Array.isArray(value)
+        ) {
           // This is a table section
           tableSections[key] = value;
         } else {
@@ -822,7 +862,7 @@ export default function DataFormatConverter({ theme = "dark" }) {
           simpleProps[key] = value;
         }
       }
-      
+
       // Write simple key-value pairs
       for (const [key, value] of Object.entries(simpleProps)) {
         const formattedValue = formatValue(value);
@@ -830,13 +870,16 @@ export default function DataFormatConverter({ theme = "dark" }) {
           toml += `${key} = ${formattedValue}${lineBreak}`;
         }
       }
-      
+
       // Add spacing if we have both simple props and tables
-      if (Object.keys(simpleProps).length > 0 && 
-          (Object.keys(tableSections).length > 0 || Object.keys(arrayOfTables).length > 0)) {
+      if (
+        Object.keys(simpleProps).length > 0 &&
+        (Object.keys(tableSections).length > 0 ||
+          Object.keys(arrayOfTables).length > 0)
+      ) {
         toml += lineBreak;
       }
-      
+
       // Write table sections
       for (const [key, value] of Object.entries(tableSections)) {
         const newPath = [...path, key];
@@ -844,18 +887,18 @@ export default function DataFormatConverter({ theme = "dark" }) {
         writeSection(value, newPath);
         toml += lineBreak;
       }
-      
+
       // Write arrays of tables
       for (const [key, tables] of Object.entries(arrayOfTables)) {
-        tables.forEach(table => {
+        tables.forEach((table) => {
           const newPath = [...path, key];
           toml += `[[${newPath.join(".")}]]${lineBreak}`;
-          writeSection(table, []);  // Don't pass path as we're already in the right context
+          writeSection(table, []); // Don't pass path as we're already in the right context
           toml += lineBreak;
         });
       }
     }
-    
+
     writeSection(data);
     return toml.trim();
   };
@@ -874,11 +917,11 @@ export default function DataFormatConverter({ theme = "dark" }) {
       setConversionStatus({ success: true, message: "" });
       return;
     }
-    
+
     try {
       const parsedData = parseInput(inputText, sourceFormat);
       const result = formatOutput(parsedData, targetFormat);
-      
+
       setOutputText(result);
       setConversionStatus({
         success: true,
@@ -936,18 +979,18 @@ export default function DataFormatConverter({ theme = "dark" }) {
     if (!file) return;
 
     // Automatically detect format from file extension
-    const extension = file.name.split('.').pop().toLowerCase();
+    const extension = file.name.split(".").pop().toLowerCase();
     let format = sourceFormat;
-    
-    if (['json', 'csv', 'xml', 'yaml', 'yml', 'toml'].includes(extension)) {
-      if (extension === 'yml') {
-        format = 'yaml';
+
+    if (["json", "csv", "xml", "yaml", "yml", "toml"].includes(extension)) {
+      if (extension === "yml") {
+        format = "yaml";
       } else {
         format = extension;
       }
       setSourceFormat(format);
     }
-    
+
     const reader = new FileReader();
     reader.onload = (event) => {
       setInputText(event.target.result);
@@ -958,25 +1001,25 @@ export default function DataFormatConverter({ theme = "dark" }) {
   // Handler for downloading output as a file
   const downloadOutput = () => {
     if (!outputText) return;
-    
+
     const extensions = {
-      json: 'json',
-      csv: 'csv',
-      yaml: 'yaml',
-      xml: 'xml',
-      toml: 'toml'
+      json: "json",
+      csv: "csv",
+      yaml: "yaml",
+      xml: "xml",
+      toml: "toml",
     };
-    
-    const blob = new Blob([outputText], { type: 'text/plain' });
+
+    const blob = new Blob([outputText], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `converted.${extensions[targetFormat]}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     showNotification(`Downloaded as converted.${extensions[targetFormat]}`);
   };
 
@@ -991,7 +1034,7 @@ export default function DataFormatConverter({ theme = "dark" }) {
   const toggleAdvancedOptions = () => {
     setAdvancedOptions({
       ...advancedOptions,
-      showPanel: !advancedOptions.showPanel
+      showPanel: !advancedOptions.showPanel,
     });
   };
 
@@ -1045,12 +1088,9 @@ export default function DataFormatConverter({ theme = "dark" }) {
             variant === "primary"
               ? getColors()[theme].primary
               : variant === "secondary"
-              ? getColors()[theme].surface2
-              : "transparent",
-          color:
-            variant === "primary"
-              ? "#fff"
-              : getColors()[theme].text,
+                ? getColors()[theme].surface2
+                : "transparent",
+          color: variant === "primary" ? "#fff" : getColors()[theme].text,
           borderColor:
             variant === "secondary" ? getColors()[theme].border : "transparent",
         }}
@@ -1183,9 +1223,18 @@ export default function DataFormatConverter({ theme = "dark" }) {
             variant="secondary"
             icon={<Settings size={16} />}
           >
-            Options {advancedOptions.showPanel ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            Options{" "}
+            {advancedOptions.showPanel ? (
+              <ChevronUp size={16} />
+            ) : (
+              <ChevronDown size={16} />
+            )}
           </Button>
-          <Button onClick={resetAll} variant="secondary" icon={<RefreshCw size={16} />}>
+          <Button
+            onClick={resetAll}
+            variant="secondary"
+            icon={<RefreshCw size={16} />}
+          >
             Reset
           </Button>
         </div>
@@ -1194,17 +1243,26 @@ export default function DataFormatConverter({ theme = "dark" }) {
       {/* Advanced options panel */}
       {advancedOptions.showPanel && (
         <Panel className="mb-6">
-          <h3 className="mb-4 font-semibold" style={{ color: getColors()[theme].text }}>
+          <h3
+            className="mb-4 font-semibold"
+            style={{ color: getColors()[theme].text }}
+          >
             Advanced Options
           </h3>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <h4 className="mb-2 font-medium" style={{ color: getColors()[theme].textSecondary }}>
+              <h4
+                className="mb-2 font-medium"
+                style={{ color: getColors()[theme].textSecondary }}
+              >
                 CSV Options
               </h4>
               <div className="space-y-2">
                 <div className="flex items-center">
-                  <label className="mr-2 flex-shrink-0" style={{ color: getColors()[theme].text }}>
+                  <label
+                    className="mr-2 flex-shrink-0"
+                    style={{ color: getColors()[theme].text }}
+                  >
                     Delimiter:
                   </label>
                   <input
@@ -1227,7 +1285,10 @@ export default function DataFormatConverter({ theme = "dark" }) {
                   />
                 </div>
                 <div className="flex items-center">
-                  <label className="flex items-center" style={{ color: getColors()[theme].text }}>
+                  <label
+                    className="flex items-center"
+                    style={{ color: getColors()[theme].text }}
+                  >
                     <input
                       type="checkbox"
                       checked={advancedOptions.csvQuoteStrings}
@@ -1243,7 +1304,10 @@ export default function DataFormatConverter({ theme = "dark" }) {
                   </label>
                 </div>
                 <div className="flex items-center">
-                  <label className="flex items-center" style={{ color: getColors()[theme].text }}>
+                  <label
+                    className="flex items-center"
+                    style={{ color: getColors()[theme].text }}
+                  >
                     <input
                       type="checkbox"
                       checked={advancedOptions.csvIncludeHeaders}
@@ -1262,12 +1326,18 @@ export default function DataFormatConverter({ theme = "dark" }) {
             </div>
 
             <div>
-              <h4 className="mb-2 font-medium" style={{ color: getColors()[theme].textSecondary }}>
+              <h4
+                className="mb-2 font-medium"
+                style={{ color: getColors()[theme].textSecondary }}
+              >
                 Formatting Options
               </h4>
               <div className="space-y-2">
                 <div className="flex items-center">
-                  <label className="flex items-center" style={{ color: getColors()[theme].text }}>
+                  <label
+                    className="flex items-center"
+                    style={{ color: getColors()[theme].text }}
+                  >
                     <input
                       type="checkbox"
                       checked={advancedOptions.prettyPrint}
@@ -1283,7 +1353,10 @@ export default function DataFormatConverter({ theme = "dark" }) {
                   </label>
                 </div>
                 <div className="flex items-center">
-                  <label className="mr-2" style={{ color: getColors()[theme].text }}>
+                  <label
+                    className="mr-2"
+                    style={{ color: getColors()[theme].text }}
+                  >
                     Indent size:
                   </label>
                   <input
@@ -1320,7 +1393,10 @@ export default function DataFormatConverter({ theme = "dark" }) {
         {/* Input panel */}
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <h2 className="font-semibold" style={{ color: getColors()[theme].text }}>
+            <h2
+              className="font-semibold"
+              style={{ color: getColors()[theme].text }}
+            >
               Input ({sourceFormat.toUpperCase()})
             </h2>
             <div className="flex space-x-2">
@@ -1332,7 +1408,11 @@ export default function DataFormatConverter({ theme = "dark" }) {
                 accept=".json,.csv,.xml,.yaml,.yml,.toml"
               />
               <label htmlFor="file-upload">
-                <Button variant="secondary" size="sm" icon={<Upload size={14} />}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  icon={<Upload size={14} />}
+                >
                   Upload
                 </Button>
               </label>
@@ -1351,7 +1431,10 @@ export default function DataFormatConverter({ theme = "dark" }) {
         {/* Output panel */}
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <h2 className="font-semibold" style={{ color: getColors()[theme].text }}>
+            <h2
+              className="font-semibold"
+              style={{ color: getColors()[theme].text }}
+            >
               Output ({targetFormat.toUpperCase()})
             </h2>
             <div className="flex space-x-2">
@@ -1359,7 +1442,9 @@ export default function DataFormatConverter({ theme = "dark" }) {
                 onClick={copyToClipboard}
                 variant="secondary"
                 size="sm"
-                icon={copied ? <CheckCircle size={14} /> : <Clipboard size={14} />}
+                icon={
+                  copied ? <CheckCircle size={14} /> : <Clipboard size={14} />
+                }
                 disabled={!outputText}
               >
                 {copied ? "Copied!" : "Copy"}

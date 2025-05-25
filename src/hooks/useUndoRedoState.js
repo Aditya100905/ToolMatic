@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from "react";
 
 /**
  * Custom hook that enhances useState with undo/redo functionality
@@ -8,12 +8,12 @@ import { useState, useCallback, useRef } from 'react';
 const useUndoRedoState = (initialState) => {
   // Initialize the current state
   const [state, setState] = useState(initialState);
-  
+
   // Use refs to maintain history outside of render cycles
   const historyRef = useRef({
     past: [],
     future: [],
-    present: typeof initialState === 'function' ? initialState() : initialState
+    present: typeof initialState === "function" ? initialState() : initialState,
   });
 
   // Reference to track if we're currently performing an undo/redo operation
@@ -22,7 +22,7 @@ const useUndoRedoState = (initialState) => {
   // Update state and history
   const updateState = useCallback((action) => {
     const { past, present } = historyRef.current;
-    
+
     // If this is an undo/redo operation, don't add to history
     if (operationInProgress.current) {
       setState(action);
@@ -30,7 +30,7 @@ const useUndoRedoState = (initialState) => {
     }
 
     // If action is a function, get the new state by calling it with present state
-    const newPresent = typeof action === 'function' ? action(present) : action;
+    const newPresent = typeof action === "function" ? action(present) : action;
 
     // Don't update history if the state is the same (using shallow equality)
     if (JSON.stringify(newPresent) === JSON.stringify(present)) {
@@ -41,7 +41,7 @@ const useUndoRedoState = (initialState) => {
     historyRef.current = {
       past: [...past, present],
       present: newPresent,
-      future: []
+      future: [],
     };
 
     // Update React state
@@ -61,7 +61,7 @@ const useUndoRedoState = (initialState) => {
     historyRef.current = {
       past: newPast,
       present: previous,
-      future: [present, ...future]
+      future: [present, ...future],
     };
     setState(previous);
     operationInProgress.current = false;
@@ -80,7 +80,7 @@ const useUndoRedoState = (initialState) => {
     historyRef.current = {
       past: [...past, present],
       present: next,
-      future: newFuture
+      future: newFuture,
     };
     setState(next);
     operationInProgress.current = false;
@@ -104,8 +104,8 @@ const useUndoRedoState = (initialState) => {
       redo,
       canUndo,
       canRedo,
-      history: historyRef.current // Expose history for debugging if needed
-    }
+      history: historyRef.current, // Expose history for debugging if needed
+    },
   ];
 };
 

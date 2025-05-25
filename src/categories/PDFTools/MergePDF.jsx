@@ -1,8 +1,13 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 import { PDFDocument } from "pdf-lib";
 import { saveAs } from "file-saver";
 import FileUploader from "./FileUploader";
-import { XCircleIcon, ArrowsUpDownIcon, DocumentTextIcon, DocumentPlusIcon } from "@heroicons/react/24/solid";
+import {
+  XCircleIcon,
+  ArrowsUpDownIcon,
+  DocumentTextIcon,
+  DocumentPlusIcon,
+} from "@heroicons/react/24/solid";
 import { useTheme } from "../../ThemeProvider";
 
 export default function MergePDF() {
@@ -23,36 +28,38 @@ export default function MergePDF() {
 
   const handleFileChange = (event) => {
     const newFiles = [...event.target.files];
-    
+
     // Filter out non-PDF files
-    const pdfFiles = newFiles.filter(file => file.type === "application/pdf");
-    
+    const pdfFiles = newFiles.filter((file) => file.type === "application/pdf");
+
     if (pdfFiles.length !== newFiles.length) {
       setError("Only PDF files are allowed!");
     }
-    
+
     if (pdfFiles.length > 0 && files.length === 0) {
       setFilename(pdfFiles[0].name.replace(/\.pdf$/, ""));
     }
-    
+
     setFiles((prevFiles) => [...prevFiles, ...pdfFiles]);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
     const droppedFiles = [...event.dataTransfer.files];
-    
+
     // Filter out non-PDF files
-    const pdfFiles = droppedFiles.filter(file => file.type === "application/pdf");
-    
+    const pdfFiles = droppedFiles.filter(
+      (file) => file.type === "application/pdf"
+    );
+
     if (pdfFiles.length !== droppedFiles.length) {
       setError("Only PDF files are allowed!");
     }
-    
+
     if (pdfFiles.length > 0 && files.length === 0) {
       setFilename(pdfFiles[0].name.replace(/\.pdf$/, ""));
     }
-    
+
     setFiles((prevFiles) => [...prevFiles, ...pdfFiles]);
   };
 
@@ -85,13 +92,13 @@ export default function MergePDF() {
     if (draggedItem !== null) {
       const newFiles = [...files];
       const draggedFile = newFiles[draggedItem];
-      
+
       // Remove the dragged item
       newFiles.splice(draggedItem, 1);
-      
+
       // Insert at new position
       newFiles.splice(dropIndex, 0, draggedFile);
-      
+
       setFiles(newFiles);
       setDraggedItem(null);
     }
@@ -100,14 +107,20 @@ export default function MergePDF() {
   const moveFileUp = (index) => {
     if (index <= 0) return;
     const newFiles = [...files];
-    [newFiles[index], newFiles[index - 1]] = [newFiles[index - 1], newFiles[index]];
+    [newFiles[index], newFiles[index - 1]] = [
+      newFiles[index - 1],
+      newFiles[index],
+    ];
     setFiles(newFiles);
   };
 
   const moveFileDown = (index) => {
     if (index >= files.length - 1) return;
     const newFiles = [...files];
-    [newFiles[index], newFiles[index + 1]] = [newFiles[index + 1], newFiles[index]];
+    [newFiles[index], newFiles[index + 1]] = [
+      newFiles[index + 1],
+      newFiles[index],
+    ];
     setFiles(newFiles);
   };
 
@@ -119,14 +132,17 @@ export default function MergePDF() {
 
     setLoading(true);
     setError("");
-    
+
     try {
       const mergedPdf = await PDFDocument.create();
-      
+
       for (const file of files) {
         const fileBytes = await file.arrayBuffer();
         const pdf = await PDFDocument.load(fileBytes);
-        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        const copiedPages = await mergedPdf.copyPages(
+          pdf,
+          pdf.getPageIndices()
+        );
         copiedPages.forEach((page) => mergedPdf.addPage(page));
       }
 
@@ -151,15 +167,15 @@ export default function MergePDF() {
 
   // Format bytes to readable format
   const formatBytes = (bytes, decimals = 2) => {
-    if (bytes === 0) return '0 Bytes';
-    
+    if (bytes === 0) return "0 Bytes";
+
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   };
 
   return (
@@ -176,7 +192,9 @@ export default function MergePDF() {
         }`}
       >
         <h2 className="text-3xl font-bold mb-2 text-center">Merge PDFs</h2>
-        <p className={`text-center mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
+        <p
+          className={`text-center mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+        >
           Combine multiple PDF files into one document
         </p>
 
@@ -193,7 +211,7 @@ export default function MergePDF() {
         )}
 
         {files.length === 0 ? (
-          <div 
+          <div
             className={`border-2 border-dashed rounded-lg p-8 ${
               theme === "dark" ? "border-gray-700" : "border-gray-300"
             }`}
@@ -201,26 +219,35 @@ export default function MergePDF() {
             onDrop={handleDrop}
           >
             <div className="flex flex-col items-center text-center">
-              <DocumentPlusIcon 
+              <DocumentPlusIcon
                 className={`w-16 h-16 mb-4 ${
                   theme === "dark" ? "text-blue-400" : "text-blue-500"
-                }`} 
+                }`}
               />
-              
-              <h3 className="text-xl font-medium mb-2">Upload your PDF files</h3>
-              
-              <p className={`mb-6 max-w-md ${
-                theme === "dark" ? "text-gray-400" : "text-gray-600"
-              }`}>
-                Select or drag & drop PDF files here to merge them into a single document
+
+              <h3 className="text-xl font-medium mb-2">
+                Upload your PDF files
+              </h3>
+
+              <p
+                className={`mb-6 max-w-md ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                Select or drag & drop PDF files here to merge them into a single
+                document
               </p>
-              
+
               {/* The FileUploader component */}
               <FileUploader onChange={handleFileChange} hasFiles={false} />
-              
-              <div className={`w-full max-w-sm mt-8 pt-6 border-t ${
-                theme === "dark" ? "border-gray-700 text-gray-400" : "border-gray-200 text-gray-600"
-              }`}>
+
+              <div
+                className={`w-full max-w-sm mt-8 pt-6 border-t ${
+                  theme === "dark"
+                    ? "border-gray-700 text-gray-400"
+                    : "border-gray-200 text-gray-600"
+                }`}
+              >
                 <div className="flex items-center justify-between text-sm">
                   <span>• Process files locally</span>
                   <span>• Rearrange document order</span>
@@ -231,12 +258,18 @@ export default function MergePDF() {
         ) : (
           <>
             {/* File Upload Button when files exist */}
-            <FileUploader onChange={handleFileChange} hasFiles={files.length > 0} />
+            <FileUploader
+              onChange={handleFileChange}
+              hasFiles={files.length > 0}
+            />
 
             {/* File Stats */}
             <div className="mt-4 text-center">
-              <p className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}>
-                {files.length} {files.length === 1 ? 'file' : 'files'} selected • Total size: {formatBytes(totalSize)}
+              <p
+                className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}
+              >
+                {files.length} {files.length === 1 ? "file" : "files"} selected
+                • Total size: {formatBytes(totalSize)}
               </p>
             </div>
 
@@ -266,7 +299,7 @@ export default function MergePDF() {
                 <h3 className="text-lg font-semibold">Selected PDFs:</h3>
                 <div className="text-sm text-blue-500">Drag to reorder</div>
               </div>
-              
+
               <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                 {files.map((file, index) => {
                   const fileURL = URL.createObjectURL(file);
@@ -278,8 +311,8 @@ export default function MergePDF() {
                       onDragOver={(e) => handleDragOver(e, index)}
                       onDrop={(e) => handleDrop1(e, index)}
                       className={`flex items-center justify-between shadow-sm rounded-lg px-4 py-3 ${
-                        theme === "dark" 
-                          ? "bg-gray-700 hover:bg-gray-600 text-gray-200" 
+                        theme === "dark"
+                          ? "bg-gray-700 hover:bg-gray-600 text-gray-200"
                           : "bg-white hover:bg-gray-100 text-gray-800"
                       } transition-colors cursor-grab border border-transparent hover:border-blue-400`}
                     >
@@ -301,26 +334,26 @@ export default function MergePDF() {
                           {formatBytes(file.size)}
                         </span>
                       </div>
-                      
+
                       <div className="flex items-center gap-2">
-                        <button 
+                        <button
                           onClick={() => moveFileUp(index)}
-                          className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 ${index === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 ${index === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
                           disabled={index === 0}
                           title="Move up"
                         >
                           <ArrowsUpDownIcon className="h-4 w-4 rotate-180" />
                         </button>
-                        <button 
+                        <button
                           onClick={() => moveFileDown(index)}
-                          className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 ${index === files.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 ${index === files.length - 1 ? "opacity-50 cursor-not-allowed" : ""}`}
                           disabled={index === files.length - 1}
                           title="Move down"
                         >
                           <ArrowsUpDownIcon className="h-4 w-4" />
                         </button>
-                        <button 
-                          onClick={() => removeFile(index)} 
+                        <button
+                          onClick={() => removeFile(index)}
                           className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/50 text-red-500"
                           title="Remove file"
                         >
@@ -348,7 +381,7 @@ export default function MergePDF() {
                   {loading ? "Merging..." : "Merge PDFs"}
                 </button>
               )}
-              
+
               <button
                 onClick={clearAllFiles}
                 className="px-6 py-3 rounded-lg font-medium bg-red-500 hover:bg-red-400 transition text-white shadow-md hover:shadow-lg"
@@ -359,11 +392,12 @@ export default function MergePDF() {
           </>
         )}
       </div>
-      
+
       {/* Footer */}
       <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        Your files are processed locally in your browser. No uploads to any server.
-      </div> 
+        Your files are processed locally in your browser. No uploads to any
+        server.
+      </div>
     </div>
   );
 }

@@ -8,10 +8,16 @@ const TextCleaning = ({ theme }) => {
   const [result, setResult] = useState("");
 
   // Theme classes
-  const themeClass = theme === "dark" ? "bg-[#121212] text-white" : "bg-gray-100 text-black";
-  const inputClass = theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black";
-  const btnClass = theme === "dark" ? "bg-blue-600 hover:bg-blue-500" : "bg-blue-500 hover:bg-blue-400";
-  const resultClass = theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-black";
+  const themeClass =
+    theme === "dark" ? "bg-[#121212] text-white" : "bg-gray-100 text-black";
+  const inputClass =
+    theme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black";
+  const btnClass =
+    theme === "dark"
+      ? "bg-blue-600 hover:bg-blue-500"
+      : "bg-blue-500 hover:bg-blue-400";
+  const resultClass =
+    theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-black";
 
   // Remove duplicates
   const removeDuplicateLines = () => {
@@ -34,7 +40,7 @@ const TextCleaning = ({ theme }) => {
 
     const cleanedText = text
       .split("\n")
-      .map(line => line.replace(/[\t ]+/g, " ").trim())  // Replace tabs & multiple spaces
+      .map((line) => line.replace(/[\t ]+/g, " ").trim()) // Replace tabs & multiple spaces
       .join("\n");
 
     setResult(cleanedText);
@@ -50,7 +56,7 @@ const TextCleaning = ({ theme }) => {
 
     const cleanedText = text
       .split("\n")
-      .filter(line => line.trim() !== "")
+      .filter((line) => line.trim() !== "")
       .join("\n");
 
     setResult(cleanedText);
@@ -66,9 +72,9 @@ const TextCleaning = ({ theme }) => {
 
     const cleanedText = text
       .split("\n")
-      .map(line => line.replace(/[\t ]+/g, " ").trim())  // Normalize spaces & tabs
-      .filter(line => line !== "")                       // Remove empty lines
-      .filter((line, index, arr) => arr.indexOf(line) === index)  // Remove duplicates
+      .map((line) => line.replace(/[\t ]+/g, " ").trim()) // Normalize spaces & tabs
+      .filter((line) => line !== "") // Remove empty lines
+      .filter((line, index, arr) => arr.indexOf(line) === index) // Remove duplicates
       .join("\n");
 
     setResult(cleanedText);
@@ -103,19 +109,34 @@ const TextCleaning = ({ theme }) => {
 
         {/* Buttons */}
         <div className="flex flex-wrap gap-3 mt-4">
-          <button onClick={removeDuplicateLines} className={`px-4 py-2 rounded ${btnClass}`}>
+          <button
+            onClick={removeDuplicateLines}
+            className={`px-4 py-2 rounded ${btnClass}`}
+          >
             Remove Duplicates
           </button>
-          <button onClick={removeExtraSpaces} className={`px-4 py-2 rounded ${btnClass}`}>
+          <button
+            onClick={removeExtraSpaces}
+            className={`px-4 py-2 rounded ${btnClass}`}
+          >
             Remove Extra Spaces
           </button>
-          <button onClick={removeEmptyLines} className={`px-4 py-2 rounded ${btnClass}`}>
+          <button
+            onClick={removeEmptyLines}
+            className={`px-4 py-2 rounded ${btnClass}`}
+          >
             Remove Empty Lines
           </button>
-          <button onClick={formatText} className={`px-4 py-2 bg-green-600 hover:bg-green-500 rounded text-white`}>
+          <button
+            onClick={formatText}
+            className={`px-4 py-2 bg-green-600 hover:bg-green-500 rounded text-white`}
+          >
             Format Text
           </button>
-          <button onClick={clearText} className="px-4 py-2 bg-red-500 hover:bg-red-400 rounded text-white">
+          <button
+            onClick={clearText}
+            className="px-4 py-2 bg-red-500 hover:bg-red-400 rounded text-white"
+          >
             Clear
           </button>
         </div>

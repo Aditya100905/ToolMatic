@@ -1200,18 +1200,14 @@ const MatrixSolver = () => {
         </div>
 
         <div className="overflow-x-auto pb-2">
-
-
           <div
             className="grid gap-2 min-w-max"
-             style={{
-               gridTemplateColumns: `repeat(${cols}, minmax(60px, 1fr))`,
-             }}
-             role="grid"
-             aria-label="Result matrix"
-           >
-
-
+            style={{
+              gridTemplateColumns: `repeat(${cols}, minmax(60px, 1fr))`,
+            }}
+            role="grid"
+            aria-label="Result matrix"
+          >
             {result.map((row, i) =>
               row.map((val, j) => (
                 <div

@@ -179,13 +179,13 @@ export default function ImageToPDF() {
 
   const removeFile = (fileToRemove) => {
     const idToRemove = getFileId(fileToRemove);
-    
+
     // Find the image object to revoke its URL
-    const imageToRemove = imageObjects.find(img => img.fileId === idToRemove);
+    const imageToRemove = imageObjects.find((img) => img.fileId === idToRemove);
     if (imageToRemove && imageToRemove.src) {
       URL.revokeObjectURL(imageToRemove.src);
     }
-    
+
     setFiles((prevFiles) =>
       prevFiles.filter((file) => getFileId(file) !== idToRemove)
     );
@@ -197,7 +197,7 @@ export default function ImageToPDF() {
     const newSelectedImages = { ...selectedImages };
     delete newSelectedImages[idToRemove];
     setSelectedImages(newSelectedImages);
-    
+
     // Clear PDF preview when selection changes
     if (pdfPreviewUrl) {
       URL.revokeObjectURL(pdfPreviewUrl);
@@ -227,11 +227,11 @@ export default function ImageToPDF() {
         URL.revokeObjectURL(img.src);
       }
     });
-    
+
     if (pdfPreviewUrl) {
       URL.revokeObjectURL(pdfPreviewUrl);
     }
-    
+
     setFiles([]);
     setImageObjects([]);
     setFileIds({});
@@ -359,7 +359,7 @@ export default function ImageToPDF() {
       if (pdfPreviewUrl) {
         URL.revokeObjectURL(pdfPreviewUrl);
       }
-      
+
       // Create URL for preview
       const previewUrl = URL.createObjectURL(blob);
       setPdfPreviewUrl(previewUrl);
@@ -604,7 +604,10 @@ export default function ImageToPDF() {
                           className={`truncate hover:text-blue-500 ${!isSelected && "opacity-60"}`}
                           title={file.name}
                           onClick={(e) => {
-                            setTimeout(() => URL.revokeObjectURL(fileURL), 5000); // Clean up after 5 seconds
+                            setTimeout(
+                              () => URL.revokeObjectURL(fileURL),
+                              5000
+                            ); // Clean up after 5 seconds
                           }}
                         >
                           {file.name}
@@ -734,7 +737,7 @@ export default function ImageToPDF() {
                       onClick={downloadPDF}
                       disabled={loading || selectedCount === 0}
                       className={`px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-1 ${
-loading || selectedCount === 0
+                        loading || selectedCount === 0
                           ? "bg-green-400 dark:bg-green-600 cursor-not-allowed opacity-70"
                           : "bg-green-500 hover:bg-green-400 shadow-sm hover:shadow"
                       } text-white transition-all`}
@@ -797,7 +800,10 @@ loading || selectedCount === 0
                         >
                           <div className="flex justify-between items-center">
                             <div className="flex-1 min-w-0">
-                              <p className="text-xs font-medium truncate" title={img.fileName}>
+                              <p
+                                className="text-xs font-medium truncate"
+                                title={img.fileName}
+                              >
                                 {img.fileName}
                               </p>
                               <p className="text-xs text-gray-500 truncate">
@@ -878,9 +884,7 @@ loading || selectedCount === 0
                             isDarkMode
                               ? "bg-gray-800 text-white"
                               : "bg-white text-gray-800"
-                          } shadow-md ${
-                            !isSelected && "opacity-50"
-                          }`}
+                          } shadow-md ${!isSelected && "opacity-50"}`}
                         >
                           {isSelected ? `Page ${index + 1}` : "Excluded"}
                         </div>

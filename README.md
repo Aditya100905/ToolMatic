@@ -9,6 +9,7 @@ A comprehensive React-based utility web application that consolidates a wide ran
 ## 🛠️ Features
 
 ### 📁 General Utilities
+
 - Text Cleaner
 - Text Comparison
 - QR Code Generator
@@ -17,6 +18,7 @@ A comprehensive React-based utility web application that consolidates a wide ran
 - Password Generator
 
 ### 📄 PDF Tools
+
 - Merge PDF
 - Split PDF
 - Compress PDF
@@ -25,6 +27,7 @@ A comprehensive React-based utility web application that consolidates a wide ran
 - Reorder PDF Pages
 
 ### 📊 Maths Tools
+
 - Matrix Solver
 - Complex Number Calculator
 - Graph Plotter
@@ -32,17 +35,20 @@ A comprehensive React-based utility web application that consolidates a wide ran
 - Statistics & Probability Tool
 
 ### 🎨 Design Tools
+
 - CSS Animations Viewer
 - CSS Grid Templates
 - CSS Gradient Generator
 - Typewriter Effect Generator
 
 ### 💻 Developer Tools
+
 - Markdown to HTML Converter
 - JSON Formatter
 - JSON/CSV/XML Converter
 
 ### 📋 Other Pages
+
 - Home
 - About
 - Contact
@@ -57,6 +63,7 @@ A comprehensive React-based utility web application that consolidates a wide ran
 - **Modular Component Architecture**
 
 ## 🧩 Folder Structure
+
 ```
 src/
 ├── App.jsx
@@ -89,9 +96,12 @@ src/
    ```bash
    git clone https://github.com/Aditya100905/ToolMatic.git
    cd toolmatic
+   ```
 2. **Install dependencies:**
-    ```bash
-    npm install
+   ```bash
+   npm install
+   ```
 3. **Start the development server:**
-    ```bash
-    npm start
+   ```bash
+   npm run dev
+   ```
