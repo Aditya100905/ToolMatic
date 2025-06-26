@@ -207,7 +207,9 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
 
     for (let i = categories.length - 1; i >= 0; i--) {
       const category = categories[i];
-      const categoryId = `category-${category.replace(/\s+/g, "-").toLowerCase()}`;
+      const categoryId = `category-${category
+        .replace(/\s+/g, "-")
+        .toLowerCase()}`;
       const element = document.getElementById(categoryId);
 
       if (element && element.offsetTop <= scrollPosition) {
@@ -380,7 +382,9 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
           </div>
           <ul className="space-y-1 pl-2">
             {Object.keys(availableUtilities).map((category) => {
-              const categoryId = `category-${category.replace(/\s+/g, "-").toLowerCase()}`;
+              const categoryId = `category-${category
+                .replace(/\s+/g, "-")
+                .toLowerCase()}`;
               const isActive = activeCategory === category;
               return (
                 <li
@@ -392,12 +396,14 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
                         ? "bg-blue-900/30 text-blue-400"
                         : "bg-blue-100 text-blue-700"
                       : theme === "dark"
-                        ? "hover:bg-gray-800 hover:text-blue-400"
-                        : "hover:bg-gray-100 hover:text-blue-600"
+                      ? "hover:bg-gray-800 hover:text-blue-400"
+                      : "hover:bg-gray-100 hover:text-blue-600"
                   }`}
                 >
                   <span
-                    className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-blue-500" : "bg-gray-400"}`}
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      isActive ? "bg-blue-500" : "bg-gray-400"
+                    }`}
                   ></span>
                   <div className="font-medium text-sm">{category}</div>
                 </li>
@@ -409,7 +415,9 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
 
       {/* Main content - improved spacing and styling */}
       <main
-        className={`transition-all ${theme === "dark" ? "bg-[#0e0e0e]" : "bg-white"} duration-300 ${sidebarOpen ? "sm:pl-72" : ""}`}
+        className={`transition-all ${
+          theme === "dark" ? "bg-[#0e0e0e]" : "bg-white"
+        } duration-300 ${sidebarOpen ? "sm:pl-72" : ""}`}
       >
         {/* Add proper spacing to account for fixed navbar */}
         <div className="container mx-auto p-4 pt-24 pb-20 max-w-7xl">
@@ -463,7 +471,9 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
           ) : (
             // Improved category sections with better spacing
             Object.keys(filteredUtilities).map((category) => {
-              const categoryId = `category-${category.replace(/\s+/g, "-").toLowerCase()}`;
+              const categoryId = `category-${category
+                .replace(/\s+/g, "-")
+                .toLowerCase()}`;
 
               return (
                 <div
@@ -582,7 +592,9 @@ const UtilityPage = ({ theme, customUtilities, customUtilityRoutes }) => {
                         {/* Decorative corner accent */}
                         <div
                           className={`absolute -bottom-12 -right-12 w-24 h-24 rotate-45 opacity-0 group-hover:opacity-20 transition-opacity duration-300
-                            ${theme === "dark" ? "bg-blue-500" : "bg-blue-400"}`}
+                            ${
+                              theme === "dark" ? "bg-blue-500" : "bg-blue-400"
+                            }`}
                         ></div>
                       </div>
                     ))}

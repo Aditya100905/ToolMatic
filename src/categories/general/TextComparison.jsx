@@ -916,7 +916,11 @@ const TextComparison = ({ theme = "dark" }) => {
                 </div>
                 <textarea
                   ref={textArea1Ref}
-                  className={`w-full ${colors.input} font-mono text-sm p-3 rounded transition-all h-64 ${colors.inputFocus} focus:outline-none ${
+                  className={`w-full ${
+                    colors.input
+                  } font-mono text-sm p-3 rounded transition-all h-64 ${
+                    colors.inputFocus
+                  } focus:outline-none ${
                     isSwapping ? "transform translate-x-full opacity-0" : ""
                   }`}
                   value={text1}
@@ -1042,7 +1046,11 @@ const TextComparison = ({ theme = "dark" }) => {
                 </div>
                 <textarea
                   ref={textArea2Ref}
-                  className={`w-full ${colors.input} font-mono text-sm p-3 rounded transition-all h-64 ${colors.inputFocus} focus:outline-none ${
+                  className={`w-full ${
+                    colors.input
+                  } font-mono text-sm p-3 rounded transition-all h-64 ${
+                    colors.inputFocus
+                  } focus:outline-none ${
                     isSwapping ? "transform -translate-x-full opacity-0" : ""
                   }`}
                   value={text2}
@@ -1259,10 +1267,10 @@ const TextComparison = ({ theme = "dark" }) => {
                             item.type === "unchanged"
                               ? colors.unchanged
                               : item.type === "added"
-                                ? colors.added
-                                : item.type === "removed"
-                                  ? colors.removed
-                                  : "bg-transparent"
+                              ? colors.added
+                              : item.type === "removed"
+                              ? colors.removed
+                              : "bg-transparent"
                           } ${
                             item.type !== "modified" ? "rounded px-2 py-1" : ""
                           }`}

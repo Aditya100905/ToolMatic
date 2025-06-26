@@ -20,11 +20,15 @@ export default function NotFound({ theme }) {
 
   return (
     <div
-      className={`flex flex-col items-center justify-center min-h-screen w-full ${isDarkMode ? "bg-black text-white" : "bg-gray-100 text-gray-800"}`}
+      className={`flex flex-col items-center justify-center min-h-screen w-full ${
+        isDarkMode ? "bg-black text-white" : "bg-gray-100 text-gray-800"
+      }`}
     >
       <div className="w-full max-w-2xl px-4 py-16 text-center">
         <div
-          className={`text-9xl font-bold mb-4 ${isDarkMode ? "text-blue-400" : "text-blue-600"}`}
+          className={`text-9xl font-bold mb-4 ${
+            isDarkMode ? "text-blue-400" : "text-blue-600"
+          }`}
         >
           404
         </div>
@@ -32,7 +36,9 @@ export default function NotFound({ theme }) {
         <h1 className="text-4xl font-extrabold mb-6">Page Not Found</h1>
 
         <p
-          className={`text-xl mb-8 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+          className={`text-xl mb-8 ${
+            isDarkMode ? "text-gray-300" : "text-gray-600"
+          }`}
         >
           Sorry, we couldn't find the page you're looking for. It might have
           been moved or no longer exists.

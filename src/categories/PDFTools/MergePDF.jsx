@@ -193,7 +193,9 @@ export default function MergePDF() {
       >
         <h2 className="text-3xl font-bold mb-2 text-center">Merge PDFs</h2>
         <p
-          className={`text-center mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+          className={`text-center mb-6 ${
+            theme === "dark" ? "text-gray-300" : "text-gray-600"
+          }`}
         >
           Combine multiple PDF files into one document
         </p>
@@ -266,7 +268,9 @@ export default function MergePDF() {
             {/* File Stats */}
             <div className="mt-4 text-center">
               <p
-                className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}
+                className={`text-sm ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
               >
                 {files.length} {files.length === 1 ? "file" : "files"} selected
                 • Total size: {formatBytes(totalSize)}
@@ -338,7 +342,9 @@ export default function MergePDF() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => moveFileUp(index)}
-                          className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 ${index === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+                          className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 ${
+                            index === 0 ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
                           disabled={index === 0}
                           title="Move up"
                         >
@@ -346,7 +352,11 @@ export default function MergePDF() {
                         </button>
                         <button
                           onClick={() => moveFileDown(index)}
-                          className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 ${index === files.length - 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+                          className={`p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 ${
+                            index === files.length - 1
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }`}
                           disabled={index === files.length - 1}
                           title="Move down"
                         >

@@ -177,14 +177,16 @@ export default function JSONFormatter() {
     return (
       <div className="flex items-center gap-2 mt-2 mb-4">
         <div
-          className={`w-3 h-3 rounded-full ${colors[fileType] || "bg-gray-500"}`}
+          className={`w-3 h-3 rounded-full ${
+            colors[fileType] || "bg-gray-500"
+          }`}
         ></div>
         <span className="text-sm">
           {fileType === "JSON"
             ? "Valid JSON detected"
             : fileType === "Empty"
-              ? "Input is empty"
-              : `Warning: Input appears to be ${fileType}`}
+            ? "Input is empty"
+            : `Warning: Input appears to be ${fileType}`}
         </span>
       </div>
     );
@@ -193,7 +195,11 @@ export default function JSONFormatter() {
   return (
     <div
       className={`flex flex-col justify-center items-center min-h-[calc(100vh-80px)] px-4 pt-24 pb-10 
-        ${theme === "dark" ? "bg-[#0e0e0e] text-white" : "bg-gray-100 text-gray-900"}`}
+        ${
+          theme === "dark"
+            ? "bg-[#0e0e0e] text-white"
+            : "bg-gray-100 text-gray-900"
+        }`}
     >
       <div
         className={`w-full max-w-4xl p-8 rounded-2xl shadow-xl
@@ -213,7 +219,11 @@ export default function JSONFormatter() {
             <input
               type="text"
               className={`w-full p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 
-                ${theme === "dark" ? "bg-[#1e1e1e] border-gray-700" : "bg-gray-50 border-gray-300"}`}
+                ${
+                  theme === "dark"
+                    ? "bg-[#1e1e1e] border-gray-700"
+                    : "bg-gray-50 border-gray-300"
+                }`}
               placeholder="e.g., formatted.json"
               value={fileName}
               onChange={(e) => setFileName(e.target.value)}
@@ -229,7 +239,11 @@ export default function JSONFormatter() {
               value={indentation}
               onChange={(e) => setIndentation(parseInt(e.target.value))}
               className={`p-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400 
-                ${theme === "dark" ? "bg-[#1e1e1e] border-gray-700" : "bg-gray-50 border-gray-300"}`}
+                ${
+                  theme === "dark"
+                    ? "bg-[#1e1e1e] border-gray-700"
+                    : "bg-gray-50 border-gray-300"
+                }`}
             >
               <option value={2}>2 spaces</option>
               <option value={4}>4 spaces</option>
@@ -269,7 +283,11 @@ export default function JSONFormatter() {
           <div className="relative">
             <textarea
               className={`w-full p-4 rounded-lg h-60 font-mono resize-none border focus:outline-none focus:ring-2 focus:ring-blue-400 
-                ${theme === "dark" ? "bg-[#1e1e1e] border-gray-700" : "bg-gray-50 border-gray-300"}`}
+                ${
+                  theme === "dark"
+                    ? "bg-[#1e1e1e] border-gray-700"
+                    : "bg-gray-50 border-gray-300"
+                }`}
               placeholder="Paste or type your JSON here..."
               value={inputJSON}
               onChange={handleCodeChange}
@@ -336,23 +354,27 @@ export default function JSONFormatter() {
             </label>
             <div
               className={`rounded-lg border p-4 overflow-auto 
-              ${theme === "dark" ? "border-gray-700 bg-[#1e1e1e]" : "border-gray-300 bg-gray-50"}`}
+              ${
+                theme === "dark"
+                  ? "border-gray-700 bg-[#1e1e1e]"
+                  : "border-gray-300 bg-gray-50"
+              }`}
             >
-<SyntaxHighlighter
-  language="json"
-  style={theme === "dark" ? materialOceanic : prism}
-  customStyle={{
-    background: "transparent",
-    margin: 0,
-    padding: 0,
-  }}
-  codeTagProps={{
-    style: { background: "transparent" }
-  }}
-  wrapLongLines={true}
->
-  {outputJSON}
-</SyntaxHighlighter>
+              <SyntaxHighlighter
+                language="json"
+                style={theme === "dark" ? materialOceanic : prism}
+                customStyle={{
+                  background: "transparent",
+                  margin: 0,
+                  padding: 0,
+                }}
+                codeTagProps={{
+                  style: { background: "transparent" },
+                }}
+                wrapLongLines={true}
+              >
+                {outputJSON}
+              </SyntaxHighlighter>
             </div>
           </div>
         )}

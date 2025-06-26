@@ -107,23 +107,35 @@ const Home = ({ theme }) => {
     <div className="min-h-screen mt-10">
       {/* Hero Section with floating elements */}
       <section
-        className={`py-16 px-4 transition-opacity duration-700 overflow-hidden relative ${heroVisible ? "opacity-100" : "opacity-0"}`}
+        className={`py-16 px-4 transition-opacity duration-700 overflow-hidden relative ${
+          heroVisible ? "opacity-100" : "opacity-0"
+        }`}
       >
         <div className="container mx-auto max-w-6xl">
           <div
-            className={`rounded-2xl shadow-xl w-full overflow-hidden ${theme === "dark" ? "bg-[#121212]/70 backdrop-blur" : "bg-gradient-to-br from-blue-50 to-indigo-50 backdrop-blur"}`}
+            className={`rounded-2xl shadow-xl w-full overflow-hidden ${
+              theme === "dark"
+                ? "bg-[#121212]/70 backdrop-blur"
+                : "bg-gradient-to-br from-blue-50 to-indigo-50 backdrop-blur"
+            }`}
           >
             <div className="py-16 px-8 md:px-12 flex flex-col items-center text-center relative">
               {/* Floating circles background */}
               <div className="absolute inset-0 overflow-hidden">
                 <div
-                  className={`absolute top-20 left-10 w-32 h-32 rounded-full ${theme === "dark" ? "bg-blue-900/20" : "bg-blue-200/30"} blur-xl`}
+                  className={`absolute top-20 left-10 w-32 h-32 rounded-full ${
+                    theme === "dark" ? "bg-blue-900/20" : "bg-blue-200/30"
+                  } blur-xl`}
                 ></div>
                 <div
-                  className={`absolute bottom-10 right-20 w-40 h-40 rounded-full ${theme === "dark" ? "bg-indigo-900/20" : "bg-indigo-200/30"} blur-xl`}
+                  className={`absolute bottom-10 right-20 w-40 h-40 rounded-full ${
+                    theme === "dark" ? "bg-indigo-900/20" : "bg-indigo-200/30"
+                  } blur-xl`}
                 ></div>
                 <div
-                  className={`absolute top-40 right-40 w-24 h-24 rounded-full ${theme === "dark" ? "bg-purple-900/20" : "bg-purple-200/30"} blur-xl`}
+                  className={`absolute top-40 right-40 w-24 h-24 rounded-full ${
+                    theme === "dark" ? "bg-purple-900/20" : "bg-purple-200/30"
+                  } blur-xl`}
                 ></div>
               </div>
 
@@ -178,7 +190,11 @@ const Home = ({ theme }) => {
                   </Link>
                   <Link
                     to="/about"
-                    className={`px-8 py-3 rounded-lg font-medium transition transform hover:-translate-y-1 ${theme === "dark" ? "bg-gray-700 hover:bg-gray-600 text-white shadow-lg shadow-gray-900/30" : "bg-white hover:bg-gray-100 text-gray-800 shadow-lg shadow-gray-200/50"}`}
+                    className={`px-8 py-3 rounded-lg font-medium transition transform hover:-translate-y-1 ${
+                      theme === "dark"
+                        ? "bg-gray-700 hover:bg-gray-600 text-white shadow-lg shadow-gray-900/30"
+                        : "bg-white hover:bg-gray-100 text-gray-800 shadow-lg shadow-gray-200/50"
+                    }`}
                   >
                     Learn More
                   </Link>
@@ -194,7 +210,9 @@ const Home = ({ theme }) => {
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-2xl font-bold mb-8 flex items-center">
             <span
-              className={`mr-3 p-1 rounded ${theme === "dark" ? "bg-blue-900" : "bg-blue-100"}`}
+              className={`mr-3 p-1 rounded ${
+                theme === "dark" ? "bg-blue-900" : "bg-blue-100"
+              }`}
             >
               <Layers
                 size={24}
@@ -238,12 +256,16 @@ const Home = ({ theme }) => {
 
       {/* Features Section */}
       <section
-        className={`py-16 px-4 ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}
+        className={`py-16 px-4 ${
+          theme === "dark" ? "bg-gray-900" : "bg-gray-50"
+        }`}
       >
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-2xl font-bold mb-8 flex items-center">
             <span
-              className={`mr-3 p-1 rounded ${theme === "dark" ? "bg-purple-900" : "bg-purple-100"}`}
+              className={`mr-3 p-1 rounded ${
+                theme === "dark" ? "bg-purple-900" : "bg-purple-100"
+              }`}
             >
               <Layers
                 size={24}
@@ -309,7 +331,11 @@ const Home = ({ theme }) => {
 
       {/* CTA Section */}
       <section
-        className={`py-16 px-4 ${theme === "dark" ? "bg-gradient-to-br from-blue-900 to-indigo-900" : "bg-gradient-to-br from-blue-600 to-indigo-600"} text-white mt-8 rounded-t-3xl`}
+        className={`py-16 px-4 ${
+          theme === "dark"
+            ? "bg-gradient-to-br from-blue-900 to-indigo-900"
+            : "bg-gradient-to-br from-blue-600 to-indigo-600"
+        } text-white mt-8 rounded-t-3xl`}
       >
         <div className="container mx-auto max-w-4xl text-center  sm:h-full max-h-[350px] ">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">

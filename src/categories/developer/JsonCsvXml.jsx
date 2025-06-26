@@ -667,7 +667,9 @@ export default function DataFormatConverter({ theme = "dark" }) {
 
     function objectToXml(obj, nodeName, level = 0) {
       if (obj === null || obj === undefined) {
-        return `${indent.repeat(level)}<${nodeName}/>${advancedOptions.prettyPrint ? "\n" : ""}`;
+        return `${indent.repeat(level)}<${nodeName}/>${
+          advancedOptions.prettyPrint ? "\n" : ""
+        }`;
       }
 
       const currentIndent = indent.repeat(level);
@@ -765,7 +767,9 @@ export default function DataFormatConverter({ theme = "dark" }) {
     }
 
     // Handle the root element(s)
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>${advancedOptions.prettyPrint ? "\n" : ""}`;
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>${
+      advancedOptions.prettyPrint ? "\n" : ""
+    }`;
 
     if (Array.isArray(data)) {
       // Wrap arrays in a root element
@@ -907,7 +911,10 @@ export default function DataFormatConverter({ theme = "dark" }) {
   const getErrorContext = (text, position, contextSize = 20) => {
     const start = Math.max(0, position - contextSize);
     const end = Math.min(text.length, position + contextSize);
-    return `...${text.substring(start, position)}►${text.substring(position, end)}...`;
+    return `...${text.substring(start, position)}►${text.substring(
+      position,
+      end
+    )}...`;
   };
 
   // Main conversion function
@@ -1080,16 +1087,14 @@ export default function DataFormatConverter({ theme = "dark" }) {
     return (
       <button
         onClick={onClick}
-        className={`rounded-md flex items-center justify-center transition-colors ${
-          sizeClasses[size]
-        } ${variantClasses[variant]} ${className}`}
+        className={`rounded-md flex items-center justify-center transition-colors ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
         style={{
           backgroundColor:
             variant === "primary"
               ? getColors()[theme].primary
               : variant === "secondary"
-                ? getColors()[theme].surface2
-                : "transparent",
+              ? getColors()[theme].surface2
+              : "transparent",
           color: variant === "primary" ? "#fff" : getColors()[theme].text,
           borderColor:
             variant === "secondary" ? getColors()[theme].border : "transparent",

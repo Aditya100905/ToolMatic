@@ -237,7 +237,9 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
     setInputText(outputText);
     setOutputText(inputText);
     showNotification(
-      `Switched to ${mode === "markdown-to-html" ? "HTML to Markdown" : "Markdown to HTML"} mode`
+      `Switched to ${
+        mode === "markdown-to-html" ? "HTML to Markdown" : "Markdown to HTML"
+      } mode`
     );
   };
 
@@ -350,8 +352,8 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
       fontSize: ["xs"].includes(screenSize)
         ? "1.25rem"
         : ["small"].includes(screenSize)
-          ? "1.5rem"
-          : "2rem",
+        ? "1.5rem"
+        : "2rem",
       fontWeight: "bold",
       marginBottom: "0.5rem",
       color: c.text,
@@ -414,13 +416,17 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
           ? "rgba(139, 92, 246, 0.15)"
           : "rgba(139, 92, 246, 0.1)",
       color: c.secondary,
-      border: `1px solid ${theme === "dark" ? "rgba(139, 92, 246, 0.3)" : "rgba(139, 92, 246, 0.2)"}`,
+      border: `1px solid ${
+        theme === "dark" ? "rgba(139, 92, 246, 0.3)" : "rgba(139, 92, 246, 0.2)"
+      }`,
     },
     dangerButton: {
       backgroundColor:
         theme === "dark" ? "rgba(239, 68, 68, 0.15)" : "rgba(239, 68, 68, 0.1)",
       color: c.error,
-      border: `1px solid ${theme === "dark" ? "rgba(239, 68, 68, 0.3)" : "rgba(239, 68, 68, 0.2)"}`,
+      border: `1px solid ${
+        theme === "dark" ? "rgba(239, 68, 68, 0.3)" : "rgba(239, 68, 68, 0.2)"
+      }`,
     },
     infoButton: {
       backgroundColor:
@@ -428,7 +434,9 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
           ? "rgba(59, 130, 246, 0.15)"
           : "rgba(59, 130, 246, 0.1)",
       color: c.info,
-      border: `1px solid ${theme === "dark" ? "rgba(59, 130, 246, 0.3)" : "rgba(59, 130, 246, 0.2)"}`,
+      border: `1px solid ${
+        theme === "dark" ? "rgba(59, 130, 246, 0.3)" : "rgba(59, 130, 246, 0.2)"
+      }`,
     },
     successButton: {
       backgroundColor:
@@ -436,7 +444,9 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
           ? "rgba(16, 185, 129, 0.15)"
           : "rgba(16, 185, 129, 0.1)",
       color: c.success,
-      border: `1px solid ${theme === "dark" ? "rgba(16, 185, 129, 0.3)" : "rgba(16, 185, 129, 0.2)"}`,
+      border: `1px solid ${
+        theme === "dark" ? "rgba(16, 185, 129, 0.3)" : "rgba(16, 185, 129, 0.2)"
+      }`,
     },
     panels: {
       display: "grid",
@@ -526,7 +536,9 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
       display: "flex",
       alignItems: "center",
       gap: "0.5rem",
-      border: `1px solid ${theme === "dark" ? "rgba(239, 68, 68, 0.3)" : "rgba(239, 68, 68, 0.2)"}`,
+      border: `1px solid ${
+        theme === "dark" ? "rgba(239, 68, 68, 0.3)" : "rgba(239, 68, 68, 0.2)"
+      }`,
     },
     statusIndicator: {
       display: "flex",
@@ -540,8 +552,8 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
           ? "rgba(16, 185, 129, 0.15)"
           : "rgba(16, 185, 129, 0.1)"
         : theme === "dark"
-          ? "rgba(239, 68, 68, 0.15)"
-          : "rgba(239, 68, 68, 0.1)",
+        ? "rgba(239, 68, 68, 0.15)"
+        : "rgba(239, 68, 68, 0.1)",
       color: conversionStatus.success ? c.success : c.error,
       transition: "background-color 0.3s, color 0.3s",
       border: `1px solid ${
@@ -550,8 +562,8 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
             ? "rgba(16, 185, 129, 0.3)"
             : "rgba(16, 185, 129, 0.2)"
           : theme === "dark"
-            ? "rgba(239, 68, 68, 0.3)"
-            : "rgba(239, 68, 68, 0.2)"
+          ? "rgba(239, 68, 68, 0.3)"
+          : "rgba(239, 68, 68, 0.2)"
       }`,
       marginTop: "0.5rem", // Added margin for spacing
     },
@@ -572,12 +584,12 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
             ? "rgba(16, 185, 129, 0.95)"
             : "rgba(16, 185, 129, 0.95)"
           : notification.type === "error"
-            ? theme === "dark"
-              ? "rgba(239, 68, 68, 0.95)"
-              : "rgba(239, 68, 68, 0.95)"
-            : theme === "dark"
-              ? "rgba(59, 130, 246, 0.95)"
-              : "rgba(59, 130, 246, 0.95)",
+          ? theme === "dark"
+            ? "rgba(239, 68, 68, 0.95)"
+            : "rgba(239, 68, 68, 0.95)"
+          : theme === "dark"
+          ? "rgba(59, 130, 246, 0.95)"
+          : "rgba(59, 130, 246, 0.95)",
       color: "white",
       boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
       zIndex: 1000,
@@ -656,7 +668,9 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
                 ? mode === "markdown-to-html"
                   ? "HTML→MD"
                   : "MD→HTML"
-                : `Switch to ${mode === "markdown-to-html" ? "HTML → MD" : "MD → HTML"}`}
+                : `Switch to ${
+                    mode === "markdown-to-html" ? "HTML → MD" : "MD → HTML"
+                  }`}
             </button>
             <button
               onClick={swapTexts}
@@ -742,7 +756,9 @@ export default function MarkdownHtmlConverter({ theme = "dark" }) {
               ref={inputRef}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder={`Enter ${mode === "html-to-markdown" ? "HTML" : "Markdown"} text`}
+              placeholder={`Enter ${
+                mode === "html-to-markdown" ? "HTML" : "Markdown"
+              } text`}
               style={styles.textarea}
               spellCheck="false"
             />

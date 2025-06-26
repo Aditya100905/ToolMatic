@@ -135,28 +135,36 @@ const MatrixSolver = () => {
       event.preventDefault();
       document
         .getElementById(
-          `matrix-${matrixSetter === setMatrixA ? "A" : "B"}-${currentRow - 1}-${currentCol}`
+          `matrix-${matrixSetter === setMatrixA ? "A" : "B"}-${
+            currentRow - 1
+          }-${currentCol}`
         )
         .focus();
     } else if (key === "ArrowDown" && currentRow < matrixRows - 1) {
       event.preventDefault();
       document
         .getElementById(
-          `matrix-${matrixSetter === setMatrixA ? "A" : "B"}-${currentRow + 1}-${currentCol}`
+          `matrix-${matrixSetter === setMatrixA ? "A" : "B"}-${
+            currentRow + 1
+          }-${currentCol}`
         )
         .focus();
     } else if (key === "ArrowLeft" && currentCol > 0) {
       event.preventDefault();
       document
         .getElementById(
-          `matrix-${matrixSetter === setMatrixA ? "A" : "B"}-${currentRow}-${currentCol - 1}`
+          `matrix-${matrixSetter === setMatrixA ? "A" : "B"}-${currentRow}-${
+            currentCol - 1
+          }`
         )
         .focus();
     } else if (key === "ArrowRight" && currentCol < matrixCols - 1) {
       event.preventDefault();
       document
         .getElementById(
-          `matrix-${matrixSetter === setMatrixA ? "A" : "B"}-${currentRow}-${currentCol + 1}`
+          `matrix-${matrixSetter === setMatrixA ? "A" : "B"}-${currentRow}-${
+            currentCol + 1
+          }`
         )
         .focus();
     } else if (
@@ -182,15 +190,17 @@ const MatrixSolver = () => {
         nextCol < 0
           ? Math.max(0, currentRow - 1)
           : nextCol === 0 && currentCol === matrixCols - 1
-            ? currentRow + 1
-            : currentRow;
+          ? currentRow + 1
+          : currentRow;
 
       const actualNextCol = nextCol < 0 ? matrixCols - 1 : nextCol;
       const actualNextRow = Math.min(matrixRows - 1, nextRow);
 
       document
         .getElementById(
-          `matrix-${matrixSetter === setMatrixA ? "A" : "B"}-${actualNextRow}-${actualNextCol}`
+          `matrix-${
+            matrixSetter === setMatrixA ? "A" : "B"
+          }-${actualNextRow}-${actualNextCol}`
         )
         .focus();
     }
@@ -912,7 +922,11 @@ const MatrixSolver = () => {
       <div
         ref={matrixRef}
         className={`p-6 rounded-2xl shadow-lg transition-all w-full max-w-xl 
-              ${theme === "dark" ? "bg-[#1c1c1c] text-white" : "bg-white text-black"}`}
+              ${
+                theme === "dark"
+                  ? "bg-[#1c1c1c] text-white"
+                  : "bg-white text-black"
+              }`}
         animate={shake ? { x: [-5, 5, -5, 5, 0] } : { x: 0 }}
         transition={{ duration: 0.3 }}
         data-testid={`matrix-${matrixId}-container`}
@@ -1021,7 +1035,11 @@ const MatrixSolver = () => {
                   handleKeyDown(e, setMatrix, matrix, i, j, rows, cols)
                 }
                 className={`w-full h-10 sm:h-12 text-center rounded-lg shadow-sm transition-all 
-                      ${theme === "dark" ? "bg-[#2c2c2c] text-white" : "bg-gray-100 text-black"}
+                      ${
+                        theme === "dark"
+                          ? "bg-[#2c2c2c] text-white"
+                          : "bg-gray-100 text-black"
+                      }
                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:scale-105`}
                 inputMode="decimal"
                 step="any"
@@ -1130,8 +1148,8 @@ const MatrixSolver = () => {
                           ? "bg-gray-600 cursor-not-allowed"
                           : "bg-gray-300 cursor-not-allowed"
                         : theme === "dark"
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "bg-blue-500 hover:bg-blue-600"
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "bg-blue-500 hover:bg-blue-600"
                     }
                     text-white`}
                   aria-label={op.description}
@@ -1180,7 +1198,11 @@ const MatrixSolver = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className={`mt-8 mx-auto p-6 rounded-2xl shadow-lg w-full max-w-4xl
-            ${theme === "dark" ? "bg-[#1c1c1c] text-white" : "bg-white text-black"}`}
+            ${
+              theme === "dark"
+                ? "bg-[#1c1c1c] text-white"
+                : "bg-white text-black"
+            }`}
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">
@@ -1222,10 +1244,10 @@ const MatrixSolver = () => {
                       {val[1] === 0
                         ? ""
                         : val[1] > 0
-                          ? ` + ${val[1].toFixed(4).replace(/\.?0+$/, "")}i`
-                          : ` - ${Math.abs(val[1])
-                              .toFixed(4)
-                              .replace(/\.?0+$/, "")}i`}
+                        ? ` + ${val[1].toFixed(4).replace(/\.?0+$/, "")}i`
+                        : ` - ${Math.abs(val[1])
+                            .toFixed(4)
+                            .replace(/\.?0+$/, "")}i`}
                     </>
                   ) : // Display real number
                   val?.toFixed ? (
@@ -1377,7 +1399,11 @@ const MatrixSolver = () => {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             className={`max-w-2xl w-full p-6 rounded-xl shadow-2xl 
-                ${theme === "dark" ? "bg-[#1c1c1c] text-white" : "bg-white text-black"}`}
+                ${
+                  theme === "dark"
+                    ? "bg-[#1c1c1c] text-white"
+                    : "bg-white text-black"
+                }`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
@@ -1489,7 +1515,11 @@ const MatrixSolver = () => {
   return (
     <div
       className={`min-h-screen p-4 sm:p-8 flex flex-col items-center justify-center transition-all 
-          ${theme === "dark" ? "bg-[#0e0e0e] text-white" : "bg-gray-100 text-black"}`}
+          ${
+            theme === "dark"
+              ? "bg-[#0e0e0e] text-white"
+              : "bg-gray-100 text-black"
+          }`}
     >
       <ToastContainer
         position="top-right"
@@ -1568,7 +1598,9 @@ const MatrixSolver = () => {
               height="16"
               fill="currentColor"
               viewBox="0 0 16 16"
-              className={`transition-transform ${showHistory ? "rotate-180" : ""}`}
+              className={`transition-transform ${
+                showHistory ? "rotate-180" : ""
+              }`}
             >
               <path
                 fillRule="evenodd"

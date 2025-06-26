@@ -126,7 +126,11 @@ const FullURLShortener = ({ theme = "light" }) => {
   // Generate a QR code using a public QR code API
   const generateQRCode = (url) => {
     // Using the QR Server API which supports CORS
-    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(url)}&size=300x300&color=${theme === "light" ? "0-0-0" : "255-255-255"}&bgcolor=${theme === "light" ? "255-255-255" : "31-41-55"}`;
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+      url
+    )}&size=300x300&color=${
+      theme === "light" ? "0-0-0" : "255-255-255"
+    }&bgcolor=${theme === "light" ? "255-255-255" : "31-41-55"}`;
 
     setQrCode(qrCodeUrl);
     setShowQR(true);
@@ -208,7 +212,9 @@ const FullURLShortener = ({ theme = "light" }) => {
         console.error("Error shortening URL:", err);
 
         // Fallback to using a URL shortener that doesn't require API key
-        const bitlyUrl = `https://bit.ly/app/shorten?link=${encodeURIComponent(url)}`;
+        const bitlyUrl = `https://bit.ly/app/shorten?link=${encodeURIComponent(
+          url
+        )}`;
         window.open(bitlyUrl, "_blank");
 
         const timestamp = new Date().toISOString();
@@ -403,7 +409,9 @@ const FullURLShortener = ({ theme = "light" }) => {
                   <div
                     className={`w-full ${themeColors.statsProgress} rounded-t`}
                     style={{
-                      height: `${maxClicks ? (day.clicks / maxClicks) * 100 : 0}%`,
+                      height: `${
+                        maxClicks ? (day.clicks / maxClicks) * 100 : 0
+                      }%`,
                     }}
                   ></div>
                 </div>
@@ -547,7 +555,9 @@ const FullURLShortener = ({ theme = "light" }) => {
             urlHistory.map((item) => (
               <tr
                 key={item.id}
-                className={`border-b ${themeColors.divider} ${isExpired(item) ? "opacity-60" : ""}`}
+                className={`border-b ${themeColors.divider} ${
+                  isExpired(item) ? "opacity-60" : ""
+                }`}
               >
                 <td className="px-4 py-3">
                   <div className="flex items-center">
@@ -630,7 +640,9 @@ const FullURLShortener = ({ theme = "light" }) => {
   // QR Code Modal with actual QR code
   const QRCodeModal = () => (
     <div
-      className={`${showQR ? "flex" : "hidden"} ${themeColors.background} fixed inset-0 z-50 items-center justify-center p-4 bg-black bg-opacity-50`}
+      className={`${showQR ? "flex" : "hidden"} ${
+        themeColors.background
+      } fixed inset-0 z-50 items-center justify-center p-4 bg-black bg-opacity-50`}
     >
       <div
         className={`${themeColors.card} ${themeColors.shadow} rounded-lg p-6 max-w-sm w-full`}
@@ -684,13 +696,21 @@ const FullURLShortener = ({ theme = "light" }) => {
         <div className={`flex border-b mb-6 ${themeColors.divider}`}>
           <button
             onClick={() => setViewMode("create")}
-            className={`px-4 py-2 border-b-2 font-medium ${viewMode === "create" ? themeColors.tabActive : themeColors.tabInactive}`}
+            className={`px-4 py-2 border-b-2 font-medium ${
+              viewMode === "create"
+                ? themeColors.tabActive
+                : themeColors.tabInactive
+            }`}
           >
             Create URL
           </button>
           <button
             onClick={() => setViewMode("history")}
-            className={`px-4 py-2 border-b-2 font-medium ${viewMode === "history" ? themeColors.tabActive : themeColors.tabInactive}`}
+            className={`px-4 py-2 border-b-2 font-medium ${
+              viewMode === "history"
+                ? themeColors.tabActive
+                : themeColors.tabInactive
+            }`}
           >
             URL History ({urlHistory.length})
           </button>
@@ -763,7 +783,11 @@ const FullURLShortener = ({ theme = "light" }) => {
             <button
               onClick={shortenUrl}
               disabled={isLoading}
-              className={`${themeColors.buttonPrimary} w-full text-white px-4 py-2 rounded-md font-medium ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              className={`${
+                themeColors.buttonPrimary
+              } w-full text-white px-4 py-2 rounded-md font-medium ${
+                isLoading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
               {isLoading ? "Processing..." : "Shorten URL"}
             </button>

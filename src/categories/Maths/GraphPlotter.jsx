@@ -843,7 +843,15 @@ const UltimateGraphPlotter = ({
                     }
                   }}
                   placeholder="Enter equation (e.g., x^2, sin(x))"
-                  className={`w-full p-2 border rounded ${currentTheme.input} ${currentTheme.text} ${!validationStatus.isValid ? "border-red-500" : validationStatus.isWarning ? "border-yellow-500" : ""}`}
+                  className={`w-full p-2 border rounded ${currentTheme.input} ${
+                    currentTheme.text
+                  } ${
+                    !validationStatus.isValid
+                      ? "border-red-500"
+                      : validationStatus.isWarning
+                      ? "border-yellow-500"
+                      : ""
+                  }`}
                 />
                 {currentEquation && (
                   <button
@@ -861,7 +869,11 @@ const UltimateGraphPlotter = ({
                   addEquation(currentEquation);
                 }}
                 disabled={!validationStatus.isValid}
-                className={`bg-blue-500 text-white p-2 rounded ${!validationStatus.isValid ? "opacity-50 cursor-not-allowed" : ""}`}
+                className={`bg-blue-500 text-white p-2 rounded ${
+                  !validationStatus.isValid
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
               >
                 <Plus />
               </button>
@@ -931,7 +943,9 @@ const UltimateGraphPlotter = ({
               </button>
               <button
                 onClick={() => setShowGrid(!showGrid)}
-                className={`p-2 ${showGrid ? "bg-blue-500" : "bg-gray-400"} text-white rounded-full shadow-md`}
+                className={`p-2 ${
+                  showGrid ? "bg-blue-500" : "bg-gray-400"
+                } text-white rounded-full shadow-md`}
                 title={`${showGrid ? "Hide" : "Show"} grid`}
               >
                 <Grid size={18} />
@@ -968,7 +982,9 @@ const UltimateGraphPlotter = ({
                 equations.map((eq) => (
                   <div
                     key={eq.id}
-                    className={`flex items-center gap-2 p-2 mb-2 border rounded ${currentTheme.input} ${eq.isVisible ? "" : "opacity-50"}`}
+                    className={`flex items-center gap-2 p-2 mb-2 border rounded ${
+                      currentTheme.input
+                    } ${eq.isVisible ? "" : "opacity-50"}`}
                   >
                     {/* Visibility toggle */}
                     <div className="flex items-center">

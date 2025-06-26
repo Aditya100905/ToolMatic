@@ -77,7 +77,9 @@ function ScrollToTop() {
 // Main layout: renders Navbar, Toasts, and matched child route
 const MainLayout = ({ theme }) => (
   <div
-    className={`${theme === "dark" ? "bg-black text-white" : "bg-gray-100 text-black"} min-h-screen`}
+    className={`${
+      theme === "dark" ? "bg-black text-white" : "bg-gray-100 text-black"
+    } min-h-screen`}
   >
     <ScrollToTop />
     <Navbar />

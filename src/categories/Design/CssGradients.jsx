@@ -867,8 +867,8 @@ const GradientGenerator = ({ theme = "light" }) => {
                     ? "bg-gray-700 text-white"
                     : "bg-gray-100 text-gray-900"
                   : theme === "dark"
-                    ? "text-gray-300 hover:bg-gray-700"
-                    : "text-gray-600 hover:bg-gray-100"
+                  ? "text-gray-300 hover:bg-gray-700"
+                  : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               Editor
@@ -882,8 +882,8 @@ const GradientGenerator = ({ theme = "light" }) => {
                     ? "bg-gray-700 text-white"
                     : "bg-gray-100 text-gray-900"
                   : theme === "dark"
-                    ? "text-gray-300 hover:bg-gray-700"
-                    : "text-gray-600 hover:bg-gray-100"
+                  ? "text-gray-300 hover:bg-gray-700"
+                  : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               My Library
@@ -897,8 +897,8 @@ const GradientGenerator = ({ theme = "light" }) => {
                     ? "bg-purple-600 text-white"
                     : "bg-purple-500 text-white"
                   : theme === "dark"
-                    ? "text-gray-300 hover:bg-gray-700"
-                    : "text-gray-600 hover:bg-gray-100"
+                  ? "text-gray-300 hover:bg-gray-700"
+                  : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               <Sparkles className="w-4 h-4 mr-1" />
@@ -935,8 +935,8 @@ const GradientGenerator = ({ theme = "light" }) => {
                               ? "bg-purple-600 text-white"
                               : "bg-purple-100 text-purple-700 border border-purple-300"
                             : theme === "dark"
-                              ? "bg-gray-700 text-gray-300"
-                              : "bg-gray-100 text-gray-700"
+                            ? "bg-gray-700 text-gray-300"
+                            : "bg-gray-100 text-gray-700"
                         }`}
                       >
                         {type}
@@ -1005,8 +1005,8 @@ const GradientGenerator = ({ theme = "light" }) => {
                               ? "bg-gray-700 text-gray-500"
                               : "bg-gray-200 text-gray-400"
                             : theme === "dark"
-                              ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                         }`}
                         title="Add Color Stop"
                       >
@@ -1209,8 +1209,8 @@ const GradientGenerator = ({ theme = "light" }) => {
                           ? "bg-gray-700 text-gray-500"
                           : "bg-gray-200 text-gray-400"
                         : theme === "dark"
-                          ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                     title="Undo"
                   >
@@ -1226,8 +1226,8 @@ const GradientGenerator = ({ theme = "light" }) => {
                           ? "bg-gray-700 text-gray-500"
                           : "bg-gray-200 text-gray-400"
                         : theme === "dark"
-                          ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                     title="Redo"
                   >
@@ -1331,8 +1331,14 @@ const GradientGenerator = ({ theme = "light" }) => {
                         className="gradient-preview rounded-full shadow-lg"
                         style={{
                           ...previewStyle,
-                          width: `${Math.min(previewSize.width, previewSize.height)}px`,
-                          height: `${Math.min(previewSize.width, previewSize.height)}px`,
+                          width: `${Math.min(
+                            previewSize.width,
+                            previewSize.height
+                          )}px`,
+                          height: `${Math.min(
+                            previewSize.width,
+                            previewSize.height
+                          )}px`,
                           maxWidth: "100%",
                         }}
                       />
@@ -1359,7 +1365,9 @@ const GradientGenerator = ({ theme = "light" }) => {
 
                 {/* Code Output */}
                 <div
-                  className={`border-t ${theme === "dark" ? "border-gray-700" : "border-gray-200"}`}
+                  className={`border-t ${
+                    theme === "dark" ? "border-gray-700" : "border-gray-200"
+                  }`}
                 >
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-4">
@@ -1549,8 +1557,8 @@ const GradientGenerator = ({ theme = "light" }) => {
                         preset.type === "linear"
                           ? `linear-gradient(${preset.angle}deg, ${colorStopsStr})`
                           : preset.type === "radial"
-                            ? `radial-gradient(circle, ${colorStopsStr})`
-                            : `conic-gradient(from ${preset.angle}deg, ${colorStopsStr})`;
+                          ? `radial-gradient(circle, ${colorStopsStr})`
+                          : `conic-gradient(from ${preset.angle}deg, ${colorStopsStr})`;
 
                       return (
                         <div
@@ -1579,7 +1587,9 @@ const GradientGenerator = ({ theme = "light" }) => {
                     })}
                   </div>
                   <hr
-                    className={`my-6 ${theme === "dark" ? "border-gray-700" : "border-gray-200"}`}
+                    className={`my-6 ${
+                      theme === "dark" ? "border-gray-700" : "border-gray-200"
+                    }`}
                   />
                 </div>
               )}

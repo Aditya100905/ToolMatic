@@ -154,8 +154,8 @@ const CategoryPill = ({ label, active, onClick, theme, icon }) => (
             ? "bg-blue-600 text-white"
             : "bg-blue-500 text-white"
           : theme === "dark"
-            ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
-            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          ? "bg-gray-700 text-gray-300 hover:bg-gray-600"
+          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
       }`}
   >
     {icon && icon}
@@ -198,15 +198,27 @@ const AnimationCard = ({
   return (
     <div
       className={`anim-grid-item relative cursor-pointer rounded-lg overflow-hidden shadow
-        ${theme === "dark" ? "bg-gray-800 hover:bg-gray-750" : "bg-white hover:bg-gray-50"} 
-        ${isSelected ? (theme === "dark" ? "ring-2 ring-blue-500" : "ring-2 ring-blue-400") : ""}
+        ${
+          theme === "dark"
+            ? "bg-gray-800 hover:bg-gray-750"
+            : "bg-white hover:bg-gray-50"
+        } 
+        ${
+          isSelected
+            ? theme === "dark"
+              ? "ring-2 ring-blue-500"
+              : "ring-2 ring-blue-400"
+            : ""
+        }
         border-l-4 ${getCategoryColor()}`}
       onClick={onSelect}
     >
       <div className="p-3 h-full flex flex-col">
         <div className="flex justify-between items-center mb-2">
           <h3
-            className={`text-sm font-medium ${theme === "dark" ? "text-gray-200" : "text-gray-700"}`}
+            className={`text-sm font-medium ${
+              theme === "dark" ? "text-gray-200" : "text-gray-700"
+            }`}
           >
             {displayName}
           </h3>
@@ -227,7 +239,13 @@ const AnimationCard = ({
                 onToggleFavorite(animation);
               }}
               className={`p-1 rounded-full transition-transform duration-200 hover:scale-110 
-                ${isFavorite ? "text-red-500" : theme === "dark" ? "text-gray-500" : "text-gray-400"}`}
+                ${
+                  isFavorite
+                    ? "text-red-500"
+                    : theme === "dark"
+                    ? "text-gray-500"
+                    : "text-gray-400"
+                }`}
               title={isFavorite ? "Remove from favorites" : "Add to favorites"}
             >
               <Heart size={14} fill={isFavorite ? "currentColor" : "none"} />
@@ -239,7 +257,13 @@ const AnimationCard = ({
           ${theme === "dark" ? "bg-gray-900" : "bg-gray-100"}`}
         >
           <div
-            className={`${isPlaying ? (animation === "typewriter" ? "typewriter" : animationClassNames[animation]) : ""}`}
+            className={`${
+              isPlaying
+                ? animation === "typewriter"
+                  ? "typewriter"
+                  : animationClassNames[animation]
+                : ""
+            }`}
             style={cardStyle}
           >
             {animationDisplayElements[animation](theme)}
@@ -247,12 +271,16 @@ const AnimationCard = ({
         </div>
         <div className="mt-2 flex items-center justify-between">
           <span
-            className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs ${
+              theme === "dark" ? "text-gray-400" : "text-gray-500"
+            }`}
           >
             {category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
           <span
-            className={`text-xs font-mono ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}
+            className={`text-xs font-mono ${
+              theme === "dark" ? "text-gray-400" : "text-gray-500"
+            }`}
           >
             .{animation.replace(/([A-Z])/g, "-$1").toLowerCase()}
           </span>
@@ -272,14 +300,20 @@ const CodeDisplay = ({
     <div className="code-container relative rounded-lg overflow-hidden">
       <pre
         className={`p-4 overflow-auto max-h-72 text-sm scrollbar-custom font-mono
-        ${theme === "dark" ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-800"}`}
+        ${
+          theme === "dark"
+            ? "bg-gray-900 text-gray-300"
+            : "bg-gray-100 text-gray-800"
+        }`}
       >
         {showLineNumbers ? (
           <code className="relative">
             {code.split("\n").map((line, i) => (
               <div key={i} className="table-row">
                 <span
-                  className={`table-cell pr-4 text-right select-none opacity-50 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}
+                  className={`table-cell pr-4 text-right select-none opacity-50 ${
+                    theme === "dark" ? "text-gray-500" : "text-gray-400"
+                  }`}
                 >
                   {i + 1}
                 </span>
@@ -666,80 +700,104 @@ const animationSnippets = {
 const animationDisplayElements = {
   fadeIn: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Hello
     </div>
   ),
   slideIn: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Slide
     </div>
   ),
   float: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Float
     </div>
   ),
   shake: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Shake
     </div>
   ),
   flip: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Flip
     </div>
   ),
   pulse: (theme) => (
     <div
-      className={`w-16 h-16 rounded-full ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+      className={`w-16 h-16 rounded-full ${
+        theme === "dark" ? "bg-blue-500" : "bg-blue-600"
+      }`}
     ></div>
   ),
   glowPulse: (theme) => (
     <div
-      className={`w-16 h-16 rounded-full ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+      className={`w-16 h-16 rounded-full ${
+        theme === "dark" ? "bg-blue-500" : "bg-blue-600"
+      }`}
     ></div>
   ),
   typewriter: (theme) => (
     <div
-      className={`font-mono ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`font-mono ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Typing...
     </div>
   ),
   rubberBand: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Rubber
     </div>
   ),
   rotateIn: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Rotate
     </div>
   ),
   bounceInUp: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Bounce
     </div>
   ),
   swing: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Swing
     </div>
@@ -747,7 +805,9 @@ const animationDisplayElements = {
   gradientMove: (theme) => <div className="w-16 h-16 rounded-lg"></div>,
   expandRotate: (theme) => (
     <div
-      className={`w-16 h-16 rounded-lg ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+      className={`w-16 h-16 rounded-lg ${
+        theme === "dark" ? "bg-blue-500" : "bg-blue-600"
+      }`}
     ></div>
   ),
   heartbeat: (theme) => (
@@ -758,26 +818,34 @@ const animationDisplayElements = {
   ),
   jello: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Jello
     </div>
   ),
   ripple: (theme) => (
     <div
-      className={`w-12 h-12 rounded-full ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+      className={`w-12 h-12 rounded-full ${
+        theme === "dark" ? "bg-blue-500" : "bg-blue-600"
+      }`}
     ></div>
   ),
   wobble: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Wobble
     </div>
   ),
   shimmer: (theme) => (
     <div
-      className={`w-24 h-8 rounded-md ${theme === "dark" ? "bg-gray-700" : "bg-gray-300"}`}
+      className={`w-24 h-8 rounded-md ${
+        theme === "dark" ? "bg-gray-700" : "bg-gray-300"
+      }`}
     ></div>
   ),
   morphSVG: () => (
@@ -794,28 +862,40 @@ const animationDisplayElements = {
   stackedCards: (theme) => (
     <div className="card-stack w-24 h-16">
       <div
-        className={`stacked-card rounded-md p-2 ${theme === "dark" ? "bg-blue-500" : "bg-blue-600"}`}
+        className={`stacked-card rounded-md p-2 ${
+          theme === "dark" ? "bg-blue-500" : "bg-blue-600"
+        }`}
       >
         <div
-          className={`text-xs font-bold text-center ${theme === "dark" ? "text-white" : "text-white"}`}
+          className={`text-xs font-bold text-center ${
+            theme === "dark" ? "text-white" : "text-white"
+          }`}
         >
           Card 1
         </div>
       </div>
       <div
-        className={`stacked-card rounded-md p-2 ${theme === "dark" ? "bg-blue-400" : "bg-blue-500"}`}
+        className={`stacked-card rounded-md p-2 ${
+          theme === "dark" ? "bg-blue-400" : "bg-blue-500"
+        }`}
       >
         <div
-          className={`text-xs font-bold text-center ${theme === "dark" ? "text-white" : "text-white"}`}
+          className={`text-xs font-bold text-center ${
+            theme === "dark" ? "text-white" : "text-white"
+          }`}
         >
           Card 2
         </div>
       </div>
       <div
-        className={`stacked-card rounded-md p-2 ${theme === "dark" ? "bg-blue-300" : "bg-blue-400"}`}
+        className={`stacked-card rounded-md p-2 ${
+          theme === "dark" ? "bg-blue-300" : "bg-blue-400"
+        }`}
       >
         <div
-          className={`text-xs font-bold text-center ${theme === "dark" ? "text-white" : "text-white"}`}
+          className={`text-xs font-bold text-center ${
+            theme === "dark" ? "text-white" : "text-white"
+          }`}
         >
           Card 3
         </div>
@@ -824,28 +904,36 @@ const animationDisplayElements = {
   ),
   skewBounce: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Skew
     </div>
   ),
   slideFromTop: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Drop
     </div>
   ),
   elasticScale: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Pop
     </div>
   ),
   revealText: (theme) => (
     <div
-      className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+      className={`text-2xl font-bold ${
+        theme === "dark" ? "text-blue-400" : "text-blue-600"
+      }`}
     >
       Reveal
     </div>
@@ -1031,7 +1119,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
           return match.replace(/infinite/, customizationOptions.iterations);
         } else {
           const insertPoint = match.lastIndexOf(";");
-          return `${match.substring(0, insertPoint)} ${customizationOptions.iterations}${match.substring(insertPoint)}`;
+          return `${match.substring(0, insertPoint)} ${
+            customizationOptions.iterations
+          }${match.substring(insertPoint)}`;
         }
       });
     }
@@ -1043,17 +1133,27 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
   };
   return (
     <div
-      className={`min-h-screen mt-20 transition-colors duration-200 ${theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"}`}
+      className={`min-h-screen mt-20 transition-colors duration-200 ${
+        theme === "dark"
+          ? "bg-gray-900 text-gray-100"
+          : "bg-gray-50 text-gray-900"
+      }`}
     >
       <style>{styleSheet}</style>
       <header
-        className={`py-4 px-6 border-b ${theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"} sticky top-0 z-10`}
+        className={`py-4 px-6 border-b ${
+          theme === "dark"
+            ? "bg-gray-800 border-gray-700"
+            : "bg-white border-gray-200"
+        } sticky top-0 z-10`}
       >
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div
-                className={`text-2xl font-bold ${theme === "dark" ? "text-blue-400" : "text-blue-600"}`}
+                className={`text-2xl font-bold ${
+                  theme === "dark" ? "text-blue-400" : "text-blue-600"
+                }`}
               >
                 CSS Animation Library
               </div>
@@ -1063,7 +1163,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search
                   size={16}
-                  className={`${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}
+                  className={`${
+                    theme === "dark" ? "text-gray-400" : "text-gray-500"
+                  }`}
                 />
               </div>
               <input
@@ -1178,7 +1280,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
           <div className={`${selectedAnimation ? "lg:w-3/5" : "w-full"}`}>
             {filteredAnimations.length === 0 ? (
               <div
-                className={`p-8 rounded-lg text-center ${theme === "dark" ? "bg-gray-800" : "bg-white"}`}
+                className={`p-8 rounded-lg text-center ${
+                  theme === "dark" ? "bg-gray-800" : "bg-white"
+                }`}
               >
                 <div className="flex flex-col mb-5 items-center justify-center text-center">
                   <div className="relative md:mb-15 my-8 md:my-10">
@@ -1247,7 +1351,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
           {}
           {selectedAnimation && (
             <div
-              className={`lg:w-2/5 ${theme === "dark" ? "bg-gray-800" : "bg-white"} rounded-lg shadow-lg overflow-hidden`}
+              className={`lg:w-2/5 ${
+                theme === "dark" ? "bg-gray-800" : "bg-white"
+              } rounded-lg shadow-lg overflow-hidden`}
             >
               <div
                 className="flex justify-between items-center p-4 border-b 
@@ -1263,8 +1369,8 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
                       favoriteAnimations.includes(selectedAnimation)
                         ? "text-yellow-400"
                         : theme === "dark"
-                          ? "text-gray-400 hover:text-yellow-300"
-                          : "text-gray-500 hover:text-yellow-400"
+                        ? "text-gray-400 hover:text-yellow-300"
+                        : "text-gray-500 hover:text-yellow-400"
                     }`}
                     title={
                       favoriteAnimations.includes(selectedAnimation)
@@ -1309,7 +1415,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
               </div>
               {}
               <div
-                className={`p-8 flex items-center justify-center ${theme === "dark" ? "bg-gray-900" : "bg-gray-100"}`}
+                className={`p-8 flex items-center justify-center ${
+                  theme === "dark" ? "bg-gray-900" : "bg-gray-100"
+                }`}
               >
                 <div
                   className={animationClassNames[selectedAnimation]}
@@ -1329,7 +1437,11 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
               {}
               {showCustomizationPanel && (
                 <div
-                  className={`p-4 border-t ${theme === "dark" ? "border-gray-700 bg-gray-850" : "border-gray-200 bg-gray-50"}`}
+                  className={`p-4 border-t ${
+                    theme === "dark"
+                      ? "border-gray-700 bg-gray-850"
+                      : "border-gray-200 bg-gray-50"
+                  }`}
                 >
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="font-medium">Customize Animation</h3>
@@ -1353,7 +1465,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
                     <div>
                       <div className="flex justify-between mb-1">
                         <label
-                          className={`text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+                          className={`text-sm font-medium ${
+                            theme === "dark" ? "text-gray-300" : "text-gray-700"
+                          }`}
                         >
                           Duration:{customizationOptions.duration}s
                         </label>
@@ -1377,7 +1491,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
                     <div>
                       <div className="flex justify-between mb-1">
                         <label
-                          className={`text-sm font-medium ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+                          className={`text-sm font-medium ${
+                            theme === "dark" ? "text-gray-300" : "text-gray-700"
+                          }`}
                         >
                           Delay:{customizationOptions.delay}s
                         </label>
@@ -1400,7 +1516,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
                     {}
                     <div>
                       <label
-                        className={`block text-sm font-medium mb-1 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+                        className={`block text-sm font-medium mb-1 ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-700"
+                        }`}
                       >
                         Timing Function
                       </label>
@@ -1428,7 +1546,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
                     {}
                     <div>
                       <label
-                        className={`block text-sm font-medium mb-1 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`}
+                        className={`block text-sm font-medium mb-1 ${
+                          theme === "dark" ? "text-gray-300" : "text-gray-700"
+                        }`}
                       >
                         Iterations
                       </label>
@@ -1460,7 +1580,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <h3
-                    className={`font-medium ${theme === "dark" ? "text-gray-200" : "text-gray-800"}`}
+                    className={`font-medium ${
+                      theme === "dark" ? "text-gray-200" : "text-gray-800"
+                    }`}
                   >
                     CSS Code
                   </h3>
@@ -1478,7 +1600,9 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
                       {copiedCode ? "Copied!" : "Copy code"}
                     </button>
                     <a
-                      href={`data:text/css;charset=utf-8,${encodeURIComponent(getCustomizedCode())}`}
+                      href={`data:text/css;charset=utf-8,${encodeURIComponent(
+                        getCustomizedCode()
+                      )}`}
                       download={`${selectedAnimation}.css`}
                       className={`flex items-center gap-1 text-xs px-3 py-1.5 rounded-md transition-colors
                         ${
@@ -1501,11 +1625,15 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
               </div>
               {}
               <div
-                className={`p-4 border-t ${theme === "dark" ? "border-gray-700" : "border-gray-200"}`}
+                className={`p-4 border-t ${
+                  theme === "dark" ? "border-gray-700" : "border-gray-200"
+                }`}
               >
                 <div className="flex justify-between items-center mb-2">
                   <h3
-                    className={`font-medium ${theme === "dark" ? "text-gray-200" : "text-gray-800"}`}
+                    className={`font-medium ${
+                      theme === "dark" ? "text-gray-200" : "text-gray-800"
+                    }`}
                   >
                     Usage Example
                   </h3>
@@ -1530,15 +1658,21 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
                 />
               </div>
               <div
-                className={`p-4 border-t ${theme === "dark" ? "border-gray-700" : "border-gray-200"}`}
+                className={`p-4 border-t ${
+                  theme === "dark" ? "border-gray-700" : "border-gray-200"
+                }`}
               >
                 <h3
-                  className={`font-medium mb-2 ${theme === "dark" ? "text-gray-200" : "text-gray-800"}`}
+                  className={`font-medium mb-2 ${
+                    theme === "dark" ? "text-gray-200" : "text-gray-800"
+                  }`}
                 >
                   Tips&Usage
                 </h3>
                 <div
-                  className={`text-sm space-y-2 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+                  className={`text-sm space-y-2 ${
+                    theme === "dark" ? "text-gray-300" : "text-gray-600"
+                  }`}
                 >
                   <p>
                     <span className="font-medium">Category:</span>
@@ -1568,10 +1702,10 @@ const AnimationsLibrary = ({ theme = "light", onThemeChange }) => {
                     )
                       ? "High - Uses well-optimized properties"
                       : ["float", "shake", "heartbeat", "ripple"].includes(
-                            selectedAnimation
-                          )
-                        ? "Medium - Generally performs well across devices"
-                        : "Use sparingly - May cause performance issues on low-end devices"}
+                          selectedAnimation
+                        )
+                      ? "Medium - Generally performs well across devices"
+                      : "Use sparingly - May cause performance issues on low-end devices"}
                   </p>
                   <div className="flex items-center gap-1 mt-3">
                     <Info size={16} className="text-blue-500" />

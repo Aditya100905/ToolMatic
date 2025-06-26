@@ -332,8 +332,8 @@ export default function ComplexNumberCalculator({ theme = "light" }) {
           return imag === 1
             ? "i"
             : imag === -1
-              ? "-i"
-              : `${imag.toFixed(precision)}i`;
+            ? "-i"
+            : `${imag.toFixed(precision)}i`;
         const sign = imag > 0 ? "+" : "";
         const imagPart =
           imag === 1 ? "i" : imag === -1 ? "-i" : `${imag.toFixed(precision)}i`;
@@ -357,7 +357,9 @@ export default function ComplexNumberCalculator({ theme = "light" }) {
       }
 
       default:
-        return `${real.toFixed(precision)}${imag >= 0 ? "+" : ""}${imag.toFixed(precision)}i`;
+        return `${real.toFixed(precision)}${imag >= 0 ? "+" : ""}${imag.toFixed(
+          precision
+        )}i`;
     }
   };
 
@@ -438,15 +440,21 @@ export default function ComplexNumberCalculator({ theme = "light" }) {
       ref={calculatorRef}
     >
       <div
-        className={`w-full max-w-7xl ${!showResult && !showHistory ? "flex justify-center" : ""}`}
+        className={`w-full max-w-7xl ${
+          !showResult && !showHistory ? "flex justify-center" : ""
+        }`}
       >
         {/* Responsive layout that adapts to different screen sizes */}
         <div
-          className={`flex flex-col xl:flex-row gap-6 ${!showResult && !showHistory ? "w-full xl:max-w-lg" : "w-full"}`}
+          className={`flex flex-col xl:flex-row gap-6 ${
+            !showResult && !showHistory ? "w-full xl:max-w-lg" : "w-full"
+          }`}
         >
           {/* Main Calculator Panel */}
           <div
-            className={`w-full ${showResult || showHistory ? "xl:w-2/3" : ""} ${styles.card} border rounded-xl p-4 md:p-6 shadow-lg mb-6 xl:mb-0 transition-all duration-300`}
+            className={`w-full ${showResult || showHistory ? "xl:w-2/3" : ""} ${
+              styles.card
+            } border rounded-xl p-4 md:p-6 shadow-lg mb-6 xl:mb-0 transition-all duration-300`}
           >
             <h1 className="text-2xl font-bold mb-6 text-center">
               Complex Number Calculator
@@ -465,8 +473,8 @@ export default function ComplexNumberCalculator({ theme = "light" }) {
                       mode === "rectangular"
                         ? "rounded-l-lg"
                         : mode === "exponential"
-                          ? "rounded-r-lg"
-                          : ""
+                        ? "rounded-r-lg"
+                        : ""
                     } ${
                       displayMode === mode ? styles.activeTab : styles.tab
                     } transition-colors duration-200`}
@@ -652,7 +660,9 @@ export default function ComplexNumberCalculator({ theme = "light" }) {
                 >
                   <h2 className="text-xl font-semibold mb-4">Result</h2>
                   <div
-                    className={`p-4 rounded-lg border ${theme === "dark" ? "border-[#2a2a2a]" : "border-gray-200"} transition-colors mb-4 overflow-x-auto`}
+                    className={`p-4 rounded-lg border ${
+                      theme === "dark" ? "border-[#2a2a2a]" : "border-gray-200"
+                    } transition-colors mb-4 overflow-x-auto`}
                   >
                     <div className="text-xl font-medium break-all">
                       {formatComplex(result.real, result.imag)}
@@ -702,7 +712,15 @@ export default function ComplexNumberCalculator({ theme = "light" }) {
                         return (
                           <div
                             key={index}
-                            className={`p-4 ${index !== history.length - 1 ? (theme === "dark" ? "border-b border-[#2a2a2a]" : "border-b border-gray-200") : ""} ${styles.historyItem} cursor-pointer hover:opacity-80 transition-colors`}
+                            className={`p-4 ${
+                              index !== history.length - 1
+                                ? theme === "dark"
+                                  ? "border-b border-[#2a2a2a]"
+                                  : "border-b border-gray-200"
+                                : ""
+                            } ${
+                              styles.historyItem
+                            } cursor-pointer hover:opacity-80 transition-colors`}
                             onClick={() => useHistoryItem(item)}
                           >
                             <div className="flex justify-between items-center">
@@ -713,13 +731,33 @@ export default function ComplexNumberCalculator({ theme = "light" }) {
                                 <div className="font-medium break-all">
                                   <span className="block sm:hidden">
                                     {item.z2
-                                      ? `${item.z1} ${getOperationSymbol(item.op)} ${item.z2} = ${formatComplex(item.result.real, item.result.imag)}`
-                                      : `${getOperationName(item.op)}(${item.z1}) = ${formatComplex(item.result.real, item.result.imag)}`}
+                                      ? `${item.z1} ${getOperationSymbol(
+                                          item.op
+                                        )} ${item.z2} = ${formatComplex(
+                                          item.result.real,
+                                          item.result.imag
+                                        )}`
+                                      : `${getOperationName(item.op)}(${
+                                          item.z1
+                                        }) = ${formatComplex(
+                                          item.result.real,
+                                          item.result.imag
+                                        )}`}
                                   </span>
                                   <span className="hidden sm:block">
                                     {item.z2
-                                      ? `${item.z1} ${getOperationSymbol(item.op)} ${item.z2} = ${formatComplex(item.result.real, item.result.imag)}`
-                                      : `${getOperationName(item.op)}(${item.z1}) = ${formatComplex(item.result.real, item.result.imag)}`}
+                                      ? `${item.z1} ${getOperationSymbol(
+                                          item.op
+                                        )} ${item.z2} = ${formatComplex(
+                                          item.result.real,
+                                          item.result.imag
+                                        )}`
+                                      : `${getOperationName(item.op)}(${
+                                          item.z1
+                                        }) = ${formatComplex(
+                                          item.result.real,
+                                          item.result.imag
+                                        )}`}
                                   </span>
                                 </div>
                               </div>

@@ -510,8 +510,8 @@ const FlexGridGenerator = ({ theme = "light" }) => {
                     ? "bg-gray-700 text-white"
                     : "bg-gray-100 text-gray-900"
                   : theme === "dark"
-                    ? "text-gray-300 hover:bg-gray-700"
-                    : "text-gray-600 hover:bg-gray-100"
+                  ? "text-gray-300 hover:bg-gray-700"
+                  : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               Editor
@@ -524,8 +524,8 @@ const FlexGridGenerator = ({ theme = "light" }) => {
                     ? "bg-gray-700 text-white"
                     : "bg-gray-100 text-gray-900"
                   : theme === "dark"
-                    ? "text-gray-300 hover:bg-gray-700"
-                    : "text-gray-600 hover:bg-gray-100"
+                  ? "text-gray-300 hover:bg-gray-700"
+                  : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               Code
@@ -538,8 +538,8 @@ const FlexGridGenerator = ({ theme = "light" }) => {
                     ? "bg-gray-700 text-white"
                     : "bg-gray-100 text-gray-900"
                   : theme === "dark"
-                    ? "text-gray-300 hover:bg-gray-700"
-                    : "text-gray-600 hover:bg-gray-100"
+                  ? "text-gray-300 hover:bg-gray-700"
+                  : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               My Layouts
@@ -569,8 +569,8 @@ const FlexGridGenerator = ({ theme = "light" }) => {
                           ? "bg-blue-600 text-white"
                           : "bg-blue-100 text-blue-700 border border-blue-300"
                         : theme === "dark"
-                          ? "bg-gray-700 text-gray-300"
-                          : "bg-gray-100 text-gray-700"
+                        ? "bg-gray-700 text-gray-300"
+                        : "bg-gray-100 text-gray-700"
                     }`}
                   >
                     <LayoutGrid size={16} />
@@ -584,8 +584,8 @@ const FlexGridGenerator = ({ theme = "light" }) => {
                           ? "bg-indigo-600 text-white"
                           : "bg-indigo-100 text-indigo-700 border border-indigo-300"
                         : theme === "dark"
-                          ? "bg-gray-700 text-gray-300"
-                          : "bg-gray-100 text-gray-700"
+                        ? "bg-gray-700 text-gray-300"
+                        : "bg-gray-100 text-gray-700"
                     }`}
                   >
                     <GridIcon size={16} />
@@ -619,8 +619,8 @@ const FlexGridGenerator = ({ theme = "light" }) => {
                           ? "border-b-2 border-blue-500 text-blue-400"
                           : "border-b-2 border-blue-500 text-blue-600"
                         : selectedElementId
-                          ? ""
-                          : "opacity-50 cursor-not-allowed"
+                        ? ""
+                        : "opacity-50 cursor-not-allowed"
                     }`}
                     disabled={!selectedElementId}
                   >
@@ -1427,7 +1427,9 @@ const FlexGridGenerator = ({ theme = "light" }) => {
                   {elements.map((element, index) => (
                     <div
                       key={element.id}
-                      className={`element-item ${selectedElementId === element.id ? "selected" : ""}`}
+                      className={`element-item ${
+                        selectedElementId === element.id ? "selected" : ""
+                      }`}
                       style={getElementStyle(element)}
                       onClick={() => {
                         setSelectedElementId(element.id);

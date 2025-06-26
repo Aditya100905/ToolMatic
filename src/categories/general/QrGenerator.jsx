@@ -153,7 +153,9 @@ const Qr = ({ theme }) => {
 
       await navigator.share({
         title: "QR Code",
-        text: `QR Code for: ${text.substring(0, 50)}${text.length > 50 ? "..." : ""}`,
+        text: `QR Code for: ${text.substring(0, 50)}${
+          text.length > 50 ? "..." : ""
+        }`,
         files: [file],
       });
     } catch (err) {
@@ -199,7 +201,9 @@ const Qr = ({ theme }) => {
       >
         <div className="flex items-center justify-between mb-6">
           <h1
-            className={`text-2xl md:text-3xl font-bold ${isDarkTheme ? "text-blue-400" : "text-blue-600"}`}
+            className={`text-2xl md:text-3xl font-bold ${
+              isDarkTheme ? "text-blue-400" : "text-blue-600"
+            }`}
           >
             QR Code Generator
           </h1>
@@ -241,7 +245,9 @@ const Qr = ({ theme }) => {
                 {history.map((item, index) => (
                   <div
                     key={index}
-                    className={`p-2 rounded-lg cursor-pointer hover:opacity-80 transition ${isDarkTheme ? "bg-gray-700" : "bg-white"}`}
+                    className={`p-2 rounded-lg cursor-pointer hover:opacity-80 transition ${
+                      isDarkTheme ? "bg-gray-700" : "bg-white"
+                    }`}
                     onClick={() => loadFromHistory(item)}
                   >
                     <img
@@ -325,7 +331,9 @@ const Qr = ({ theme }) => {
                 className={`flex flex-col items-center p-6 rounded-lg ${panelBgClass}`}
               >
                 <div
-                  className={`p-6 rounded-lg ${previewMode ? panelBgClass : "bg-white"}`}
+                  className={`p-6 rounded-lg ${
+                    previewMode ? panelBgClass : "bg-white"
+                  }`}
                 >
                   <img
                     ref={qrImageRef}
@@ -384,7 +392,11 @@ const Qr = ({ theme }) => {
                     onClick={() => setActivePanel(panel)}
                     className={`py-2 px-4 capitalize ${
                       activePanel === panel
-                        ? `border-b-2 ${isDarkTheme ? "border-blue-400 text-blue-400" : "border-blue-600 text-blue-600"}`
+                        ? `border-b-2 ${
+                            isDarkTheme
+                              ? "border-blue-400 text-blue-400"
+                              : "border-blue-600 text-blue-600"
+                          }`
                         : "opacity-70"
                     }`}
                   >
@@ -465,7 +477,11 @@ const Qr = ({ theme }) => {
                         ].map((preset, i) => (
                           <button
                             key={i}
-                            className={`p-2 text-xs rounded-lg border transition hover:opacity-80 ${isDarkTheme ? "border-gray-600" : "border-gray-300"}`}
+                            className={`p-2 text-xs rounded-lg border transition hover:opacity-80 ${
+                              isDarkTheme
+                                ? "border-gray-600"
+                                : "border-gray-300"
+                            }`}
                             onClick={() => {
                               setColor(preset.fg);
                               setBGColor(preset.bg);

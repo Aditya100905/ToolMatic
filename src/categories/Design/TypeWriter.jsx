@@ -398,7 +398,9 @@ const TypographyPreview = ({
       return (
         <div className="typewriter-container">
           <div
-            className={`effect-typewriter ${getBaseClasses()} ${settings.cursorStyle} ${!isPlaying ? "typewriter-instant" : ""}`}
+            className={`effect-typewriter ${getBaseClasses()} ${
+              settings.cursorStyle
+            } ${!isPlaying ? "typewriter-instant" : ""}`}
             style={getStyleVariables()}
           >
             {text || "Type something..."}
@@ -421,7 +423,9 @@ const TypographyPreview = ({
           ))}
           {settings.cursorStyle && (
             <span
-              className={`${settings.cursorStyle} ${settings.cursorBlink ? "cursor-blink" : ""}`}
+              className={`${settings.cursorStyle} ${
+                settings.cursorBlink ? "cursor-blink" : ""
+              }`}
             ></span>
           )}
         </div>
@@ -435,7 +439,9 @@ const TypographyPreview = ({
           {words.map((word, i) => (
             <span key={i}>
               <span
-                className={`typewriter-word ${i < visibleWords ? "visible" : ""}`}
+                className={`typewriter-word ${
+                  i < visibleWords ? "visible" : ""
+                }`}
               >
                 {word}
               </span>
@@ -444,7 +450,9 @@ const TypographyPreview = ({
           ))}
           {settings.cursorStyle && (
             <span
-              className={`${settings.cursorStyle} ${settings.cursorBlink ? "cursor-blink" : ""}`}
+              className={`${settings.cursorStyle} ${
+                settings.cursorBlink ? "cursor-blink" : ""
+              }`}
             ></span>
           )}
         </div>
@@ -485,13 +493,19 @@ const CodeDisplay = ({ code, theme, onCopy, onDownload }) => {
     <div className="code-container relative rounded-lg overflow-hidden">
       <pre
         className={`p-4 overflow-auto max-h-72 text-sm font-mono
-        ${theme === "dark" ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-800"}`}
+        ${
+          theme === "dark"
+            ? "bg-gray-900 text-gray-300"
+            : "bg-gray-100 text-gray-800"
+        }`}
       >
         <code className="relative">
           {code.split("\n").map((line, i) => (
             <div key={i} className="table-row">
               <span
-                className={`table-cell pr-4 text-right select-none opacity-50 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}
+                className={`table-cell pr-4 text-right select-none opacity-50 ${
+                  theme === "dark" ? "text-gray-500" : "text-gray-400"
+                }`}
               >
                 {i + 1}
               </span>
@@ -599,7 +613,9 @@ const Thumbnail = ({ settings, theme, text }) => {
   if (settings.effectType === "glitch") {
     return (
       <div
-        className={`h-full w-full flex items-center justify-center rounded transition-all ${theme === "dark" ? "bg-gray-800" : "bg-gray-100"}`}
+        className={`h-full w-full flex items-center justify-center rounded transition-all ${
+          theme === "dark" ? "bg-gray-800" : "bg-gray-100"
+        }`}
       >
         <div
           data-text={text || "Typography Effect"}
@@ -614,7 +630,9 @@ const Thumbnail = ({ settings, theme, text }) => {
 
   return (
     <div
-      className={`h-full w-full flex items-center justify-center rounded transition-all ${theme === "dark" ? "bg-gray-800" : "bg-gray-100"}`}
+      className={`h-full w-full flex items-center justify-center rounded transition-all ${
+        theme === "dark" ? "bg-gray-800" : "bg-gray-100"
+      }`}
     >
       <div
         className={`${getBaseClasses()} ${effectClass} overflow-hidden`}
@@ -1013,9 +1031,19 @@ const TypographyLibrary = ({ theme = "light" }) => {
           .map((char, i) => `<span class="typewriter-char">${char}</span>`)
           .join("");
 
-        htmlCode = `<div class="typewriter-container char-by-char ${settings.fontFamily} ${settings.fontSize} ${settings.fontWeight} ${settings.fontStyle} ${settings.textColor}">
+        htmlCode = `<div class="typewriter-container char-by-char ${
+          settings.fontFamily
+        } ${settings.fontSize} ${settings.fontWeight} ${settings.fontStyle} ${
+          settings.textColor
+        }">
   ${chars}
-  ${settings.cursorStyle ? `<span class="${settings.cursorStyle} ${settings.cursorBlink ? "cursor-blink" : ""}"></span>` : ""}
+  ${
+    settings.cursorStyle
+      ? `<span class="${settings.cursorStyle} ${
+          settings.cursorBlink ? "cursor-blink" : ""
+        }"></span>`
+      : ""
+  }
 </div>
 
 <script>
@@ -1037,13 +1065,25 @@ const TypographyLibrary = ({ theme = "light" }) => {
           .split(" ")
           .map(
             (word, i) =>
-              `<span><span class="typewriter-word">${word}</span>${i < text.split(" ").length - 1 ? " " : ""}</span>`
+              `<span><span class="typewriter-word">${word}</span>${
+                i < text.split(" ").length - 1 ? " " : ""
+              }</span>`
           )
           .join("");
 
-        htmlCode = `<div class="typewriter-container type-mode-word ${settings.fontFamily} ${settings.fontSize} ${settings.fontWeight} ${settings.fontStyle} ${settings.textColor}">
+        htmlCode = `<div class="typewriter-container type-mode-word ${
+          settings.fontFamily
+        } ${settings.fontSize} ${settings.fontWeight} ${settings.fontStyle} ${
+          settings.textColor
+        }">
   ${words}
-  ${settings.cursorStyle ? `<span class="${settings.cursorStyle} ${settings.cursorBlink ? "cursor-blink" : ""}"></span>` : ""}
+  ${
+    settings.cursorStyle
+      ? `<span class="${settings.cursorStyle} ${
+          settings.cursorBlink ? "cursor-blink" : ""
+        }"></span>`
+      : ""
+  }
 </div>
 
 <script>
@@ -1062,9 +1102,13 @@ const TypographyLibrary = ({ theme = "light" }) => {
       }
     } else if (settings.effectType === "glitch") {
       htmlCode = `<div 
-  class="typography-effect effect-glitch ${settings.fontFamily} ${settings.fontSize} ${settings.fontWeight} ${settings.fontStyle} ${settings.textColor}"
+  class="typography-effect effect-glitch ${settings.fontFamily} ${
+        settings.fontSize
+      } ${settings.fontWeight} ${settings.fontStyle} ${settings.textColor}"
   data-text="${text}"
-  style="--glitch-duration: ${settings.speed * 0.01}s; --glitch-color-1: ${settings.glitchColor1 || "#ff00ff"}; --glitch-color-2: ${settings.glitchColor2 || "#00ffff"}">
+  style="--glitch-duration: ${settings.speed * 0.01}s; --glitch-color-1: ${
+        settings.glitchColor1 || "#ff00ff"
+      }; --glitch-color-2: ${settings.glitchColor2 || "#00ffff"}">
   ${text}
 </div>`;
     } else {
@@ -1093,7 +1137,9 @@ const TypographyLibrary = ({ theme = "light" }) => {
           break;
         case "gradient":
           styleVars.push(
-            `--gradient: ${settings.gradient || "linear-gradient(to right, #6366f1, #8b5cf6)"}`
+            `--gradient: ${
+              settings.gradient || "linear-gradient(to right, #6366f1, #8b5cf6)"
+            }`
           );
           styleVars.push(`--gradient-duration: ${settings.speed * 0.1}s`);
           break;
@@ -1102,7 +1148,9 @@ const TypographyLibrary = ({ theme = "light" }) => {
             `--shadow: ${settings.shadow || "2px 2px 4px rgba(0, 0, 0, 0.5)"}`
           );
           styleVars.push(
-            `--shadow-pulse: ${settings.shadowPulse || "3px 3px 6px rgba(0, 0, 0, 0.7)"}`
+            `--shadow-pulse: ${
+              settings.shadowPulse || "3px 3px 6px rgba(0, 0, 0, 0.7)"
+            }`
           );
           styleVars.push(`--shadow-duration: ${settings.speed * 0.05}s`);
           break;
@@ -1114,7 +1162,9 @@ const TypographyLibrary = ({ theme = "light" }) => {
           styleVars.push(`--reveal-duration: ${settings.speed / 30}s`);
           styleVars.push(`--reveal-delay: ${settings.delay / 1000}s`);
           styleVars.push(
-            `--reveal-timing: ${settings.timingFunction || "cubic-bezier(0.77, 0, 0.18, 1)"}`
+            `--reveal-timing: ${
+              settings.timingFunction || "cubic-bezier(0.77, 0, 0.18, 1)"
+            }`
           );
           break;
       }
@@ -1152,7 +1202,9 @@ ${htmlCode}`;
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `typography-effect-${currentEffect.name.toLowerCase().replace(/\s+/g, "-")}.txt`;
+    a.download = `typography-effect-${currentEffect.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1180,7 +1232,11 @@ ${htmlCode}`;
 
   return (
     <div
-      className={`typography-library mt-16 ${theme === "dark" ? "bg-[#0e0e0e] text-gray-200" : "bg-white text-gray-800"} p-4 rounded-lg shadow-lg`}
+      className={`typography-library mt-16 ${
+        theme === "dark"
+          ? "bg-[#0e0e0e] text-gray-200"
+          : "bg-white text-gray-800"
+      } p-4 rounded-lg shadow-lg`}
     >
       <style dangerouslySetInnerHTML={{ __html: styleSheet }} />
 
@@ -1392,8 +1448,8 @@ ${htmlCode}`;
                     ? "text-blue-400 border-b-2 border-blue-400"
                     : "text-blue-600 border-b-2 border-blue-600"
                   : theme === "dark"
-                    ? "text-gray-400 hover:text-gray-300"
-                    : "text-gray-500 hover:text-gray-700"
+                  ? "text-gray-400 hover:text-gray-300"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-1">
@@ -1409,8 +1465,8 @@ ${htmlCode}`;
                     ? "text-blue-400 border-b-2 border-blue-400"
                     : "text-blue-600 border-b-2 border-blue-600"
                   : theme === "dark"
-                    ? "text-gray-400 hover:text-gray-300"
-                    : "text-gray-500 hover:text-gray-700"
+                  ? "text-gray-400 hover:text-gray-300"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-1">
@@ -1426,8 +1482,8 @@ ${htmlCode}`;
                     ? "text-blue-400 border-b-2 border-blue-400"
                     : "text-blue-600 border-b-2 border-blue-600"
                   : theme === "dark"
-                    ? "text-gray-400 hover:text-gray-300"
-                    : "text-gray-500 hover:text-gray-700"
+                  ? "text-gray-400 hover:text-gray-300"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-1">
@@ -2255,7 +2311,9 @@ ${htmlCode}`;
               <div className="relative flex-1">
                 <Search
                   size={16}
-                  className={`absolute left-3 top-2.5 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}
+                  className={`absolute left-3 top-2.5 ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-500"
+                  }`}
                 />
                 <input
                   type="text"

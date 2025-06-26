@@ -697,7 +697,11 @@ export default function PasswordGenerator({ theme = "light" }) {
         "WARNING: This file contains sensitive information. Store it securely.\n\n";
       content += savedPasswords
         .map((p) => {
-          return `Title: ${p.title}\nTag: ${p.tag || "General"}\nPassword: ${p.password}\nStrength: ${p.strength}\nCreated: ${new Date(p.created).toLocaleString()}\nNotes: ${p.note || "None"}\n\n`;
+          return `Title: ${p.title}\nTag: ${p.tag || "General"}\nPassword: ${
+            p.password
+          }\nStrength: ${p.strength}\nCreated: ${new Date(
+            p.created
+          ).toLocaleString()}\nNotes: ${p.note || "None"}\n\n`;
         })
         .join("---\n\n");
       filename = "saved_passwords_SECURE.txt";
@@ -866,7 +870,9 @@ export default function PasswordGenerator({ theme = "light" }) {
 
           {showAnalysis && getPasswordAnalysis() && (
             <div
-              className={`mt-4 p-3 rounded ${isDark ? "bg-gray-900" : "bg-gray-100"}`}
+              className={`mt-4 p-3 rounded ${
+                isDark ? "bg-gray-900" : "bg-gray-100"
+              }`}
             >
               <h4 className="font-semibold mb-2">Password Analysis</h4>
               <div className="grid grid-cols-2 gap-2 text-sm">
@@ -1146,7 +1152,9 @@ export default function PasswordGenerator({ theme = "light" }) {
                 </label>
 
                 <div
-                  className={`p-3 rounded ${isDark ? "bg-gray-700" : "bg-gray-100"}`}
+                  className={`p-3 rounded ${
+                    isDark ? "bg-gray-700" : "bg-gray-100"
+                  }`}
                 >
                   <h4 className="text-sm mb-2">Minimum requirements</h4>
                   <div className="space-y-2">
@@ -1461,7 +1469,9 @@ export default function PasswordGenerator({ theme = "light" }) {
                 {savedPasswords.map((savedPwd) => (
                   <div
                     key={savedPwd.id}
-                    className={`p-3 rounded border ${isDark ? "border-gray-700" : "border-gray-200"}`}
+                    className={`p-3 rounded border ${
+                      isDark ? "border-gray-700" : "border-gray-200"
+                    }`}
                   >
                     {editingSavedPasswordId === savedPwd.id ? (
                       <div className="space-y-2">
@@ -1532,7 +1542,9 @@ export default function PasswordGenerator({ theme = "light" }) {
                             <h4 className="font-medium">{savedPwd.title}</h4>
                             {savedPwd.tag && (
                               <span
-                                className={`ml-2 px-2 py-0.5 text-xs rounded ${isDark ? "bg-gray-700" : "bg-gray-200"}`}
+                                className={`ml-2 px-2 py-0.5 text-xs rounded ${
+                                  isDark ? "bg-gray-700" : "bg-gray-200"
+                                }`}
                               >
                                 <Tag size={12} className="inline mr-1" />
                                 {savedPwd.tag}
@@ -1594,7 +1606,9 @@ export default function PasswordGenerator({ theme = "light" }) {
                         <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
                           <div>
                             <span
-                              className={`inline-block w-2 h-2 rounded-full mr-1 ${getStrengthColor(savedPwd.strengthScore)}`}
+                              className={`inline-block w-2 h-2 rounded-full mr-1 ${getStrengthColor(
+                                savedPwd.strengthScore
+                              )}`}
                             ></span>
                             {savedPwd.strength}
                           </div>
@@ -1605,7 +1619,9 @@ export default function PasswordGenerator({ theme = "light" }) {
 
                         {savedPwd.note && (
                           <div
-                            className={`mt-2 text-xs p-2 rounded ${isDark ? "bg-gray-700" : "bg-gray-100"}`}
+                            className={`mt-2 text-xs p-2 rounded ${
+                              isDark ? "bg-gray-700" : "bg-gray-100"
+                            }`}
                           >
                             {savedPwd.note}
                           </div>
@@ -1628,8 +1644,8 @@ export default function PasswordGenerator({ theme = "light" }) {
               notification.type === "success"
                 ? themes.success
                 : notification.type === "error"
-                  ? themes.danger
-                  : themes.warning
+                ? themes.danger
+                : themes.warning
             }`}
           >
             {notification.type === "success" && (

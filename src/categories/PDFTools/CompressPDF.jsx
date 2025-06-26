@@ -524,7 +524,9 @@ export default function CompressPDF() {
           PDF Size Compressor
         </h2>
         <p
-          className={`text-center mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+          className={`text-center mb-6 ${
+            theme === "dark" ? "text-gray-300" : "text-gray-600"
+          }`}
         >
           Reduce PDF file size with intelligent compression - process locally in
           your browser
@@ -747,10 +749,10 @@ export default function CompressPDF() {
                         compressionLevel < 25
                           ? "bg-green-100 text-green-800 dark:bg-green-300 dark:text-green-900"
                           : compressionLevel < 50
-                            ? "bg-blue-100 text-blue-800 dark:bg-blue-300 dark:text-blue-900"
-                            : compressionLevel < 75
-                              ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-300 dark:text-yellow-900"
-                              : "bg-red-100 text-red-800 dark:bg-red-300 dark:text-red-900"
+                          ? "bg-blue-100 text-blue-800 dark:bg-blue-300 dark:text-blue-900"
+                          : compressionLevel < 75
+                          ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-300 dark:text-yellow-900"
+                          : "bg-red-100 text-red-800 dark:bg-red-300 dark:text-red-900"
                       }`}
                     >
                       {getCompressionLevelDescription()} ({compressionLevel}%)
@@ -853,8 +855,8 @@ export default function CompressPDF() {
                                 ? "border-blue-500 bg-blue-900/20"
                                 : "border-blue-500 bg-blue-50"
                               : theme === "dark"
-                                ? "border-gray-700 bg-gray-800"
-                                : "border-gray-300 bg-gray-50"
+                              ? "border-gray-700 bg-gray-800"
+                              : "border-gray-300 bg-gray-50"
                           }`}
                         >
                           <input
@@ -876,8 +878,8 @@ export default function CompressPDF() {
                                 ? "border-blue-500 bg-blue-900/20"
                                 : "border-blue-500 bg-blue-50"
                               : theme === "dark"
-                                ? "border-gray-700 bg-gray-800"
-                                : "border-gray-300 bg-gray-50"
+                              ? "border-gray-700 bg-gray-800"
+                              : "border-gray-300 bg-gray-50"
                           }`}
                         >
                           <input
@@ -899,8 +901,8 @@ export default function CompressPDF() {
                                 ? "border-blue-500 bg-blue-900/20"
                                 : "border-blue-500 bg-blue-50"
                               : theme === "dark"
-                                ? "border-gray-700 bg-gray-800"
-                                : "border-gray-300 bg-gray-50"
+                              ? "border-gray-700 bg-gray-800"
+                              : "border-gray-300 bg-gray-50"
                           }`}
                         >
                           <input

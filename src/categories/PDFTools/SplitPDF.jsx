@@ -185,7 +185,9 @@ export default function SplitPDF() {
       >
         <h2 className="text-3xl font-bold mb-2 text-center">Split PDF</h2>
         <p
-          className={`text-center mb-6 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+          className={`text-center mb-6 ${
+            theme === "dark" ? "text-gray-300" : "text-gray-600"
+          }`}
         >
           Extract specific pages from your PDF document
         </p>
@@ -251,7 +253,9 @@ export default function SplitPDF() {
             {/* File Stats */}
             <div className="mt-4 text-center">
               <p
-                className={`text-sm ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}
+                className={`text-sm ${
+                  theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
               >
                 File selected • Size: {formatBytes(file.size)} • Pages:{" "}
                 {totalPages}
@@ -303,7 +307,9 @@ export default function SplitPDF() {
               <label className="block font-medium mb-2">
                 Pages to Extract (e.g., 1, 3-5, 7):
                 <span
-                  className={`ml-2 text-sm font-normal ${theme === "dark" ? "text-gray-400" : "text-gray-600"}`}
+                  className={`ml-2 text-sm font-normal ${
+                    theme === "dark" ? "text-gray-400" : "text-gray-600"
+                  }`}
                 >
                   Document has {totalPages} pages
                 </span>

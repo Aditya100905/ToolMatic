@@ -151,8 +151,12 @@ const Navbar = ({ onSearch }) => {
         scrolled ? "shadow-lg" : "shadow-md"
       } ${
         isDark
-          ? `bg-[#1a1a1a] ${scrolled ? "bg-opacity-95" : "bg-opacity-90"} text-white`
-          : `bg-white ${scrolled ? "bg-opacity-95" : "bg-opacity-90"} text-black`
+          ? `bg-[#1a1a1a] ${
+              scrolled ? "bg-opacity-95" : "bg-opacity-90"
+            } text-white`
+          : `bg-white ${
+              scrolled ? "bg-opacity-95" : "bg-opacity-90"
+            } text-black`
       } backdrop-blur-sm transition-all duration-300`}
     >
       <div className="container mx-auto px-4 py-3">
@@ -171,13 +175,17 @@ const Navbar = ({ onSearch }) => {
                   className="w-8 h-8 md:w-10 md:h-10 group-hover:scale-105 transition-transform duration-300"
                 />
                 <div
-                  className={`absolute inset-0 rounded-full ${isDark ? "bg-blue-500" : "bg-blue-400"} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
+                  className={`absolute inset-0 rounded-full ${
+                    isDark ? "bg-blue-500" : "bg-blue-400"
+                  } opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
                 ></div>
               </div>
               <span className="relative">
                 ToolMatic
                 <span
-                  className={`absolute -bottom-1 left-0 w-0 h-[2px] ${isDark ? "bg-blue-400" : "bg-blue-500"} group-hover:w-full transition-all duration-500`}
+                  className={`absolute -bottom-1 left-0 w-0 h-[2px] ${
+                    isDark ? "bg-blue-400" : "bg-blue-500"
+                  } group-hover:w-full transition-all duration-500`}
                 ></span>
               </span>
             </Link>
@@ -198,15 +206,21 @@ const Navbar = ({ onSearch }) => {
                     className={`relative sm:px-1 md:px-2 lg:px-3 py-2 transition-all duration-300 rounded-md group text-sm sm:text-sm md:text-base lg:text-lg ${
                       isActive(path)
                         ? `text-blue-500 font-semibold`
-                        : `hover:text-blue-500 ${isDark ? "hover:bg-gray-800" : "hover:bg-gray-100"}`
+                        : `hover:text-blue-500 ${
+                            isDark ? "hover:bg-gray-800" : "hover:bg-gray-100"
+                          }`
                     }`}
                   >
                     <span className="relative z-10">{name}</span>
                     <span
                       className={`absolute bottom-0 left-0 w-full h-[3px] rounded-full transform origin-left ${
                         isActive(path)
-                          ? `scale-x-100 ${isDark ? "bg-blue-500" : "bg-blue-500"}`
-                          : `scale-x-0 ${isDark ? "bg-blue-400" : "bg-blue-500"} group-hover:scale-x-100`
+                          ? `scale-x-100 ${
+                              isDark ? "bg-blue-500" : "bg-blue-500"
+                            }`
+                          : `scale-x-0 ${
+                              isDark ? "bg-blue-400" : "bg-blue-500"
+                            } group-hover:scale-x-100`
                       } transition-transform duration-300 ease-out`}
                     ></span>
                   </Link>
@@ -305,13 +319,17 @@ const Navbar = ({ onSearch }) => {
                 className="w-[36px] h-[36px] group-hover:scale-105 transition-transform duration-300"
               />
               <div
-                className={`absolute inset-0 rounded-full ${isDark ? "bg-blue-500" : "bg-blue-400"} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
+                className={`absolute inset-0 rounded-full ${
+                  isDark ? "bg-blue-500" : "bg-blue-400"
+                } opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
               ></div>
             </div>
             <span className="relative">
               ToolMatic
               <span
-                className={`absolute -bottom-1 left-0 w-0 h-[2px] ${isDark ? "bg-blue-400" : "bg-blue-500"} group-hover:w-full transition-all duration-500`}
+                className={`absolute -bottom-1 left-0 w-0 h-[2px] ${
+                  isDark ? "bg-blue-400" : "bg-blue-500"
+                } group-hover:w-full transition-all duration-500`}
               ></span>
             </span>
           </Link>
@@ -434,7 +452,9 @@ const Navbar = ({ onSearch }) => {
         <div className="py-4 px-6">
           {/* Menu Title */}
           <div
-            className={`mb-4 pb-2 ${isDark ? "border-gray-700" : "border-gray-200"} border-b text-center`}
+            className={`mb-4 pb-2 ${
+              isDark ? "border-gray-700" : "border-gray-200"
+            } border-b text-center`}
           >
             <span className="text-lg font-medium flex items-center justify-center">
               <span className={isDark ? "text-blue-400" : "text-blue-500"}>
@@ -456,7 +476,9 @@ const Navbar = ({ onSearch }) => {
                   to={path}
                   className={`flex items-center justify-between py-3 px-4 rounded-md transition-all duration-300 ${
                     isActive(path)
-                      ? `${isDark ? "bg-blue-900 bg-opacity-30" : "bg-blue-50"} text-blue-500 font-semibold`
+                      ? `${
+                          isDark ? "bg-blue-900 bg-opacity-30" : "bg-blue-50"
+                        } text-blue-500 font-semibold`
                       : `hover:translate-x-1 ${
                           isDark
                             ? "hover:bg-gray-800 active:bg-gray-700"
@@ -468,7 +490,9 @@ const Navbar = ({ onSearch }) => {
                   <span>{name}</span>
                   <ChevronRight
                     size={16}
-                    className={`transition-transform ${isActive(path) ? "text-blue-500" : ""}`}
+                    className={`transition-transform ${
+                      isActive(path) ? "text-blue-500" : ""
+                    }`}
                   />
                 </Link>
               </li>
@@ -477,7 +501,9 @@ const Navbar = ({ onSearch }) => {
 
           {/* Bottom Section */}
           <div
-            className={`mt-6 pt-4 ${isDark ? "border-gray-700" : "border-gray-200"} border-t flex justify-center`}
+            className={`mt-6 pt-4 ${
+              isDark ? "border-gray-700" : "border-gray-200"
+            } border-t flex justify-center`}
           >
             <div className="text-sm text-center">
               <span className={`${isDark ? "text-gray-400" : "text-gray-500"}`}>
@@ -490,7 +516,9 @@ const Navbar = ({ onSearch }) => {
           {isSearchVisible && (
             <div className="mt-4 text-center">
               <p
-                className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
+                className={`text-xs ${
+                  isDark ? "text-gray-400" : "text-gray-500"
+                }`}
               >
                 Press{" "}
                 <kbd

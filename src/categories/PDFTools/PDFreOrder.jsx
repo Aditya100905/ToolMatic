@@ -20,7 +20,8 @@ import {
 import { useTheme } from "../../ThemeProvider";
 
 // Set the PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js";
 
 // Generate unique IDs for files
 const generateUniqueId = () => Math.random().toString(36).substring(2, 15);
@@ -56,83 +57,89 @@ export default function PDFReordering() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   };
 
-//   // Process uploaded files - keeping original file order
-//   const processFiles = useCallback((uploadedFiles) => {
-//     const pdfFiles = uploadedFiles.filter((file) => file.type === "application/pdf");
-    
-//     if (pdfFiles.length !== uploadedFiles.length) {
-//       setError("Only PDF files are allowed!");
-//     }
-    
-//     if (pdfFiles.length > 0) {
-//       const newFileIds = { ...fileIds };
-//       const newFiles = [...files];
-//       const fileOrder = newFiles.length; // Starting order for newly added files
-      
-//       pdfFiles.forEach((file, index) => {
-//         if (!newFileIds[file.name]) {
-//           const fileId = generateUniqueId();
-//           newFileIds[file.name] = fileId;
-//           // Store file with its order to maintain upload sequence
-//           file.order = fileOrder + index;
-//         }
-//       });
-      
-//       setFileIds(newFileIds);
-//       setFiles((prevFiles) => [...prevFiles, ...pdfFiles]);
-      
-//       // Set default output filename based on first file
-//       if (prevFiles.length === 0 && pdfFiles.length > 0) {
-//         const defaultFileName = pdfFiles[0].name.replace(/\.pdf$/i, "") + "-reordered.pdf";
-//         setOutputFileName(defaultFileName);
-//       }
-      
-//       setError("");
-//     }
-//   }, [fileIds, files]);
+  //   // Process uploaded files - keeping original file order
+  //   const processFiles = useCallback((uploadedFiles) => {
+  //     const pdfFiles = uploadedFiles.filter((file) => file.type === "application/pdf");
 
-// Process uploaded files - keeping original file order
-const processFiles = useCallback((uploadedFiles) => {
-    const pdfFiles = uploadedFiles.filter((file) => file.type === "application/pdf");
-    
-    if (pdfFiles.length !== uploadedFiles.length) {
-      setError("Only PDF files are allowed!");
-    }
-    
-    if (pdfFiles.length > 0) {
-      const newFileIds = { ...fileIds };
-      const newFiles = [...files];
-      const fileOrder = newFiles.length; // Starting order for newly added files
-      
-      pdfFiles.forEach((file, index) => {
-        if (!newFileIds[file.name]) {
-          const fileId = generateUniqueId();
-          newFileIds[file.name] = fileId;
-          // Store file with its order to maintain upload sequence
-          file.order = fileOrder + index;
-        }
-      });
-      
-      setFileIds(newFileIds);
-      setFiles((prevFiles) => {
-        // Set default output filename based on first file
-        if (prevFiles.length === 0 && pdfFiles.length > 0) {
-          const defaultFileName = pdfFiles[0].name.replace(/\.pdf$/i, "") + "-reordered.pdf";
-          setOutputFileName(defaultFileName);
-        }
-        return [...prevFiles, ...pdfFiles];
-      });
-      
-      setError("");
-    }
-  }, [fileIds, files]);
+  //     if (pdfFiles.length !== uploadedFiles.length) {
+  //       setError("Only PDF files are allowed!");
+  //     }
+
+  //     if (pdfFiles.length > 0) {
+  //       const newFileIds = { ...fileIds };
+  //       const newFiles = [...files];
+  //       const fileOrder = newFiles.length; // Starting order for newly added files
+
+  //       pdfFiles.forEach((file, index) => {
+  //         if (!newFileIds[file.name]) {
+  //           const fileId = generateUniqueId();
+  //           newFileIds[file.name] = fileId;
+  //           // Store file with its order to maintain upload sequence
+  //           file.order = fileOrder + index;
+  //         }
+  //       });
+
+  //       setFileIds(newFileIds);
+  //       setFiles((prevFiles) => [...prevFiles, ...pdfFiles]);
+
+  //       // Set default output filename based on first file
+  //       if (prevFiles.length === 0 && pdfFiles.length > 0) {
+  //         const defaultFileName = pdfFiles[0].name.replace(/\.pdf$/i, "") + "-reordered.pdf";
+  //         setOutputFileName(defaultFileName);
+  //       }
+
+  //       setError("");
+  //     }
+  //   }, [fileIds, files]);
+
+  // Process uploaded files - keeping original file order
+  const processFiles = useCallback(
+    (uploadedFiles) => {
+      const pdfFiles = uploadedFiles.filter(
+        (file) => file.type === "application/pdf"
+      );
+
+      if (pdfFiles.length !== uploadedFiles.length) {
+        setError("Only PDF files are allowed!");
+      }
+
+      if (pdfFiles.length > 0) {
+        const newFileIds = { ...fileIds };
+        const newFiles = [...files];
+        const fileOrder = newFiles.length; // Starting order for newly added files
+
+        pdfFiles.forEach((file, index) => {
+          if (!newFileIds[file.name]) {
+            const fileId = generateUniqueId();
+            newFileIds[file.name] = fileId;
+            // Store file with its order to maintain upload sequence
+            file.order = fileOrder + index;
+          }
+        });
+
+        setFileIds(newFileIds);
+        setFiles((prevFiles) => {
+          // Set default output filename based on first file
+          if (prevFiles.length === 0 && pdfFiles.length > 0) {
+            const defaultFileName =
+              pdfFiles[0].name.replace(/\.pdf$/i, "") + "-reordered.pdf";
+            setOutputFileName(defaultFileName);
+          }
+          return [...prevFiles, ...pdfFiles];
+        });
+
+        setError("");
+      }
+    },
+    [fileIds, files]
+  );
 
   // Update total size when files change
   useEffect(() => {
     if (files.length > 0) {
       extractPDFPages();
     }
-    
+
     const size = files.reduce((total, file) => total + file.size, 0);
     setTotalSize(size);
   }, [files]);
@@ -158,7 +165,7 @@ const processFiles = useCallback((uploadedFiles) => {
   // Handle drag events
   const handleDragEnter = (event) => {
     event.preventDefault();
-    if (!draggedPage && event.dataTransfer.types.includes('Files')) {
+    if (!draggedPage && event.dataTransfer.types.includes("Files")) {
       setIsDraggingFile(true);
     }
   };
@@ -180,31 +187,32 @@ const processFiles = useCallback((uploadedFiles) => {
   // Remove a file
   const removeFile = (fileToRemove) => {
     const idToRemove = getFileId(fileToRemove);
-    
+
     // Remove file from files array
     const updatedFiles = files.filter((file) => getFileId(file) !== idToRemove);
     setFiles(updatedFiles);
-    
+
     // Remove pages associated with this file
     const updatedPages = pages.filter((page) => page.fileId !== idToRemove);
-    
+
     // Update page order numbers
     updatedPages.forEach((page, index) => {
       page.newOrder = index + 1;
     });
-    
+
     setPages(updatedPages);
-    
+
     // Update history
     const newHistory = [updatedPages];
     setReorderHistory(newHistory);
     setHistoryIndex(0);
-    
+
     // Update output filename if needed
     if (files.length === 1 && updatedFiles.length === 0) {
       setOutputFileName("");
     } else if (fileToRemove === files[0] && updatedFiles.length > 0) {
-      const defaultFileName = updatedFiles[0].name.replace(/\.pdf$/i, "") + "-reordered.pdf";
+      const defaultFileName =
+        updatedFiles[0].name.replace(/\.pdf$/i, "") + "-reordered.pdf";
       setOutputFileName(defaultFileName);
     }
   };
@@ -231,50 +239,54 @@ const processFiles = useCallback((uploadedFiles) => {
   // Extract pages from PDFs - preserving file order
   const extractPDFPages = async () => {
     if (files.length === 0) return;
-    
+
     setLoading(true);
     setProcessingAction("extracting");
     setError("");
-    
+
     let totalPages = 0;
     let processedPages = 0;
-    
+
     try {
       // First pass: count total pages
       for (const file of files) {
         const fileId = getFileId(file);
-        
+
         // Skip already processed files
         if (pages.some((page) => page.fileId === fileId)) {
-          const processedFilePages = pages.filter((page) => page.fileId === fileId);
+          const processedFilePages = pages.filter(
+            (page) => page.fileId === fileId
+          );
           if (processedFilePages.length > 0) {
             totalPages += processedFilePages.length;
           }
           continue;
         }
-        
+
         const fileReader = new FileReader();
         const fileData = await new Promise((resolve, reject) => {
           fileReader.onload = () => resolve(fileReader.result);
           fileReader.onerror = reject;
           fileReader.readAsArrayBuffer(file);
         });
-        
+
         const typedArray = new Uint8Array(fileData);
         const pdf = await pdfjsLib.getDocument(typedArray).promise;
         totalPages += pdf.numPages;
       }
-      
+
       setConversionProgress({ current: 0, total: totalPages });
-      
+
       // Second pass: process pages - respect file order
       const newPages = [];
       // Sort files by their order property to maintain upload sequence
-      const sortedFiles = [...files].sort((a, b) => (a.order || 0) - (b.order || 0));
-      
+      const sortedFiles = [...files].sort(
+        (a, b) => (a.order || 0) - (b.order || 0)
+      );
+
       for (const file of sortedFiles) {
         const fileId = getFileId(file);
-        
+
         // Skip already processed files
         if (pages.some((page) => page.fileId === fileId)) {
           const existingPages = pages.filter((page) => page.fileId === fileId);
@@ -282,36 +294,36 @@ const processFiles = useCallback((uploadedFiles) => {
           processedPages += existingPages.length;
           continue;
         }
-        
+
         const fileReader = new FileReader();
         const fileData = await new Promise((resolve, reject) => {
           fileReader.onload = () => resolve(fileReader.result);
           fileReader.onerror = reject;
           fileReader.readAsArrayBuffer(file);
         });
-        
+
         try {
           const typedArray = new Uint8Array(fileData);
           const pdf = await pdfjsLib.getDocument(typedArray).promise;
           const filePages = [];
-          
+
           // Calculate starting order based on already processed pages
           const startingOrder = processedPages + 1;
-          
+
           for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
             const viewport = page.getViewport({ scale: 2 });
             const canvas = document.createElement("canvas");
             const context = canvas.getContext("2d");
-            
+
             canvas.width = viewport.width;
             canvas.height = viewport.height;
-            
+
             await page.render({
               canvasContext: context,
-              viewport
+              viewport,
             }).promise;
-            
+
             const pageObj = {
               src: canvas.toDataURL("image/png"),
               originalPage: i,
@@ -324,21 +336,26 @@ const processFiles = useCallback((uploadedFiles) => {
               width: viewport.width,
               height: viewport.height,
             };
-            
+
             filePages.push(pageObj);
             newPages.push(pageObj);
             processedPages++;
-            
+
             setConversionProgress({
               current: processedPages,
               total: totalPages,
             });
-            
+
             // Update state periodically to show progress
             if (processedPages % 5 === 0 || processedPages === totalPages) {
               setPages((prevPages) => {
                 const existingPages = prevPages.filter(
-                  (pg) => !newPages.some((newPg) => newPg.fileId === pg.fileId && newPg.originalPage === pg.originalPage)
+                  (pg) =>
+                    !newPages.some(
+                      (newPg) =>
+                        newPg.fileId === pg.fileId &&
+                        newPg.originalPage === pg.originalPage
+                    )
                 );
                 return [...existingPages, ...newPages];
               });
@@ -348,20 +365,25 @@ const processFiles = useCallback((uploadedFiles) => {
           setError(`Error processing PDF ${file.name}: ${err.message}`);
         }
       }
-      
+
       // Final update with all pages
       setPages((prevPages) => {
         const existingPages = prevPages.filter(
-          (pg) => !newPages.some((newPg) => newPg.fileId === pg.fileId && newPg.originalPage === pg.originalPage)
+          (pg) =>
+            !newPages.some(
+              (newPg) =>
+                newPg.fileId === pg.fileId &&
+                newPg.originalPage === pg.originalPage
+            )
         );
         const allPages = [...existingPages, ...newPages];
-        
+
         // Initialize history if needed
         if (historyIndex === -1 && allPages.length > 0) {
           setReorderHistory([allPages]);
           setHistoryIndex(0);
         }
-        
+
         return allPages;
       });
     } catch (err) {
@@ -383,31 +405,35 @@ const processFiles = useCallback((uploadedFiles) => {
   const handlePageDrop = (e, targetPage) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!draggedPage || draggedPage === targetPage) {
       setDraggedPage(null);
       return;
     }
-    
+
     const updatedPages = [...pages];
     const sourceIndex = updatedPages.findIndex(
-      (p) => p.fileId === draggedPage.fileId && p.originalPage === draggedPage.originalPage
+      (p) =>
+        p.fileId === draggedPage.fileId &&
+        p.originalPage === draggedPage.originalPage
     );
     const targetIndex = updatedPages.findIndex(
-      (p) => p.fileId === targetPage.fileId && p.originalPage === targetPage.originalPage
+      (p) =>
+        p.fileId === targetPage.fileId &&
+        p.originalPage === targetPage.originalPage
     );
-    
+
     const [movedPage] = updatedPages.splice(sourceIndex, 1);
     updatedPages.splice(targetIndex, 0, movedPage);
-    
+
     // Update order numbers
     updatedPages.forEach((page, index) => {
       page.newOrder = index + 1;
     });
-    
+
     setPages(updatedPages);
     setDraggedPage(null);
-    
+
     // Update history
     const newHistory = reorderHistory.slice(0, historyIndex + 1);
     newHistory.push(updatedPages);
@@ -415,47 +441,43 @@ const processFiles = useCallback((uploadedFiles) => {
     setHistoryIndex(newHistory.length - 1);
   };
 
-
-
-
-
   // Reset page order - preserving file order
   const resetOrder = () => {
     if (pages.length === 0) return;
-    
+
     // Group pages by fileId
     const pagesByFile = {};
-    pages.forEach(page => {
+    pages.forEach((page) => {
       if (!pagesByFile[page.fileId]) {
         pagesByFile[page.fileId] = [];
       }
       pagesByFile[page.fileId].push(page);
     });
-    
+
     // Sort files by their original order
     const sortedFileIds = Object.keys(pagesByFile).sort((a, b) => {
       const fileA = pagesByFile[a][0].file;
       const fileB = pagesByFile[b][0].file;
       return (fileA.order || 0) - (fileB.order || 0);
     });
-    
+
     // Reset pages in original file and page order
     let newOrder = 1;
     const resetPages = [];
-    
+
     for (const fileId of sortedFileIds) {
       const filePages = pagesByFile[fileId];
       // Sort pages within each file by original page number
       filePages.sort((a, b) => a.originalPage - b.originalPage);
-      
-      filePages.forEach(page => {
+
+      filePages.forEach((page) => {
         page.newOrder = newOrder++;
         resetPages.push(page);
       });
     }
-    
+
     setPages([...resetPages]);
-    
+
     // Update history
     const newHistory = reorderHistory.slice(0, historyIndex + 1);
     newHistory.push(resetPages);
@@ -474,26 +496,27 @@ const processFiles = useCallback((uploadedFiles) => {
       setError("No pages available to create PDF");
       return;
     }
-    
+
     // Ensure we have a filename
     let fileName = outputFileName.trim();
     if (!fileName) {
-      fileName = files.length === 1 
-        ? `${files[0].name.replace(/\.pdf$/i, "")}-reordered.pdf` 
-        : "reordered-document.pdf";
+      fileName =
+        files.length === 1
+          ? `${files[0].name.replace(/\.pdf$/i, "")}-reordered.pdf`
+          : "reordered-document.pdf";
     }
-    
+
     // Add .pdf extension if not present
-    if (!fileName.toLowerCase().endsWith('.pdf')) {
-      fileName += '.pdf';
+    if (!fileName.toLowerCase().endsWith(".pdf")) {
+      fileName += ".pdf";
     }
-    
+
     setLoading(true);
     setProcessingAction("creating");
-    
+
     try {
       const pdfDoc = await PDFDocument.create();
-      
+
       // Copy pages in the current order (sorted by newOrder)
       for (const page of [...pages].sort((a, b) => a.newOrder - b.newOrder)) {
         const fileReader = new FileReader();
@@ -502,15 +525,17 @@ const processFiles = useCallback((uploadedFiles) => {
           fileReader.onerror = reject;
           fileReader.readAsArrayBuffer(page.file);
         });
-        
+
         const srcPdf = await PDFDocument.load(fileData);
-        const [copiedPage] = await pdfDoc.copyPages(srcPdf, [page.originalPage - 1]);
+        const [copiedPage] = await pdfDoc.copyPages(srcPdf, [
+          page.originalPage - 1,
+        ]);
         pdfDoc.addPage(copiedPage);
       }
-      
+
       const pdfBytes = await pdfDoc.save();
       const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
-      
+
       saveAs(pdfBlob, fileName);
       showSuccessMessage(`Reordered PDF "${fileName}" created successfully!`);
     } catch (err) {
@@ -522,7 +547,6 @@ const processFiles = useCallback((uploadedFiles) => {
   };
 
   // Download pages as ZIP
-
 
   const isDarkMode = theme === "dark";
 
@@ -538,9 +562,13 @@ const processFiles = useCallback((uploadedFiles) => {
           isDarkMode ? "bg-[#1a1a1a]" : "bg-white"
         }`}
       >
-        <h2 className="text-3xl font-bold mb-2 text-center">PDF Page Reordering Tool</h2>
+        <h2 className="text-3xl font-bold mb-2 text-center">
+          PDF Page Reordering Tool
+        </h2>
         <p
-          className={`text-center mb-6 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+          className={`text-center mb-6 ${
+            isDarkMode ? "text-gray-300" : "text-gray-600"
+          }`}
         >
           Reorder your PDF pages and create a new document
         </p>
@@ -550,19 +578,23 @@ const processFiles = useCallback((uploadedFiles) => {
             {error}
           </div>
         )}
-        
+
         {success && (
           <div className="text-green-500 text-center mb-4 p-3 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center gap-2">
             <CheckCircleIcon className="h-5 w-5" />
             {success}
           </div>
         )}
-        
+
         {files.length === 0 ? (
           <div
             className={`border-2 border-dashed rounded-lg p-8 ${
               isDarkMode ? "border-gray-700" : "border-gray-300"
-            } ${isDraggingFile ? "bg-blue-50 dark:bg-blue-900/20 border-blue-400" : ""}`}
+            } ${
+              isDraggingFile
+                ? "bg-blue-50 dark:bg-blue-900/20 border-blue-400"
+                : ""
+            }`}
             onDragOver={handleDragOver}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
@@ -574,7 +606,9 @@ const processFiles = useCallback((uploadedFiles) => {
                   isDarkMode ? "text-blue-400" : "text-blue-500"
                 }`}
               />
-              <h3 className="text-xl font-medium mb-2">Upload your PDF files</h3>
+              <h3 className="text-xl font-medium mb-2">
+                Upload your PDF files
+              </h3>
               <p
                 className={`mb-6 max-w-md ${
                   isDarkMode ? "text-gray-400" : "text-gray-600"
@@ -600,7 +634,11 @@ const processFiles = useCallback((uploadedFiles) => {
         ) : (
           <>
             <div
-              className={`${isDraggingFile ? "bg-blue-50 dark:bg-blue-900/20 border-2 border-dashed border-blue-400 rounded-lg p-4" : ""}`}
+              className={`${
+                isDraggingFile
+                  ? "bg-blue-50 dark:bg-blue-900/20 border-2 border-dashed border-blue-400 rounded-lg p-4"
+                  : ""
+              }`}
               onDragOver={handleDragOver}
               onDragEnter={handleDragEnter}
               onDragLeave={handleDragLeave}
@@ -614,7 +652,9 @@ const processFiles = useCallback((uploadedFiles) => {
 
             <div className="mt-4 text-center">
               <p
-                className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                className={`text-sm ${
+                  isDarkMode ? "text-gray-400" : "text-gray-600"
+                }`}
               >
                 {files.length} {files.length === 1 ? "file" : "files"} selected
                 • Total size: {formatBytes(totalSize)}
@@ -634,8 +674,10 @@ const processFiles = useCallback((uploadedFiles) => {
                   .map((file, index) => {
                     const fileURL = URL.createObjectURL(file);
                     const fileId = getFileId(file);
-                    const filePages = pages.filter((page) => page.fileId === fileId);
-                    
+                    const filePages = pages.filter(
+                      (page) => page.fileId === fileId
+                    );
+
                     return (
                       <div
                         key={index}
@@ -678,7 +720,7 @@ const processFiles = useCallback((uploadedFiles) => {
                     );
                   })}
               </div>
-              
+
               {files.length > 1 && (
                 <div className="mt-3 flex justify-end">
                   <button
@@ -696,61 +738,79 @@ const processFiles = useCallback((uploadedFiles) => {
               <div className="mt-6 text-center py-6">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mb-2"></div>
                 <p
-                  className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+                  className={`${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
                 >
-                  {processingAction === "extracting" && "Extracting PDF pages..."}
-                  {processingAction === "creating" && "Creating reordered PDF..."}
+                  {processingAction === "extracting" &&
+                    "Extracting PDF pages..."}
+                  {processingAction === "creating" &&
+                    "Creating reordered PDF..."}
                   {processingAction === "zipping" && "Creating ZIP archive..."}
                   {!processingAction && "Processing..."}
                 </p>
-                
-                {conversionProgress.total > 0 && processingAction === "extracting" && (
-                  <div className="mt-4 max-w-md mx-auto">
-                    <div className="relative pt-1">
-                      <div className="flex mb-2 items-center justify-between">
-                        <div>
-                          <span
-                            className={`text-xs font-semibold inline-block ${
-                              isDarkMode ? "text-blue-400" : "text-blue-600"
-                            }`}
-                          >
-                            Progress: {Math.round((conversionProgress.current / conversionProgress.total) * 100)}%
-                          </span>
+
+                {conversionProgress.total > 0 &&
+                  processingAction === "extracting" && (
+                    <div className="mt-4 max-w-md mx-auto">
+                      <div className="relative pt-1">
+                        <div className="flex mb-2 items-center justify-between">
+                          <div>
+                            <span
+                              className={`text-xs font-semibold inline-block ${
+                                isDarkMode ? "text-blue-400" : "text-blue-600"
+                              }`}
+                            >
+                              Progress:{" "}
+                              {Math.round(
+                                (conversionProgress.current /
+                                  conversionProgress.total) *
+                                  100
+                              )}
+                              %
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <span
+                              className={`text-xs font-semibold inline-block ${
+                                isDarkMode ? "text-gray-400" : "text-gray-600"
+                              }`}
+                            >
+                              {conversionProgress.current}/
+                              {conversionProgress.total} pages
+                            </span>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <span
-                            className={`text-xs font-semibold inline-block ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
-                          >
-                            {conversionProgress.current}/{conversionProgress.total} pages
-                          </span>
+                        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200 dark:bg-gray-700">
+                          <div
+                            style={{
+                              width: `${
+                                (conversionProgress.current /
+                                  conversionProgress.total) *
+                                100
+                              }%`,
+                            }}
+                            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500"
+                          ></div>
                         </div>
-                      </div>
-                      <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200 dark:bg-gray-700">
-                        <div
-                          style={{
-                            width: `${(conversionProgress.current / conversionProgress.total) * 100}%`,
-                          }}
-                          className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500"
-                        ></div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             )}
           </>
         )}
-        
+
         {pages.length > 0 && (
           <div className="mt-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-3">
               <h3 className="text-xl font-semibold">PDF Pages:</h3>
-              
+
               {/* Output filename input field */}
               <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
                 <div className="flex-1">
-                  <label 
-                    htmlFor="outputFileName" 
+                  <label
+                    htmlFor="outputFileName"
                     className={`block text-sm font-medium mb-1 ${
                       isDarkMode ? "text-gray-300" : "text-gray-700"
                     }`}
@@ -764,14 +824,14 @@ const processFiles = useCallback((uploadedFiles) => {
                     value={outputFileName}
                     onChange={handleFileNameChange}
                     className={`block w-full rounded-md px-3 py-2 text-sm border ${
-                      isDarkMode 
-                        ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 outline-none" 
+                      isDarkMode
+                        ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 outline-none"
                         : "bg-white border-gray-300 text-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
                     }`}
                     placeholder="reordered-document.pdf"
                   />
                 </div>
-                
+
                 <div className="flex sm:flex-col justify-end gap-2 mt-auto">
                   <button
                     onClick={createReorderedPDF}
@@ -785,11 +845,10 @@ const processFiles = useCallback((uploadedFiles) => {
                     <ArrowDownTrayIcon className="h-5 w-5" />
                     <span>Download PDF</span>
                   </button>
-
                 </div>
               </div>
             </div>
-            
+
             <div className="mb-4 flex flex-wrap gap-2">
               <button
                 onClick={resetOrder}
@@ -798,33 +857,33 @@ const processFiles = useCallback((uploadedFiles) => {
                   loading
                     ? "bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
                     : isDarkMode
-                      ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 } transition-colors`}
               >
                 <ArrowPathIcon className="h-4 w-4" />
                 <span>Reset Order</span>
               </button>
-              
-
             </div>
-            
+
             <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
-              Drag and drop to reorder pages. Each thumbnail shows page number and source file.
+              Drag and drop to reorder pages. Each thumbnail shows page number
+              and source file.
             </p>
-            
+
             {pages.length > 0 && (
-              <div 
+              <div
                 className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto p-2"
                 onDragOver={handleDragOver}
               >
                 {[...pages]
                   .sort((a, b) => a.newOrder - b.newOrder)
                   .map((page, index) => {
-                    const isBeingDragged = draggedPage && 
-                      draggedPage.fileId === page.fileId && 
+                    const isBeingDragged =
+                      draggedPage &&
+                      draggedPage.fileId === page.fileId &&
                       draggedPage.originalPage === page.originalPage;
-                    
+
                     return (
                       <div
                         key={`${page.fileId}-${page.originalPage}`}
@@ -836,10 +895,12 @@ const processFiles = useCallback((uploadedFiles) => {
                           isBeingDragged
                             ? "opacity-50"
                             : draggedPage
-                              ? "hover:outline-2 hover:outline-blue-500"
-                              : ""
+                            ? "hover:outline-2 hover:outline-blue-500"
+                            : ""
                         } ${
-                          isDarkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
+                          isDarkMode
+                            ? "border-gray-700 bg-gray-800"
+                            : "border-gray-200 bg-white"
                         }`}
                       >
                         <div className="w-full aspect-[99/100] flex items-center justify-center bg-gray-100 dark:bg-gray-700 overflow-hidden">
@@ -852,7 +913,7 @@ const processFiles = useCallback((uploadedFiles) => {
                             }}
                           />
                         </div>
-                        
+
                         <div
                           className={`w-full p-2 text-xs text-center font-medium flex flex-col items-center justify-center ${
                             isDarkMode ? "bg-gray-800" : "bg-white"
@@ -860,21 +921,27 @@ const processFiles = useCallback((uploadedFiles) => {
                         >
                           <span className="flex items-center justify-center">
                             <ArrowsUpDownIcon className="h-3.5 w-3.5 text-blue-500 mr-1" />
-                            <span className="text-base font-bold text-blue-500">{page.newOrder}</span>
+                            <span className="text-base font-bold text-blue-500">
+                              {page.newOrder}
+                            </span>
                           </span>
                           <div
-                            className={`truncate max-w-full ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+                            className={`truncate max-w-full ${
+                              isDarkMode ? "text-gray-300" : "text-gray-600"
+                            }`}
                             title={page.fileName}
                           >
                             {page.fileName}
                           </div>
                           <div
-                            className={`${isDarkMode ? "text-gray-400" : "text-gray-500"}`}
+                            className={`${
+                              isDarkMode ? "text-gray-400" : "text-gray-500"
+                            }`}
                           >
                             Pg {page.originalPage}/{page.totalPages}
                           </div>
                         </div>
-                        
+
                         {draggedPage && !isBeingDragged && (
                           <div
                             className="absolute inset-0 flex items-center justify-center bg-blue-500/10 z-10"
@@ -899,7 +966,7 @@ const processFiles = useCallback((uploadedFiles) => {
           </div>
         )}
       </div>
-      
+
       {isDraggingFile && !draggedPage && (
         <div
           className="fixed inset-0 bg-blue-500/10 flex items-center justify-center z-50 pointer-events-none"
@@ -912,9 +979,10 @@ const processFiles = useCallback((uploadedFiles) => {
         </div>
       )}
 
-            {/* Footer */}
-            <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        Your files are processed locally in your browser. No uploads to any server.
+      {/* Footer */}
+      <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        Your files are processed locally in your browser. No uploads to any
+        server.
       </div>
     </div>
   );

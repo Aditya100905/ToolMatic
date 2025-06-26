@@ -467,7 +467,9 @@ export default function ImageToPDF() {
           Convert Images to PDF
         </h2>
         <p
-          className={`text-center mb-6 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+          className={`text-center mb-6 ${
+            isDarkMode ? "text-gray-300" : "text-gray-600"
+          }`}
         >
           Combine multiple images into a single PDF document
         </p>
@@ -544,7 +546,9 @@ export default function ImageToPDF() {
             {/* File Stats */}
             <div className="mt-4 text-center">
               <p
-                className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                className={`text-sm ${
+                  isDarkMode ? "text-gray-400" : "text-gray-600"
+                }`}
               >
                 {files.length} {files.length === 1 ? "image" : "images"}{" "}
                 selected • {selectedCount} of {files.length} included • Total
@@ -570,9 +574,15 @@ export default function ImageToPDF() {
                       key={fileId}
                       className={`flex items-center justify-between shadow-sm rounded-lg px-4 py-3 ${
                         isDarkMode
-                          ? `${isSelected ? "bg-gray-700" : "bg-gray-800"} hover:bg-gray-600 text-gray-200`
-                          : `${isSelected ? "bg-white" : "bg-gray-100"} hover:bg-gray-100 text-gray-800`
-                      } transition-colors border ${isSelected ? "border-blue-500/30" : "border-transparent"}`}
+                          ? `${
+                              isSelected ? "bg-gray-700" : "bg-gray-800"
+                            } hover:bg-gray-600 text-gray-200`
+                          : `${
+                              isSelected ? "bg-white" : "bg-gray-100"
+                            } hover:bg-gray-100 text-gray-800`
+                      } transition-colors border ${
+                        isSelected ? "border-blue-500/30" : "border-transparent"
+                      }`}
                     >
                       <div className="flex items-center min-w-0 overflow-hidden">
                         {/* Checkbox for image selection */}
@@ -601,7 +611,9 @@ export default function ImageToPDF() {
                           href={fileURL}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`truncate hover:text-blue-500 ${!isSelected && "opacity-60"}`}
+                          className={`truncate hover:text-blue-500 ${
+                            !isSelected && "opacity-60"
+                          }`}
                           title={file.name}
                           onClick={(e) => {
                             setTimeout(
@@ -613,7 +625,9 @@ export default function ImageToPDF() {
                           {file.name}
                         </a>
                         <span
-                          className={`text-xs text-gray-500 ml-2 hidden sm:inline ${!isSelected && "opacity-60"}`}
+                          className={`text-xs text-gray-500 ml-2 hidden sm:inline ${
+                            !isSelected && "opacity-60"
+                          }`}
                         >
                           {formatBytes(file.size)}
                         </span>
@@ -652,7 +666,9 @@ export default function ImageToPDF() {
                 } border ${isDarkMode ? "border-blue-800" : "border-blue-100"}`}
               >
                 <p
-                  className={`text-sm ${isDarkMode ? "text-blue-300" : "text-blue-700"}`}
+                  className={`text-sm ${
+                    isDarkMode ? "text-blue-300" : "text-blue-700"
+                  }`}
                 >
                   <GripIcon className="h-4 w-4 inline-block mr-1" />
                   You can reorder images by dragging them or using the up/down
@@ -666,7 +682,9 @@ export default function ImageToPDF() {
               <div className="mt-6 text-center py-6">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mb-2"></div>
                 <p
-                  className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+                  className={`${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
                 >
                   {pdfPreviewUrl ? "Generating PDF..." : "Processing images..."}
                 </p>
@@ -692,7 +710,9 @@ export default function ImageToPDF() {
                         </div>
                         <div className="text-right">
                           <span
-                            className={`text-xs font-semibold inline-block ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                            className={`text-xs font-semibold inline-block ${
+                              isDarkMode ? "text-gray-400" : "text-gray-600"
+                            }`}
                           >
                             {conversionProgress.current}/
                             {conversionProgress.total} images
@@ -702,7 +722,11 @@ export default function ImageToPDF() {
                       <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200 dark:bg-gray-700">
                         <div
                           style={{
-                            width: `${(conversionProgress.current / conversionProgress.total) * 100}%`,
+                            width: `${
+                              (conversionProgress.current /
+                                conversionProgress.total) *
+                              100
+                            }%`,
                           }}
                           className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500"
                         ></div>

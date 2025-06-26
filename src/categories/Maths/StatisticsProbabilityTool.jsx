@@ -174,7 +174,9 @@ export default function StatisticsProbabilityTool({ theme = "dark" }) {
             ? harmonicMean
             : harmonicMean.toFixed(4),
         cv: cv.toFixed(2) + "%",
-        ci: `${ciMean.lower.toFixed(4)} - ${ciMean.upper.toFixed(4)} (${confidenceLevel}%)`,
+        ci: `${ciMean.lower.toFixed(4)} - ${ciMean.upper.toFixed(
+          4
+        )} (${confidenceLevel}%)`,
         boxPlotData: generateBoxPlotData(data),
       });
     } catch (error) {
@@ -270,21 +272,15 @@ export default function StatisticsProbabilityTool({ theme = "dark" }) {
     // This is a simplified version; for exact values, use statistical tables or specialized libraries
     if (df > 30) {
       // For large df, use normal approximation
-      if (alpha === 0.025)
-        return 1.96; // 95% CI
-      else if (alpha === 0.005)
-        return 2.576; // 99% CI
-      else if (alpha === 0.0005)
-        return 3.291; // 99.9% CI
+      if (alpha === 0.025) return 1.96; // 95% CI
+      else if (alpha === 0.005) return 2.576; // 99% CI
+      else if (alpha === 0.0005) return 3.291; // 99.9% CI
       else return 2; // Default approximation
     } else {
       // For smaller df, use higher values
-      if (alpha === 0.025)
-        return 2.1; // 95% CI, small sample
-      else if (alpha === 0.005)
-        return 2.8; // 99% CI, small sample
-      else if (alpha === 0.0005)
-        return 3.5; // 99.9% CI, small sample
+      if (alpha === 0.025) return 2.1; // 95% CI, small sample
+      else if (alpha === 0.005) return 2.8; // 99% CI, small sample
+      else if (alpha === 0.0005) return 3.5; // 99.9% CI, small sample
       else return 2.2; // Default approximation for small sample
     }
   };
@@ -829,10 +825,10 @@ export default function StatisticsProbabilityTool({ theme = "dark" }) {
               {tab === "descriptive"
                 ? "Descriptive Statistics"
                 : tab === "probability"
-                  ? "Probability Distribution"
-                  : tab === "correlationRegression"
-                    ? "Correlation & Regression"
-                    : "Hypothesis Testing"}
+                ? "Probability Distribution"
+                : tab === "correlationRegression"
+                ? "Correlation & Regression"
+                : "Hypothesis Testing"}
             </button>
           ))}
         </div>
@@ -1473,17 +1469,29 @@ export default function StatisticsProbabilityTool({ theme = "dark" }) {
                         <p>
                           <span className="font-medium">90% CI:</span>{" "}
                           {results.criticalValues &&
-                            `${results.criticalValues["90"].lower.toFixed(4)} to ${results.criticalValues["90"].upper.toFixed(4)}`}
+                            `${results.criticalValues["90"].lower.toFixed(
+                              4
+                            )} to ${results.criticalValues["90"].upper.toFixed(
+                              4
+                            )}`}
                         </p>
                         <p>
                           <span className="font-medium">95% CI:</span>{" "}
                           {results.criticalValues &&
-                            `${results.criticalValues["95"].lower.toFixed(4)} to ${results.criticalValues["95"].upper.toFixed(4)}`}
+                            `${results.criticalValues["95"].lower.toFixed(
+                              4
+                            )} to ${results.criticalValues["95"].upper.toFixed(
+                              4
+                            )}`}
                         </p>
                         <p>
                           <span className="font-medium">99% CI:</span>{" "}
                           {results.criticalValues &&
-                            `${results.criticalValues["99"].lower.toFixed(4)} to ${results.criticalValues["99"].upper.toFixed(4)}`}
+                            `${results.criticalValues["99"].lower.toFixed(
+                              4
+                            )} to ${results.criticalValues["99"].upper.toFixed(
+                              4
+                            )}`}
                         </p>
                       </div>
                     </>
@@ -1958,7 +1966,11 @@ export default function StatisticsProbabilityTool({ theme = "dark" }) {
                       {results.hypothesisTest.criticalValue}
                     </p>
                     <p
-                      className={`font-bold ${results.hypothesisTest.conclusion === "Reject H₀" ? "text-red-500" : "text-green-500"}`}
+                      className={`font-bold ${
+                        results.hypothesisTest.conclusion === "Reject H₀"
+                          ? "text-red-500"
+                          : "text-green-500"
+                      }`}
                     >
                       {results.hypothesisTest.conclusion}
                     </p>
@@ -1995,8 +2007,32 @@ export default function StatisticsProbabilityTool({ theme = "dark" }) {
                     </h3>
                     <p>
                       {results.hypothesisTest.conclusion === "Reject H₀"
-                        ? `There is sufficient evidence to reject the null hypothesis at α = ${results.hypothesisTest.alpha}. The sample mean is ${results.hypothesisTest.alternativeHypothesis.includes(">") ? "significantly greater than" : results.hypothesisTest.alternativeHypothesis.includes("<") ? "significantly less than" : "significantly different from"} ${hypothesis.nullValue}.`
-                        : `There is not sufficient evidence to reject the null hypothesis at α = ${results.hypothesisTest.alpha}. The sample mean is not ${results.hypothesisTest.alternativeHypothesis.includes(">") ? "significantly greater than" : results.hypothesisTest.alternativeHypothesis.includes("<") ? "significantly less than" : "significantly different from"} ${hypothesis.nullValue}.`}
+                        ? `There is sufficient evidence to reject the null hypothesis at α = ${
+                            results.hypothesisTest.alpha
+                          }. The sample mean is ${
+                            results.hypothesisTest.alternativeHypothesis.includes(
+                              ">"
+                            )
+                              ? "significantly greater than"
+                              : results.hypothesisTest.alternativeHypothesis.includes(
+                                  "<"
+                                )
+                              ? "significantly less than"
+                              : "significantly different from"
+                          } ${hypothesis.nullValue}.`
+                        : `There is not sufficient evidence to reject the null hypothesis at α = ${
+                            results.hypothesisTest.alpha
+                          }. The sample mean is not ${
+                            results.hypothesisTest.alternativeHypothesis.includes(
+                              ">"
+                            )
+                              ? "significantly greater than"
+                              : results.hypothesisTest.alternativeHypothesis.includes(
+                                  "<"
+                                )
+                              ? "significantly less than"
+                              : "significantly different from"
+                          } ${hypothesis.nullValue}.`}
                     </p>
                   </div>
                 </div>

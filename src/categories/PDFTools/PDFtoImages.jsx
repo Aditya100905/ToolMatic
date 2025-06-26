@@ -487,7 +487,9 @@ export default function PDFToImage() {
           Convert PDF to Images
         </h2>
         <p
-          className={`text-center mb-6 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+          className={`text-center mb-6 ${
+            isDarkMode ? "text-gray-300" : "text-gray-600"
+          }`}
         >
           Transform your PDF pages into high-quality PNG images
         </p>
@@ -560,7 +562,9 @@ export default function PDFToImage() {
             {/* File Stats */}
             <div className="mt-4 text-center">
               <p
-                className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                className={`text-sm ${
+                  isDarkMode ? "text-gray-400" : "text-gray-600"
+                }`}
               >
                 {files.length} {files.length === 1 ? "file" : "files"} selected
                 • Total size: {formatBytes(totalSize)}
@@ -646,7 +650,9 @@ export default function PDFToImage() {
               <div className="mt-6 text-center py-6">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mb-2"></div>
                 <p
-                  className={`${isDarkMode ? "text-gray-300" : "text-gray-600"}`}
+                  className={`${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
                 >
                   {processingAction === "converting" &&
                     "Converting PDFs to images..."}
@@ -680,7 +686,9 @@ export default function PDFToImage() {
                           </div>
                           <div className="text-right">
                             <span
-                              className={`text-xs font-semibold inline-block ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}
+                              className={`text-xs font-semibold inline-block ${
+                                isDarkMode ? "text-gray-400" : "text-gray-600"
+                              }`}
                             >
                               {conversionProgress.current}/
                               {conversionProgress.total} pages
@@ -690,7 +698,11 @@ export default function PDFToImage() {
                         <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200 dark:bg-gray-700">
                           <div
                             style={{
-                              width: `${(conversionProgress.current / conversionProgress.total) * 100}%`,
+                              width: `${
+                                (conversionProgress.current /
+                                  conversionProgress.total) *
+                                100
+                              }%`,
                             }}
                             className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500"
                           ></div>
@@ -750,7 +762,11 @@ export default function PDFToImage() {
                   return (
                     <div
                       key={fileIndex}
-                      className={`mt-6 pt-4 ${fileIndex > 0 ? "border-t border-gray-200 dark:border-gray-700" : ""}`}
+                      className={`mt-6 pt-4 ${
+                        fileIndex > 0
+                          ? "border-t border-gray-200 dark:border-gray-700"
+                          : ""
+                      }`}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="text-md font-semibold flex items-center">
@@ -812,8 +828,8 @@ export default function PDFToImage() {
                               isImageSelected(fileId, image.page)
                                 ? "border-blue-500 shadow-md"
                                 : isDarkMode
-                                  ? "border-gray-700"
-                                  : "border-gray-200"
+                                ? "border-gray-700"
+                                : "border-gray-200"
                             }`}
                           >
                             <div

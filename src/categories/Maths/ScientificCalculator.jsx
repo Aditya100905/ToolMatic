@@ -1079,3 +1079,4 @@ const ScientificCalculator = ({ theme = "light" }) => {
 };
 
 export default ScientificCalculator;
+ 

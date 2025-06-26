@@ -29,7 +29,9 @@ export const ThemeProvider = ({ children }) => {
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {/* Set the background color for the body based on the theme */}
       <div
-        className={`transition-all duration-300 ${theme === "dark" ? "bg-black text-white" : "bg-white text-black"}`}
+        className={`transition-all duration-300 ${
+          theme === "dark" ? "bg-black text-white" : "bg-white text-black"
+        }`}
       >
         {children}
       </div>
