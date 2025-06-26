@@ -36,6 +36,7 @@ import GraphPlotter from "./categories/Maths/GraphPlotter.jsx";
 import ScientificCalculator from "./categories/Maths/ScientificCalculator.jsx";
 import ComplexNumberCalculator from "./categories/Maths/ComplexNumberCalculator.jsx";
 import StatisticsProbabilityTool from "./categories/Maths/StatisticsProbabilityTool.jsx";
+import CalculusSolver from "./categories/Maths/CalculusSolver.jsx";
 
 // Design Tools
 import CssAnimations from "./categories/Design/CssAnimations.jsx";
@@ -231,6 +232,10 @@ const App = () => {
                 <Route
                   path="/utilities/stats-probability"
                   element={<StatisticsProbabilityTool theme={theme} />}
+                />
+                <Route
+                  path="/utilities/calculus-solver"
+                  element={<CalculusSolver theme={theme} />}
                 />
 
                 {/* Design Tools */}

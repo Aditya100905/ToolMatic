@@ -23,6 +23,7 @@ export const utilities = {
     "Graph Plotter",
     "Complex Number Calculator",
     "Statistics & Probability Tool",
+    "Calculus Solver",
   ],
 
   Design: [
@@ -61,12 +62,12 @@ export const utilityRoutes = {
   "Scientific Calculator": "/utilities/scientific-calculator",
   "Complex Number Calculator": "/utilities/complex-numbers-calculator",
   "Statistics & Probability Tool": "/utilities/stats-probability",
+  "Calculus Solver": "/utilities/calculus-solver",
 
   "Animations Library": "/utilities/animations",
   "Layout Builder": "/utilities/grids",
   "Gradients Studio": "/utilities/gradients",
   "Typography Library": "/utilities/typography",
-  // "SVG Maker" : "/utilities/svg-maker",
 
   "JSON Formatter": "/utilities/json-formatter",
   "Markdown & Html Converter": "/utilities/markdown-html-converter",
@@ -90,11 +91,17 @@ export const utilityDescriptions = {
 
   // Calculator Tools
   "Scientific Calculator":
-    "Perform complex mathematical operations including trigonometry, logarithms, and exponentiation.",
+    "Perform advanced mathematical operations including trigonometric functions, logarithms, exponentiation, and more.",
   "Matrix Calculator":
-    "Carry out matrix operations such as addition, multiplication, transposition, and inversion.",
+    "Execute a variety of matrix operations such as addition, subtraction, multiplication, transposition, and inversion.",
   "Graph Plotter":
-    "Visualize mathematical functions and equations through interactive graph plotting.",
+    "Plot and visualize mathematical functions and equations interactively with customizable graph settings.",
+  "Calculus Solver":
+    "Solve problems in calculus, including both definite and indefinite integrals as well as derivatives.",
+  "Statistics & Probability Tool":
+    "Analyze statistical data and calculate measures like mean, median, standard deviation and many more.",
+  "Complex Number Calculator":
+    "Perform arithmetic operations on complex numbers, including addition, subtraction, multiplication, division, and modulus.",
 
   // Utility Tools
   "Qr Generator":
