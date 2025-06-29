@@ -156,26 +156,30 @@ const Home = ({ theme }) => {
                 </p>
 
                 {/* Tool Categories Showcase */}
-                <div className="sm:flex sm:flex-row sm:justify-around flex flex-col gap-2 w-full  mb-10">
+                <div className="sm:flex sm:flex-row sm:justify-around flex flex-col gap-2 w-full mb-10">
                   {["PDF Tools", "Math", "General", "Design", "Dev Tools"].map(
                     (category) => (
                       <div
                         key={category}
-                        className={`p-4 w-4/5 rounded-xl transition-transform hover:-translate-y-1 ${
-                          theme === "dark"
-                            ? "bg-gray-700/60 hover:bg-gray-700/80"
-                            : "bg-white/70 hover:bg-white shadow-md"
-                        }`}
+                        className="mx-auto sm:mx-0 w-[90%] sm:w-[18%]" // consistent and slightly larger width
                       >
                         <div
-                          className={`mx-auto w-12 h-12 flex items-center justify-center rounded-full mb-2 ${getIconColor(
-                            category,
-                            theme
-                          )}`}
+                          className={`p-4 rounded-xl transition-transform hover:-translate-y-1 ${
+                            theme === "dark"
+                              ? "bg-gray-700/60 hover:bg-gray-700/80"
+                              : "bg-white/70 hover:bg-white shadow-md"
+                          }`}
                         >
-                          {getIcon(category)}
+                          <div
+                            className={`mx-auto w-12 h-12 flex items-center justify-center rounded-full mb-2 ${getIconColor(
+                              category,
+                              theme
+                            )}`}
+                          >
+                            {getIcon(category)}
+                          </div>
+                          <p className="text-sm font-medium">{category}</p>
                         </div>
-                        <p className="text-sm font-medium">{category}</p>
                       </div>
                     )
                   )}
