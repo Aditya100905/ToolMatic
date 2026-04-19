@@ -235,7 +235,6 @@ const CurrencyConverter = ({ theme = "dark" }) => {
             theme === "light" ? "border-t border-gray-200" : ""
           }`}
         >
-          Exchange rates provided by CurrencyLayer API
         </div>
       </div>
     </div>
